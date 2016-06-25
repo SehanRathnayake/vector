@@ -20,6 +20,7 @@ public class DataController {
 		return "hello";
 	}
 
+
 	@RequestMapping(value = "vibrationdata/{id}/{value}", method = RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public String saveValue(@PathVariable("id") long id, @PathVariable("value") long value){
