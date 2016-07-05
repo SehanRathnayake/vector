@@ -14,12 +14,12 @@ public class RestController {
     @RequestMapping(value="/vibrationData/{espId}",method = RequestMethod.POST, headers = "content-type=application/json")
     public @ResponseBody
     void add(@PathVariable("espId") String espId,@RequestBody VibrationData data) {
-        System.out.println("esp id: "+espId);
+        System.out.println("xAxis: ");
     }
 
-    @RequestMapping(value="/test",method = RequestMethod.POST, headers = "Accept=application/json")
+    @RequestMapping(value="/test",method = RequestMethod.POST, headers = "content-type=application/json")
     public @ResponseBody
-    void test(@RequestBody VibrationData data) {
+    void test() {
         System.out.println("esp id: ");
     }
 }

@@ -8,31 +8,33 @@ import java.io.Serializable;
  */
 public class VibrationData implements Serializable {
 
-    private int xAxis;
-    private int yAxis;
-    private int zAxis;
+    private static final long serialVersionUID = 4044288636523558664L;
 
-    public int getxAxis() {
+    private int[] xAxis;
+    private int[] yAxis;
+    private int[] zAxis;
+
+    public int[] getxAxis() {
         return xAxis;
     }
 
-    public void setxAxis(int xAxis) {
+    public void setxAxis(int[] xAxis) {
         this.xAxis = xAxis;
     }
 
-    public int getyAxis() {
+    public int[] getyAxis() {
         return yAxis;
     }
 
-    public void setyAxis(int yAxis) {
+    public void setyAxis(int[] yAxis) {
         this.yAxis = yAxis;
     }
 
-    public int getzAxis() {
+    public int[] getzAxis() {
         return zAxis;
     }
 
-    public void setzAxis(int zAxis) {
+    public void setzAxis(int[] zAxis) {
         this.zAxis = zAxis;
     }
 }
