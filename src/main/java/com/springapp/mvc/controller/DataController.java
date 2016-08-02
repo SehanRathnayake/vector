@@ -15,13 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class DataController {
 
 	@Autowired
-	//@Qualifier("userService")
 	private UserService userService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String printWelcome(ModelMap model) {
 		model.addAttribute("message", "Hello world!");
-	userService.getName(5);
+	userService.getUserList();
 		return "home";
 	}
 
