@@ -1,13 +1,11 @@
-package DTOs;
+package com.springapp.mvc.dto;
 
 import java.io.Serializable;
 
 /**
- * @author MaN
- *         on 6/25/2016.
+ * Created by Sehan Rathnayake on 16/07/29.
  */
 public class VibrationData implements Serializable {
-
     private static final long serialVersionUID = 4044288636523558664L;
 
     private int[] xAxis;

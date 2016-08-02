@@ -649,7 +649,7 @@
         return key ? key.toLowerCase().replace('_', '-') : key;
     }
 
-    // Return a moment from input, that is local/utc/zone equivalent to model.
+    // Return a moment from input, that is local/utc/zone equivalent to com.springapp.mvc.model.
     function makeAs(input, model) {
         return model._isUTC ? moment(input).zone(model._offset || 0) :
             moment(input).local();

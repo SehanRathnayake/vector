@@ -17,22 +17,20 @@
           <element id="library" level="project" name="Maven: javax.servlet:servlet-api:2.5" />
           <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:4.1.1.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-expression:4.1.1.RELEASE" />
-          <element id="library" level="project" name="Maven: com.sun.jersey:jersey-server:1.8" />
-          <element id="library" level="project" name="Maven: asm:asm:3.1" />
-          <element id="library" level="project" name="Maven: com.sun.jersey:jersey-core:1.8" />
-          <element id="library" level="project" name="Maven: com.sun.jersey:jersey-json:1.8" />
-          <element id="library" level="project" name="Maven: org.codehaus.jettison:jettison:1.1" />
-          <element id="library" level="project" name="Maven: stax:stax-api:1.0.1" />
-          <element id="library" level="project" name="Maven: com.sun.xml.bind:jaxb-impl:2.2.3-1" />
-          <element id="library" level="project" name="Maven: javax.xml.bind:jaxb-api:2.2.2" />
-          <element id="library" level="project" name="Maven: javax.xml.stream:stax-api:1.0-2" />
-          <element id="library" level="project" name="Maven: javax.activation:activation:1.1" />
-          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-core-asl:1.7.1" />
-          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.7.1" />
-          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-jaxrs:1.7.1" />
-          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-xc:1.7.1" />
           <element id="library" level="project" name="Maven: org.webjars:jquery:3.0.0" />
           <element id="library" level="project" name="Maven: jstl:jstl:1.2" />
+          <element id="library" level="project" name="Maven: javax.persistence:persistence-api:1.0.2" />
+          <element id="library" level="project" name="Maven: org.jboss.spec.javax.ejb:jboss-ejb-api_3.2_spec:1.0.0.Final" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-tx:4.1.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-orm:4.1.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-jdbc:4.1.1.RELEASE" />
+          <element id="library" level="project" name="Maven: com.oracle.jdbc:ojdbc7:12.1.0.2" />
+          <element id="library" level="project" name="Maven: com.oracle.jdbc:xdb6:12.1.0.2" />
+          <element id="library" level="project" name="Maven: com.oracle.jdbc:orai18n:12.1.0.2" />
+          <element id="library" level="project" name="Maven: com.oracle.jdbc:xmlparserv2:12.1.0.2" />
+          <element id="library" level="project" name="Maven: com.oracle.jdbc:oraclepki:12.1.0.2" />
+          <element id="library" level="project" name="Maven: com.oracle.jdbc:osdt_cert:12.1.0.2" />
+          <element id="library" level="project" name="Maven: com.oracle.jdbc:osdt_core:12.1.0.2" />
         </element>
       </element>
       <element id="directory" name="META-INF">

@@ -1,6 +1,7 @@
-package com.springapp.mvc;
+package com.springapp.mvc.controller;
 
-import DTOs.VibrationData;
+
+import com.springapp.mvc.dto.VibrationData;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -15,7 +16,7 @@ public class RestController {
     public @ResponseBody
     void add(@PathVariable("espId") String espId,@RequestBody VibrationData data) {
         System.out.println("xAxis: ");
-    }
+      }
 
     @RequestMapping(value="/test",method = RequestMethod.POST, headers = "content-type=application/json")
     public @ResponseBody

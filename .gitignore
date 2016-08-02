@@ -1,3 +1,15 @@
+*~
+*.swp
+target
+test-output
+.openshift
+.gitkeep
+*.class
+
+# Package Files #
+*.war
+*.ear
+
 # Intellij
 .idea/
 *.iml
