@@ -3,7 +3,7 @@ package com.springapp.mvc.dao;
 /**
  * Created by Sehan Rathnayake on 16/08/02.
  */
-public interface BaseJpaDao<T> {
+public interface BaseJPADao<T> {
 
     public T getEntity(Class<T> t, Object primaryKey);
 

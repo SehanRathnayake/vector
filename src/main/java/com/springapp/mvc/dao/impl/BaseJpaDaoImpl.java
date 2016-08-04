@@ -1,9 +1,8 @@
 package com.springapp.mvc.dao.impl;
 
-import com.springapp.mvc.dao.BaseJpaDao;
+import com.springapp.mvc.dao.BaseJPADao;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.stereotype.Repository;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -12,7 +11,7 @@ import javax.persistence.PersistenceContext;
  */
 @ImportResource("classpath:spring-config.xml")
 @Repository
-public class BaseJpaDaoImpl<T> implements BaseJpaDao<T>{
+public class BaseJpaDaoImpl<T> implements BaseJPADao<T>{
 
     @PersistenceContext
     protected EntityManager entityManager;
