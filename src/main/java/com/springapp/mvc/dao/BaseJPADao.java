@@ -18,4 +18,5 @@ public interface BaseJpaDao<T> {
     public void deleteEntity(T t);
 
     public void persistEntity(T t);
+
 }
