@@ -1,5 +1,7 @@
 package com.springapp.mvc.service;
 
+import com.springapp.mvc.model.User;
+
 import java.util.List;
 
 /**
@@ -7,7 +9,7 @@ import java.util.List;
  */
 public interface UserService {
 
-    public String getName(int id);
+    public User getUser(String username);
 
     public List<String> getUserList();
 }

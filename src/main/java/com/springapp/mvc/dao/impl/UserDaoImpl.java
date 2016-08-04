@@ -2,33 +2,29 @@ package com.springapp.mvc.dao.impl;
 
 import com.springapp.mvc.dao.UserDao;
 import com.springapp.mvc.model.User;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import java.util.List;
+import javax.persistence.TypedQuery;
 
 
 /**
  * Created by Sehan Rathnayake on 16/07/29.
  */
 
-@Transactional(propagation = Propagation.REQUIRED)
-@ImportResource("classpath:spring-config.xml")
-@Repository
-public class UserDaoImpl implements UserDao {
-    @PersistenceContext
-    private EntityManager entityManager;
-    private static final String SELECT_QUERY = "select p from User p";
-    public String getName(int id){
 
-        Query query = entityManager.createQuery(SELECT_QUERY);
-        List<User> users = (List<User>) query.getResultList();
-        return "";
+@Repository
+public class UserDaoImpl extends BaseJpaDaoImpl<User> implements UserDao {
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public User getUser(String username) {
+        String queryString = "SELECT u FROM User u WHERE u.userName = :username";
+
+        TypedQuery<User> query = this.entityManager.createQuery(queryString, User.class);
+        query.setParameter("username", username);
+        return query.getSingleResult();
     }
 
     public EntityManager getEntityManager() {

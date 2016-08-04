@@ -12,9 +12,11 @@ import javax.sql.DataSource;
  * Created by Sehan Rathnayake on 16/08/02.
  */
 public class BaseJdbcDaoImpl extends NamedParameterJdbcDaoSupport {
+
     @Autowired
     @Qualifier("vectorDataSource")
     private DataSource dataSource;
+
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @PostConstruct

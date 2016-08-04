@@ -1,0 +1,41 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:security="http://www.springframework.org/schema/security"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+    <http use-expressions="true" authentication-manager-ref="authenticationManager">
+
+        <security:intercept-url pattern="/home" access="permitAll"/>
+        <security:intercept-url pattern="/resources/**" access="permitAll"/>
+        <security:intercept-url pattern="/rest/**" access="permitAll"/>
+        <security:intercept-url pattern="/auth" access="hasAuthority('Do a Test')"/>
+        <security:intercept-url pattern="/**" access="hasAuthority('Do a Test')"/>
+
+        <form-login login-page="/home"
+                    login-processing-url="/j_spring_security_check"
+                    authentication-failure-url="/home?failed=true"
+                    default-target-url="/home"
+                  always-use-default-target="true"
+                />
+
+        <logout logout-success-url="/home"/>
+
+    </http>
+
+    <authentication-manager alias="authenticationManager" >
+
+        <authentication-provider user-service-ref="userDetailsService" >
+            <password-encoder ref="passwordEncoder"/>
+
+        </authentication-provider>
+    </authentication-manager>
+
+    <beans:bean id="passwordEncoder" class="com.springapp.mvc.utility.UserPasswordEncoder"></beans:bean>
+
+    <beans:bean id="userDetailsService" class="com.springapp.mvc.service.impl.UserDetailServiceImpl"></beans:bean>
+
+</beans:beans>

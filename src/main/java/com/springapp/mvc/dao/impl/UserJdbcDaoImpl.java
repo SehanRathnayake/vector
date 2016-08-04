@@ -18,12 +18,12 @@ public class UserJdbcDaoImpl extends BaseJdbcDaoImpl implements UserJdbcDao {
         List<String> returnList = null;
 
         StringBuilder query = new StringBuilder("");
-        query.append("SELECT NAME FROM T_USER");
+        query.append("SELECT FIRST_NAME FROM T_USER");
 
         RowMapper<String> mapper = new RowMapper<String>() {
             @Override
             public String mapRow(ResultSet resultSet, int i) throws SQLException {
-                String technology = resultSet.getString("NAME");
+                String technology = resultSet.getString("FIRST_NAME");
 
                 return technology;
             }

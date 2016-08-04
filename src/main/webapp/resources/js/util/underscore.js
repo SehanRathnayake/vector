@@ -1074,7 +1074,7 @@
     return hasOwnProperty.call(obj, key);
   };
 
-  // Utility Functions
+  // utility Functions
   // -----------------
 
   // Run Underscore.js in *noConflict* mode, returning the `_` variable to its

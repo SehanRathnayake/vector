@@ -3,5 +3,7 @@
              version="1.0">
     <persistence-unit name="vectorPersistenceUnit" transaction-type="RESOURCE_LOCAL">
         <class>com.springapp.mvc.model.User</class>
+        <class>com.springapp.mvc.model.Role</class>
+        <class>com.springapp.mvc.model.Privilege</class>
     </persistence-unit>
 </persistence>
