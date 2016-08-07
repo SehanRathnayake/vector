@@ -12,6 +12,8 @@
         <security:intercept-url pattern="/home" access="permitAll"/>
         <security:intercept-url pattern="/resources/**" access="permitAll"/>
         <security:intercept-url pattern="/rest/**" access="permitAll"/>
+        <security:intercept-url pattern="/sparkline" access="permitAll"/>
+        <security:intercept-url pattern="/sparklinetest" access="permitAll"/>
         <security:intercept-url pattern="/auth" access="hasAuthority('Do a Test')"/>
         <security:intercept-url pattern="/**" access="hasAuthority('Do a Test')"/>
 
