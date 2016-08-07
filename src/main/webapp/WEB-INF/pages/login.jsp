@@ -1,3 +1,4 @@
+<%@ include file="header.jsp" %>
 <div>
     <h1>
         Login Page
@@ -16,3 +17,6 @@
     <input type="submit" value="Log in"/>
 </form>
 </div>
+<script src="<c:url value="/resources/js/login.js" />"></script>
+</body>
+</html>

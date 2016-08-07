@@ -16,7 +16,7 @@ public class RestController {
     public @ResponseBody
     void add(@PathVariable("espId") String espId,@RequestBody VibrationData data) {
 
-        System.out.println("xAxis: ");
+        System.out.println("device id :"+espId+" xAxis :"+data.getxAxis()[0]);
       }
 
     @RequestMapping(value="/test",method = RequestMethod.POST, headers = "content-type=application/json")
