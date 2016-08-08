@@ -45,10 +45,10 @@ public class HomeController {
         String name = user.getUsername();
         f = f;
     }
-    @RequestMapping("/sparkline")
+    /*@RequestMapping("/sparkline")
     public ModelAndView crunchifySparklineTest() {
         return new ModelAndView("sparkline");
-    }
+    }*/
 
     @RequestMapping(value = "/sparklinetest", method = RequestMethod.GET)
     public @ResponseBody

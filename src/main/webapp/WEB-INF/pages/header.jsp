@@ -12,6 +12,7 @@
     <%-- custom styles --%>
     <link rel="stylesheet" href="<c:url value="/resources/css/datepicker.css" />">
     <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap-touchspin.css" />">
+    <%-- common --%>
     <link rel="stylesheet" href="<c:url value="/resources/css/main.css" />">
 
     <!-- Latest compiled and minified JavaScript -->
