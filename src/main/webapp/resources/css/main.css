@@ -1,9 +1,10 @@
 .block-graph{
     background-color: beige;
     height: 200px;
-    width: 300px;
+    width: 50%;
     border-style: groove;
     margin: 10px;
+    float: left;
 }
 #H_testBtn{
     background-color: cornflowerblue;

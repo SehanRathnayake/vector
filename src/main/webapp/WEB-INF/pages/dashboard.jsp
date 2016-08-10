@@ -10,6 +10,7 @@
         Dashboard
     </h1>
 </div>
+<!--sample graph | use SG_ as id prefix-->
 <div class = "block-graph" align="center" name = "Sample Graph">
 
     <div id="SG_result"></div>
