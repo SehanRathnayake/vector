@@ -1,5 +1,6 @@
 <%@ include file="header.jsp" %>
 <script src="https://cdn.crunchify.com/wp-content/uploads/code/jquery.sparkline.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="<c:url value="/resources/js/dashboard.js" />"></script>
 
 <div class="block">
@@ -22,6 +23,12 @@
     <br>
     <br> <br> <br>
 
+
+</div>
+
+<div class="block-graph" name = "highChart">
+
+    <div id="HCG_container" style="width: 550px; height: 400px; margin: 0 auto"></div>
 
 </div>
 </body>

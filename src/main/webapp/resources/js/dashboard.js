@@ -7,7 +7,8 @@ VECTOR.namespace("module.dashboard");
 VECTOR.module.dashboard = function () {
     var idPrefix = "#DB_";
     //add newly created graph js into url array
-    var graphUrls = ["resources/js/samplegraph.js"];
+    var graphUrls = ["resources/js/samplegraph.js",
+                     "resources/js/highchartGraph.js"];
 
     var loadScript = function (callback) {
         var head = document.getElementsByTagName('head')[0];
