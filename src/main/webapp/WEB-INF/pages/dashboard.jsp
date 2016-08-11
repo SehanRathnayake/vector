@@ -1,9 +1,8 @@
-<%@ include file="header.jsp" %>
 <script src="https://cdn.crunchify.com/wp-content/uploads/code/jquery.sparkline.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="<c:url value="/resources/js/dashboard.js" />"></script>
 
-<div class="block">
+<div class="vector-header">
     Hi, <security:authentication property="principal.fullname"/>.
     <a href="${logoutUrl}">Log out</a>
     <h1>
