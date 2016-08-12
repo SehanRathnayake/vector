@@ -12,4 +12,7 @@ public interface UserService {
     public User getUser(String username);
 
     public List<String> getUserList();
+
+    public void dosomething();
+
 }

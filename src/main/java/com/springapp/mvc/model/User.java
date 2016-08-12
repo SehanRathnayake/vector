@@ -3,6 +3,7 @@ package com.springapp.mvc.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Sehan Rathnayake on 16/07/29.
@@ -39,6 +40,9 @@ public class User implements Serializable {
 
     @Column(name = "STATUS")
     private String status;
+
+    @OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="user")
+    private List<Job> jobs;
 
     public long getUserId() {
         return userId;
