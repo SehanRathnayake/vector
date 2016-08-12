@@ -5,5 +5,9 @@
         <class>com.springapp.mvc.model.User</class>
         <class>com.springapp.mvc.model.Role</class>
         <class>com.springapp.mvc.model.Privilege</class>
+        <class>com.springapp.mvc.model.Job</class>
+        <class>com.springapp.mvc.model.DeviceMapping</class>
+        <class>com.springapp.mvc.model.Position</class>
+        <class>com.springapp.mvc.model.Device</class>
     </persistence-unit>
 </persistence>

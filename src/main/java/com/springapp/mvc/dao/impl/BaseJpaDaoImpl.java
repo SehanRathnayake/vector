@@ -22,7 +22,8 @@ public class BaseJpaDaoImpl<T> implements BaseJPADao<T>{
     }
 
     @Override
-    public T saveEntity(T t) {
+    public T
+    saveEntity(T t) {
         return this.entityManager.merge(t);
     }
 

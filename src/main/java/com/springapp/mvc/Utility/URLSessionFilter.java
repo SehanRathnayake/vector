@@ -34,7 +34,7 @@ public class URLSessionFilter implements Filter {
                 return url;
             }
         };
-        chain.doFilter(request, wrappedResponse);
+       chain.doFilter(request, wrappedResponse);
     }
 
     public void init(FilterConfig filterConfig) {
