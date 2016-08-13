@@ -11,14 +11,14 @@ VECTOR.module.highchartGraph = function() {
         type: 'spline',
         animation: Highcharts.svg, // don't animate in IE < IE 10.
         marginRight: 10,
+        height:195,
+        width:295,
         events: {
             load: function () {
                 // set up the updating of the chart each second
                 var series = this.series[0];
                 setInterval(function () {
-                    var x = (new Date()).getTime(), // current time
-                        y = Math.random();
-                    series.addPoint([x, y], true, true);
+                    series.setData(randomDataGen())
                 }, 1000);
             }
         }
@@ -101,7 +101,17 @@ VECTOR.module.highchartGraph = function() {
         }
     });
     $(idPrefix+'container').highcharts(json);
-  
+
+    var randomDataGen = function () {
+        var data = [],time = (new Date()).getTime(),i;
+        for (i = -100; i <= 0; i += 1) {
+            data.push({
+                x: time + i * 1000,
+                y: Math.random()
+            });
+        }
+        return data;
+    };
 return {
         init : function() {
 

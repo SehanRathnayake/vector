@@ -17,6 +17,7 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="<c:url value="/resources/js/jquery/jquery-3.0.0.min.js" />"></script>
+    <script src="<c:url value="/resources/js/jquery/jquery-ui.min.js" />"></script>
     <script src="<c:url value="/resources/js/bootstrap/bootstrap.min.js" />"></script>
     <script src="<c:url value="/resources/js/bootstrap/bootstrap-datepicker.js" />"></script>
     <script src="<c:url value="/resources/js/bootstrap/bootstrap-touchspin.js" />"></script>

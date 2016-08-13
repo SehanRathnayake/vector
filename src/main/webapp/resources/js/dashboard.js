@@ -27,10 +27,16 @@ VECTOR.module.dashboard = function () {
         });
 
     };
-
+    var setup = function(){
+        $(".block-graph").draggable();
+        $(".block-device").draggable({
+            revert:true
+        });
+    };
     return {
         init: function () {
             loadScript(null);
+            setup();
         }
     }
 }();

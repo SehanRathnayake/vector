@@ -10,9 +10,9 @@
     </h1>
 </div>
 <!--sample graph | use SG_ as id prefix-->
-<div class = "block-graph" align="center" name = "Sample Graph">
+<div class = "block-graph ui-widget-content" align="center" name = "Sample Graph">
 
-    <div id="SG_result"></div>
+    <div id="SG_result ui-widget-content"></div>
 
     <br>
     <br> One: &nbsp;&nbsp;&nbsp;&nbsp;<span id="one">.</span>
@@ -31,5 +31,9 @@
     <div id="HCG_container" style="width: 550px; height: 400px; margin: 0 auto"></div>
 
 </div>
-</body>
-</html>
+
+<div class="row">
+    <form action="new">
+        <input class="btn btn-primary" type="submit" value="New Job" />
+    </form>
+</div>
