@@ -10,7 +10,7 @@
 <!--sample graph | use SG_ as id prefix-->
 
 <div>
-    <nav class="navbar navbar-default">
+        <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
             </div>
