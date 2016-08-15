@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.*;
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("rest")
 public class RestController {
+    Integer jobId;
     @RequestMapping(value="/vibrationData/{espId}",method = RequestMethod.POST, headers = "content-type=application/json")
     public @ResponseBody
     void add(@PathVariable("espId") String espId,@RequestBody VibrationData data) {
-        VibrationDataBuffer.insertData(Integer.parseInt(espId),data);
+        VibrationDataBuffer.insertData(jobId,espId,data);
         System.out.println("device id :"+espId+" xAxis :"+data.getxAxis()[0]);
       }
 
@@ -24,5 +25,11 @@ public class RestController {
     public @ResponseBody
     void test() {
         System.out.println("esp id: ");
+    }
+
+    @RequestMapping(value="/jobId",method = RequestMethod.POST, headers = "content-type=application/json")
+    public @ResponseBody
+    void getJobId(@RequestBody Integer jobId) {
+        this.jobId=jobId;
     }
 }

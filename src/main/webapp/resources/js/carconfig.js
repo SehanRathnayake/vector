@@ -76,10 +76,22 @@ VECTOR.module.carconfig = function() {
             revert:true
         });
     };
+
+    var nextSection = function () {
+        $(idPrefix+"detailSection").hide();
+        $(idPrefix+"carConfigSection").show('slide', {direction: 'right'}, 700);
+    };
+    
+    var previousSection = function () {
+        $(idPrefix+"detailSection").show('slide', {direction: 'left'}, 700);
+        $(idPrefix+"carConfigSection").hide();
+    };
     return {
         init : function() {
             setup();
             $(".device-clear").off("click").on("click",clearClick);
+            $(idPrefix+"nextBtn").off("click").on("click",nextSection);
+            $(idPrefix+"prevBtn").off("click").on("click",previousSection);
         }
     }
 }();
