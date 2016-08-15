@@ -6,6 +6,8 @@ VECTOR.namespace("module.highchartGraph");
 
 VECTOR.module.highchartGraph = function() {
     var idPrefix = "#HCG_";
+    var prevData = randomDataGen();
+    var showData = [];
 
     var chart = {
         type: 'spline',
@@ -18,6 +20,9 @@ VECTOR.module.highchartGraph = function() {
                 // set up the updating of the chart each second
                 var series = this.series[0];
                 setInterval(function () {
+                    for(var i = 0; i < 90; i++){
+                        showdata[i] = prevData[i+9];
+                    }
                     series.setData(randomDataGen())
                 }, 1000);
             }

@@ -102,13 +102,6 @@ public class HomeController {
         return jsonObj.toString();
     }
 
-//    @RequestMapping(value = "/")
-//    public class CustomerController {
-//        @RequestMapping(value = "/customer", method = RequestMethod.GET)
-//        public String goToCustomer(ModelMap model) {
-//            return "customer";
-//        }
-//    }
 
 //	@RequestMapping(value = "/data", method = RequestMethod.GET)
 //	public String printHello(@RequestParam("value") String value) {
