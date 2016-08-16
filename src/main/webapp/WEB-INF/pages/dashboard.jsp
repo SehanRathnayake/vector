@@ -17,7 +17,7 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Dashboard</a></li>
                 <li><a href="customer">Customer</a></li>
-                <li><a href="#">Vehicle</a></li>
+                <li><a href="vehicle">Vehicle</a></li>
             </ul>
         </div>
     </nav>

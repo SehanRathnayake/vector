@@ -9,5 +9,6 @@
         <class>com.springapp.mvc.model.DeviceMapping</class>
         <class>com.springapp.mvc.model.Position</class>
         <class>com.springapp.mvc.model.Device</class>
+        <class>com.springapp.mvc.model.Customer</class>
     </persistence-unit>
 </persistence>

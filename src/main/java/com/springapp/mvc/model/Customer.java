@@ -13,8 +13,9 @@ import java.util.List;
 @Table(name = "T_CUSTOMER")
 public class Customer implements Serializable{
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
+    @SequenceGenerator(name = "customer_id", sequenceName = "CUSTOMERID_SEQ")
+    @Id
+    @GeneratedValue(generator = "customer_id")
     @Column  (name = "CUSTOMER_ID")
     private long cus_id;
 
@@ -25,7 +26,7 @@ public class Customer implements Serializable{
     private String cus_address;
 
     @Column  (name = "PHONE")
-    private String cus_phone;
+    private int cus_phone;
 
     @Column  (name = "EMAIL")
     private String cus_email;
@@ -42,9 +43,9 @@ public class Customer implements Serializable{
 
     public void setCustomerAddress(String cus_address){this.cus_address = cus_address;}
 
-    public String getCustomerPhone(){return cus_phone;}
+    public int getCustomerPhone(){return cus_phone;}
 
-    public void setCustomerPhone(String cus_phone){this.cus_phone=cus_phone;}
+    public void setCustomerPhone(int cus_phone){this.cus_phone=cus_phone;}
 
     public String getCustomerEmail(){return cus_email;}
 

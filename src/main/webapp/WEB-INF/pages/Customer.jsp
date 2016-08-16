@@ -1,5 +1,4 @@
 <%@ include file="header.jsp" %>
-<script type = "text/javascript" src="<c:url value="/resources/js/bootstrap/bootstrap.min.js"/>"></script>
 <script src="<c:url value="/resources/js/customer.js" />"></script>
 <html>
 <head>
