@@ -176,6 +176,12 @@
             <version>20160212</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-spring</artifactId>
+            <version>3.6</version>
+        </dependency>
+
     </dependencies>
     <repositories>
         <repository>

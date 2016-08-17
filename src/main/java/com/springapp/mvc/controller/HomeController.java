@@ -1,8 +1,7 @@
 package com.springapp.mvc.controller;
 
-import com.springapp.mvc.dto.JobDto;
 import com.springapp.mvc.dto.UserDetailsForAuthentication;
-import com.springapp.mvc.model.User;
+import com.springapp.mvc.service.CacheService;
 import com.springapp.mvc.service.JobService;
 import com.springapp.mvc.service.UserService;
 import org.json.JSONArray;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
 import java.util.Random;
 
 
@@ -31,6 +29,9 @@ public class HomeController {
 
     @Autowired
     private JobService jobService;
+
+    @Autowired
+    CacheService cacheService;
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String printWelcome(ModelMap model) {
@@ -58,14 +59,15 @@ public class HomeController {
         String name = user.getUsername();
         //  jobService.createPosition("Left Back Wheel");
         //  jobService.createDevice("BBB");
-        User u = userService.getUser(name);
-        JobDto jobDto = new JobDto();
-        HashMap<Long, Long> devices = new HashMap<Long, Long>();
-        devices.put(1L, 52L);
-        devices.put(54L, 54L);
-        jobDto.setDeviceSetup(devices);
-        jobService.startNewJob(jobDto,name);
+//        User u = userService.getUser(name);
+//        JobDto jobDto = new JobDto();
+//        HashMap<Long, Long> devices = new HashMap<Long, Long>();
+//        devices.put(1L, 52L);
+//        devices.put(54L, 54L);
+//        jobDto.setDeviceSetup(devices);
+//        jobService.startNewJob(jobDto,name);
         f = f;
+        cacheService.getDeviceMap();
     }
     /*@RequestMapping("/sparkline")
     public ModelAndView crunchifySparklineTest() {

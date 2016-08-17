@@ -37,6 +37,8 @@
           <element id="library" level="project" name="Maven: com.sun.mail:javax.mail:1.4.4" />
           <element id="library" level="project" name="Maven: javax.activation:activation:1.1" />
           <element id="library" level="project" name="Maven: org.json:json:20160212" />
+          <element id="library" level="project" name="Maven: com.hazelcast:hazelcast-spring:3.6" />
+          <element id="library" level="project" name="Maven: com.hazelcast:hazelcast:3.6" />
         </element>
       </element>
       <element id="directory" name="META-INF">
