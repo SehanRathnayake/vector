@@ -6,6 +6,7 @@ VECTOR.namespace("module.dashboard");
 
 VECTOR.module.dashboard = function () {
     var idPrefix = "#DB_";
+
     //add newly created graph js into url array
     var graphUrls = ["resources/js/samplegraph.js",
                      "resources/js/highchartGraph.js"];
@@ -28,15 +29,26 @@ VECTOR.module.dashboard = function () {
 
     };
     var setup = function(){
-        $(".block-graph").draggable();
+        $(".block-graph").draggable({
+            revert:true
+        });
         $(".block-device").draggable({
             revert:true
         });
+        $(".block-graph").append('<div class="highchart-plaster"></div>');
+    };
+
+    var setupCharts = function () {
+        $("#DB_container_A001").vectorDashboardGraph("J-02","D-A001",'#2f7ed8');
+        $("#DB_container_A002").vectorDashboardGraph("J-02","D-A002",'#434348');
+        $("#DB_container_A003").vectorDashboardGraph("J-02","D-A003",'#90ed7d');
+        $("#DB_container_A004").vectorDashboardGraph("J-02","D-A004",'#910000');
     };
     return {
         init: function () {
             loadScript(null);
             setup();
+            setupCharts()
         }
     }
 }();

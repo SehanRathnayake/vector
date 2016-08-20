@@ -20,7 +20,7 @@ public class VibrationDataBuffer {
         VibrationDataBuffer.buffer = buffer;
     }
     public static void insertData(Integer jobId,String key,VibrationData value){
-        if(buffer!=null){
+        if(buffer==null){
             buffer = new HashMap<Integer,Map<String,VibrationData>>();
         }
         Map<String,VibrationData> jobData = buffer.get(jobId);

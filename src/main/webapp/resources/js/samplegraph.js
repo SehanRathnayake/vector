@@ -47,7 +47,7 @@ VECTOR.module.samplegraph = function () {
     return {
         init: function () {
             $(".block").css({"background-color": "#7ed233"});
-            setInterval(crunchifySparkline, 500);
+         //   setInterval(crunchifySparkline, 500);
         }
     }
 }();

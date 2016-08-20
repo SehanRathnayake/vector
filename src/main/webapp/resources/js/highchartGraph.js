@@ -6,9 +6,6 @@ VECTOR.namespace("module.highchartGraph");
 
 VECTOR.module.highchartGraph = function() {
     var idPrefix = "#HCG_";
-    var prevData = randomDataGen();
-    var showData = [];
-
     var chart = {
         type: 'spline',
         animation: Highcharts.svg, // don't animate in IE < IE 10.
@@ -20,9 +17,6 @@ VECTOR.module.highchartGraph = function() {
                 // set up the updating of the chart each second
                 var series = this.series[0];
                 setInterval(function () {
-                    for(var i = 0; i < 90; i++){
-                        showdata[i] = prevData[i+9];
-                    }
                     series.setData(randomDataGen())
                 }, 1000);
             }
@@ -108,18 +102,59 @@ VECTOR.module.highchartGraph = function() {
     $(idPrefix+'container').highcharts(json);
 
     var randomDataGen = function () {
-        var data = [],time = (new Date()).getTime(),i;
-        for (i = -100; i <= 0; i += 1) {
-            data.push({
-                x: time + i * 1000,
-                y: Math.random()
-            });
-        }
+        var data = [];
+        $.ajax({
+            url: 'http://localhost:8082/vector/highchartGraph',
+            dataType: "json",
+            cache: false,
+            data:JSON.stringify(123),
+            contentType: 'application/json;',
+            type: 'POST',
+            async:false,
+            success: function (result) {
+                var time = (new Date()).getTime(),i;
+                for (i = -100; i < 0; i += 1) {
+                    data.push({
+                        x: time + i * 100,
+                        y: result.xAxis[100+i]
+                    });
+                }
+            }
+        });
         return data;
+    };
+
+    var generateSampleDataBuffer = function () {
+        var key="A001"
+            $.ajax({
+                url: 'http://localhost:8082/vector/rest/test',
+                dataType: "json",
+                cache: false,
+                data:key,
+                contentType: 'application/json;',
+                type: 'POST',
+                success: function (result) {
+                    var x=result;
+                }
+            });//your code to be executed after 1 second
+    };
+
+    var setJobId = function () {
+        $.ajax({
+            url: 'http://localhost:8082/vector/rest/jobId',
+            dataType: "json",
+            async:false,
+            data:JSON.stringify(123),
+            contentType: 'application/json',
+            type: 'POST',
+            success: function (result) {
+            }
+        });//your code to be executed after 1 second
     };
 return {
         init : function() {
-
+            setJobId();
+            setInterval(generateSampleDataBuffer,1000);
         }
     }
 }();

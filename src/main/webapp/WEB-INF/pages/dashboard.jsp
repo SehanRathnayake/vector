@@ -1,7 +1,7 @@
 <script src="https://cdn.crunchify.com/wp-content/uploads/code/jquery.sparkline.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="<c:url value="/resources/js/graphwidget.js" />"></script>
 <script src="<c:url value="/resources/js/dashboard.js" />"></script>
-<script src="<c:url value="/resources/js/bootstrap/bootstrap.min.js"/>"></script>
 
 <div class="vector-header">
     Hi, <security:authentication property="principal.fullname"/>.
@@ -10,7 +10,7 @@
 <!--sample graph | use SG_ as id prefix-->
 
 <div>
-        <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
             </div>
@@ -23,7 +23,7 @@
     </nav>
 </div>
 
-<div class = "block-graph" align="center" name = "Sample Graph">
+<%--<div class = "block-graph" align="center" name = "Sample Graph">
 
     <div id="SG_result"></div>
 
@@ -43,6 +43,32 @@
 
     <div id="HCG_container" style="width: 550px; height: 400px; margin: 0 auto"></div>
 
+</div>--%>
+
+<div class="block-graph" name="highChart">
+
+    <div id="DB_container_A001"></div>
+
 </div>
-</body>
-</html>
+
+<div class="block-graph" name="highChart">
+
+    <div id="DB_container_A002"></div>
+
+</div>
+<div class="block-graph" name="highChart">
+
+    <div id="DB_container_A003"></div>
+
+</div>
+<div class="block-graph" name="highChart">
+
+    <div id="DB_container_A004"></div>
+
+</div>
+
+<div class="row">
+    <form action="new">
+        <input class="btn btn-primary" type="submit" value="New Job"/>
+    </form>
+</div>
