@@ -2,7 +2,9 @@ package com.springapp.mvc.controller;
 
 
 import com.springapp.mvc.dto.VibrationData;
+import com.springapp.mvc.service.CacheService;
 import com.springapp.mvc.utility.VibrationDataBuffer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Random;
@@ -15,11 +17,16 @@ import java.util.Random;
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("rest")
 public class RestController {
+
+    @Autowired
+    CacheService cacheService;
+
     Integer jobId;
     @RequestMapping(value="/vibrationData/{espId}",method = RequestMethod.POST, headers = "content-type=application/json")
     public @ResponseBody
-    void add(@PathVariable("espId") String espId,@RequestBody VibrationData data) {
-        VibrationDataBuffer.insertData(jobId,espId,data);
+    void add(@PathVariable("espId") Integer espId,@RequestBody VibrationData data) {
+      //  VibrationDataBuffer.insertData(jobId,espId,data);
+        cacheService.insertVibrationData(espId,data);
         System.out.println("device id :"+espId+" xAxis :"+data.getxAxis()[0]);
 
       }

@@ -1,7 +1,9 @@
 package com.springapp.mvc.controller;
 
 import com.springapp.mvc.dto.VibrationData;
+import com.springapp.mvc.service.CacheService;
 import com.springapp.mvc.utility.VibrationDataBuffer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,10 +18,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller()
 @RequestMapping("/")
 public class HighchartGraphController {
+
+    @Autowired
+    CacheService cacheService;
+
     @RequestMapping(value = "/highchartGraph", method = RequestMethod.POST, headers = "content-type=application/json")
-    public  @ResponseBody
-    VibrationData printWelcome(@RequestBody String jobId) {
-        VibrationData data= VibrationDataBuffer.getValue(Integer.parseInt(jobId),"A001");
+    public
+    @ResponseBody
+    VibrationData printWelcome(@RequestBody String deviceId) {
+        // VibrationData data= VibrationDataBuffer.getValue(Integer.parseInt(jobId),"A001");
+        VibrationData data = cacheService.getVibrationData(Integer.parseInt(deviceId));
         return data;
     }
 }
