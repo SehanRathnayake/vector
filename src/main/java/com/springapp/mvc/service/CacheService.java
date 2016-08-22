@@ -17,4 +17,8 @@ public interface CacheService {
 
     public VibrationData getVibrationData(Integer deviceId);
 
+    public IMap<Integer, VibrationData> getVibrationDataMap();
+
+    public void setVibrationDataMap(IMap<Integer, VibrationData> vibrationDataMap);
+
 }

@@ -31,6 +31,14 @@ public class CacheServiceImpl implements CacheService {
 
     }
 
+    public IMap<Integer, VibrationData> getVibrationDataMap() {
+        return vibrationDataMap;
+    }
+
+    public void setVibrationDataMap(IMap<Integer, VibrationData> vibrationDataMap) {
+        this.vibrationDataMap = vibrationDataMap;
+    }
+
     public VibrationData getVibrationData(Integer deviceId) {
         return vibrationDataMap.get(deviceId);
     }

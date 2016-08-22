@@ -65,9 +65,12 @@
     </hz:hazelcast>
 
     <hz:map instance-ref="instance" id="deviceMap" name="device"/>
+    <hz:map instance-ref="instance" id="vibrationDataMap" name="vibrationData"/>
 
     <bean id="cacheService" class="com.springapp.mvc.service.impl.CacheServiceImpl">
         <property name="deviceMap" ref="deviceMap"/>
+        <property name="vibrationDataMap" ref="vibrationDataMap"/>
     </bean>
+
 
 </beans>
