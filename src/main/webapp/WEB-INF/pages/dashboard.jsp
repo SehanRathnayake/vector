@@ -66,6 +66,11 @@
     <div id="DB_container_A004"></div>
 
 </div>
+<div class="block-graph" name="highChart">
+
+    <div id="DB_container_A005"></div>
+
+</div>
 
 <div class="row">
     <form action="new">

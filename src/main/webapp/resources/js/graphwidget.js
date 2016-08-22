@@ -5,23 +5,32 @@
 (function ($) {
     var chartOptions = {
         chart: {
-            type: 'area',
+            type: 'spline',
             animation: Highcharts.svg, // don't animate in IE < IE 10.
             marginRight: 10,
-            height: 195,
-            width: 295,
+            height: 245,
+            width: 395,
             events: {
                 load: function () {
                     // set up the updating of the chart each second
-                    var series = this.series[0];
+                    var xSeries = this.series[0];
+                    var ySeries = this.series[1];
+                    var zSeries = this.series[2];
                     setInterval(function () {
-                        series.setData(randomDataGen())
+                        xSeries.setData(randomDataGen());
+                        ySeries.setData(randomDataGen());
+                        zSeries.setData(randomDataGen());
                     }, 1000);
                 }
             }
         },
+        colors: ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572',
+            '#FF9655', '#FFF263', '#6AF9C4'],
         xAxis: {
             type: 'datetime',
+            dateTimeLabelFormats: {
+                second: '%H:%M:%S'
+            },
             tickPixelInterval: 10,
             labels:{
                 style:{
@@ -31,7 +40,7 @@
         },
         yAxis: {
             title: {
-                text: 'Value'
+                text: null
             },
             plotLines: [{
                 value: 0,
@@ -62,24 +71,57 @@
             }
         },
         legend: {
-            enabled: false
+            layout: 'horizontal',
+            style:{
+                "font-size":"8px"
+            },
+            borderWidth: 0,
+            enabled: true
         },
         exporting: {
             enabled: false
         },
         series: [{
-            name: 'Random data',
+            name: 'X Axis',
             data: (function () {
                 // generate an array of random data
                 var data = [], time = (new Date()).getTime(), i;
                 for (i = -100; i <= 0; i += 1) {
                     data.push({
-                        x: time + i * 100,
+                        x: time + i * 1000,
                         y: Math.random()
                     });
                 }
                 return data;
             }())
+        },{
+            name: 'Y Axis',
+            data: (function () {
+                // generate an array of random data
+                var data = [], time = (new Date()).getTime(), i;
+                for (i = -100; i <= 0; i += 1) {
+                    data.push({
+                        x: time + i * 1000,
+                        y: Math.random()
+                    });
+                }
+                return data;
+            }()),
+            visible:false
+        },{
+            name: 'Z Axis',
+            data: (function () {
+                // generate an array of random data
+                var data = [], time = (new Date()).getTime(), i;
+                for (i = -100; i <= 0; i += 1) {
+                    data.push({
+                        x: time + i * 1000,
+                        y: Math.random()
+                    });
+                }
+                return data;
+            }()),
+            visible:false
         }],
         global: {
             useUTC: false
@@ -91,19 +133,18 @@
         var data = [], time = (new Date()).getTime(), i;
         for (i = -100; i <= 0; i += 1) {
             data.push({
-                x: time + i * 100,
+                x: time + i * 1000,
                 y: Math.random()
             });
         }
         return data;
     };
-
     $.fn.vectorDashboardGraph = function (job, device,color) {
         chartOptions["title"]= {
             text: job+":"+device
         };
-        chartOptions["colors"]=[color];
         this.highcharts(chartOptions);
+        Highcharts.setOptions(Highcharts.theme);
         console.log("yayyy !!!!");
         return this;
     };

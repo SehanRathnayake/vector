@@ -8,8 +8,7 @@ VECTOR.module.dashboard = function () {
     var idPrefix = "#DB_";
 
     //add newly created graph js into url array
-    var graphUrls = ["resources/js/samplegraph.js",
-                     "resources/js/highchartGraph.js"];
+    var graphUrls = ["resources/js/samplegraph.js"];
 
     var loadScript = function (callback) {
         var head = document.getElementsByTagName('head')[0];
@@ -39,10 +38,11 @@ VECTOR.module.dashboard = function () {
     };
 
     var setupCharts = function () {
-        $("#DB_container_A001").vectorDashboardGraph("J-02","D-A001",'#2f7ed8');
-        $("#DB_container_A002").vectorDashboardGraph("J-02","D-A002",'#434348');
-        $("#DB_container_A003").vectorDashboardGraph("J-02","D-A003",'#90ed7d');
-        $("#DB_container_A004").vectorDashboardGraph("J-02","D-A004",'#910000');
+        $("#DB_container_A001").vectorDashboardGraph("J-02","D-A001");
+        $("#DB_container_A002").vectorDashboardGraph("J-02","D-A002");
+        $("#DB_container_A003").vectorDashboardGraph("J-02","D-A003");
+        $("#DB_container_A004").vectorDashboardGraph("J-02","D-A004");
+        $("#DB_container_A005").vectorDashboardGraph("J-02","D-A005");
     };
     return {
         init: function () {
