@@ -38,11 +38,11 @@ VECTOR.module.dashboard = function () {
     };
 
     var setupCharts = function () {
-        $("#DB_container_A001").vectorDashboardGraph("J-02","D-A001");
-        $("#DB_container_A002").vectorDashboardGraph("J-02","D-A002");
-        $("#DB_container_A003").vectorDashboardGraph("J-02","D-A003");
-        $("#DB_container_A004").vectorDashboardGraph("J-02","D-A004");
-        $("#DB_container_A005").vectorDashboardGraph("J-02","D-A005");
+        $("#DB_container_A001").vectorDashboardGraph("J-02","001");
+        $("#DB_container_A002").vectorDashboardGraph("J-02","002");
+        $("#DB_container_A003").vectorDashboardGraph("J-02","003");
+        $("#DB_container_A004").vectorDashboardGraph("J-02","004");
+        $("#DB_container_A005").vectorDashboardGraph("J-02","005");
     };
     return {
         init: function () {

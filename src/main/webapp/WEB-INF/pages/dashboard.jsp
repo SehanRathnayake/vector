@@ -3,9 +3,20 @@
 <script src="<c:url value="/resources/js/graphwidget.js" />"></script>
 <script src="<c:url value="/resources/js/dashboard.js" />"></script>
 
-<div class="vector-header">
+<div class="vector-header" style="
+    font-size: 30px;
+    font-family: inherit;
+    line-height: 2;
+    padding: 8px;
+    color: white;
+">
     Hi, <security:authentication property="principal.fullname"/>.
-    <a href="${logoutUrl}">Log out</a>
+    <a href="${logoutUrl}" style="
+    float: right;
+        font-size: 15px;
+    margin-right: 10px;
+    color: whitesmoke;
+">Log out</a>
 </div>
 <!--sample graph | use SG_ as id prefix-->
 
@@ -18,6 +29,12 @@
                 <li class="active"><a href="#">Dashboard</a></li>
                 <li><a href="customer">Customer</a></li>
                 <li><a href="vehicle">Vehicle</a></li>
+                <li style="
+    float: right;
+    background-color: '#47759a';
+">
+                    <a href="new">Create new job</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -72,8 +89,4 @@
 
 </div>
 
-<div class="row">
-    <form action="new">
-        <input class="btn btn-primary" type="submit" value="New Job"/>
-    </form>
-</div>
+

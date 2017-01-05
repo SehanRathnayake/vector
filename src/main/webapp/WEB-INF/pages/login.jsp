@@ -5,7 +5,9 @@
 </div>
 <div class="row">
     <div class="col-lg-4"></div>
-    <div class="col-lg-4">
+    <div class="col-lg-4" style="
+    margin-top: 50px;
+">
         <div class="container col-lg-12 well">
             <h1>Login</h1>
             <c:if test="${param.failed == true}">
