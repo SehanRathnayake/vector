@@ -10,6 +10,7 @@
     <http use-expressions="true" authentication-manager-ref="authenticationManager">
 
         <security:intercept-url pattern="/home" access="permitAll"/>
+        <security:intercept-url pattern="/test" access="permitAll"/>
         <security:intercept-url pattern="/resources/**" access="permitAll"/>
         <security:intercept-url pattern="/rest/**" access="permitAll"/>
         <security:intercept-url pattern="/sparkline" access="permitAll"/>

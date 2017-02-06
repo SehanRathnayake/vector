@@ -2,6 +2,7 @@ package com.springapp.mvc.controller;
 
 import com.springapp.mvc.dto.UserDetailsForAuthentication;
 import com.springapp.mvc.service.CacheService;
+import com.springapp.mvc.service.ExcelManepulation;
 import com.springapp.mvc.service.JobService;
 import com.springapp.mvc.service.UserService;
 import org.json.JSONArray;
@@ -33,6 +34,9 @@ public class HomeController {
     @Autowired
     CacheService cacheService;
 
+    @Autowired
+    ExcelManepulation excelManepulation;
+
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String printWelcome(ModelMap model) {
 
@@ -53,10 +57,10 @@ public class HomeController {
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public void someControllerMethod(HttpServletRequest request, HttpSession session) {
-        Boolean f = request.isUserInRole("Do a Test");
-        UserDetailsForAuthentication user = (UserDetailsForAuthentication) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+       // Boolean f = request.isUserInRole("Do a Test");
+        //UserDetailsForAuthentication user = (UserDetailsForAuthentication) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //String h=jobService.getPositionDesc(4L);
-        String name = user.getUsername();
+    //    String name = user.getUsername();
         //  jobService.createPosition("Left Back Wheel");
         //  jobService.createDevice("BBB");
 //        User u = userService.getUser(name);
@@ -66,8 +70,9 @@ public class HomeController {
 //        devices.put(54L, 54L);
 //        jobDto.setDeviceSetup(devices);
 //        jobService.startNewJob(jobDto,name);
-        f = f;
-        cacheService.getDeviceMap();
+     //   f = f;
+      //  cacheService.getDeviceMap();
+        excelManepulation.preprocessing();
     }
     /*@RequestMapping("/sparkline")
     public ModelAndView crunchifySparklineTest() {

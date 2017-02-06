@@ -10,6 +10,9 @@ import java.util.Map;
  *      on 8/10/2016.
  */
 public class VibrationDataBuffer {
+
+    static String status;
+
     static Map<Integer,Map<String,VibrationData>> buffer=null;
 
     public static Map<Integer,Map<String,VibrationData>> getBuffer() {
@@ -37,4 +40,19 @@ public class VibrationDataBuffer {
             return null;
         }
     }
+
+    public static String getStatus() {
+        if(status==null){
+            return "DISPLAY";
+        }
+        else{
+            return status;
+        }
+    }
+
+    public static void setStatus(String status) {
+        VibrationDataBuffer.status = status;
+    }
+
+
 }
