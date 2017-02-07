@@ -27,7 +27,7 @@
 
 .vector-header {
     width: 100%;
-    height: 75px;
+    height: 15%;
     background-color: #47759a;
     margin-bottom: 0px;
 }
@@ -49,9 +49,9 @@
 
 .vector-car-container {
     display: table;
-    width: 26%;
-    height: 700px;
-    margin-left: 37%;
+    width: 49%;
+    height: 95%;
+    margin-left: 21%;
     margin-right: 17%;
     background-color: #d9edf7;
     background-image: url('/vector/resources/img/car v2.png');
@@ -268,4 +268,15 @@
     position: absolute;
     top: 75px;
     width: 100%;
+}
+.configsection{
+    height:70%;
+}
+.config-nav-buttons{
+    position: absolute;
+    bottom: 7%;
+    right: 5%;
+}
+.row{
+    margin-right: 0;
 }
