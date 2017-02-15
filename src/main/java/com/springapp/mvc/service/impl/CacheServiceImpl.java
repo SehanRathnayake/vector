@@ -19,7 +19,11 @@ public class CacheServiceImpl implements CacheService {
 
     private IMap<Integer, Integer> deviceMap;
 
+    private IMap<Integer, Integer> usedDeviceMap;
+
     private IMap<Integer, VibrationData> vibrationDataMap;
+
+    public IMap<Integer,String> deviceWheelMap;
 
     public IMap<Integer, Integer> getDeviceMap() {
         return deviceMap;
@@ -29,6 +33,10 @@ public class CacheServiceImpl implements CacheService {
 
         vibrationDataMap.put(deviceId, value, timeout, TimeUnit.MILLISECONDS);
 
+    }
+
+    public void insertDeviceData(Integer deviceId, Integer status){
+        deviceMap.put(deviceId,status,timeout,TimeUnit.MILLISECONDS);
     }
 
     public IMap<Integer, VibrationData> getVibrationDataMap() {
@@ -47,4 +55,25 @@ public class CacheServiceImpl implements CacheService {
         this.deviceMap = deviceMap;
     }
 
+    public void setUsedDeviceMap(IMap<Integer, Integer> usedDeviceMap) {
+        this.usedDeviceMap = usedDeviceMap;
+    }
+    public void insertUsedDevices(Integer deviceId, Integer status){
+        usedDeviceMap.put(deviceId,status,65000,TimeUnit.MILLISECONDS);
+    }
+
+    public IMap<Integer, Integer> getUsedDeviceMap() {
+        return usedDeviceMap;
+    }
+
+    public IMap<Integer, String> getDeviceWheelMap() {
+        return deviceWheelMap;
+    }
+
+    public void setDeviceWheelMap(IMap<Integer, String> deviceWheelMap) {
+        this.deviceWheelMap = deviceWheelMap;
+    }
+    public void insertDeviceWheel(Integer deviceId, String wheel){
+        deviceWheelMap.put(deviceId,wheel);
+    }
 }

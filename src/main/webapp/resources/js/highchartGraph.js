@@ -6,6 +6,7 @@ VECTOR.namespace("module.highchartGraph");
 
 VECTOR.module.highchartGraph = function() {
     var idPrefix = "#HCG_";
+    var ip ="192.168.43.150";
     var chart = {
         type: 'spline',
         animation: Highcharts.svg, // don't animate in IE < IE 10.
@@ -104,7 +105,7 @@ VECTOR.module.highchartGraph = function() {
     var randomDataGen = function () {
         var data = [];
         $.ajax({
-            url: 'http://localhost:8082/vector/highchartGraph',
+            url: 'http://'+ip+':8082/vector/highchartGraph',
             dataType: "json",
             cache: false,
             data:JSON.stringify(123),
@@ -127,7 +128,7 @@ VECTOR.module.highchartGraph = function() {
     var generateSampleDataBuffer = function () {
         var key="A001"
             $.ajax({
-                url: 'http://localhost:8082/vector/rest/test',
+                url: 'http://'+ip+':8082/vector/rest/test',
                 dataType: "json",
                 cache: false,
                 data:key,
@@ -141,7 +142,7 @@ VECTOR.module.highchartGraph = function() {
 
     var setJobId = function () {
         $.ajax({
-            url: 'http://localhost:8082/vector/rest/jobId',
+            url: 'http://'+ip+':8082/vector/rest/jobId',
             dataType: "json",
             async:false,
             data:JSON.stringify(123),

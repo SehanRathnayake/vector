@@ -4,6 +4,7 @@
  */
 (function ($) {
     var setChartOptions = function (deviceId) {
+        var ip="192.168.43.150";
         var chartOptions = {
             chart: {
                 type: 'spline',
@@ -136,7 +137,7 @@
     var randomDataGen = function (deviceId, axis) {
         var data = [];
         $.ajax({
-            url: 'http://localhost:8082/vector/graph',
+            url: 'http://'+ip+':8082/vector/graph',
             dataType: "json",
             cache: false,
             data: deviceId,
@@ -198,7 +199,7 @@
     };
     var generateSampleDataBuffer = function () {
         $.ajax({
-            url: 'http://localhost:8082/vector/rest/test',
+            url: 'http://'+ip+':8082/vector/rest/test',
             dataType: "json",
             cache: false,
             data: deviceId,

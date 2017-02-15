@@ -105,7 +105,7 @@
 }
 
 .block-device {
-    height: 12.5%;
+    height: 9%;
     width: 100%;
     background-color: #71d2a9 !important;
     margin-bottom: 5px;
@@ -115,7 +115,14 @@
     box-shadow: 0 0 2px black;
     border-radius: 5px;
 }
-
+.device-active{
+    background-color: #16d21f !important;
+    border: solid 1px #316B4E !important;
+}
+.device-inactive{
+    background-color: #d26564 !important;
+    border: solid 1px #831f0b !important;
+}
 #carLeftTopWheel {
     width: 36.7%;
     height: 14.2%;

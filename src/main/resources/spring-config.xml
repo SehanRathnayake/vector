@@ -42,7 +42,7 @@
         <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
         <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
         <property name="username" value="SYSTEM"/>
-        <property name="password" value="abc123-ABC"/>
+        <property name="password" value="abc123-ABC-"/>
 
     </bean>
 
@@ -66,13 +66,23 @@
 
     <hz:map instance-ref="instance" id="deviceMap" name="device"/>
     <hz:map instance-ref="instance" id="vibrationDataMap" name="vibrationData"/>
+    <hz:map instance-ref="instance" id="usedDeviceMap" name="usedDevice"/>
+    <hz:map instance-ref="instance" id="deviceWheelMap" name="deviceWheel"/>
+
 
     <bean id="multipartResolver"
-          class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+                class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+
+        <!-- setting maximum upload size -->
+        <property name="maxUploadSize" value="1000000" />
+
+    </bean>
 
     <bean id="cacheService" class="com.springapp.mvc.service.impl.CacheServiceImpl">
         <property name="deviceMap" ref="deviceMap"/>
         <property name="vibrationDataMap" ref="vibrationDataMap"/>
+        <property name="usedDeviceMap" ref="usedDeviceMap"/>
+        <property name="deviceWheelMap" ref="deviceWheelMap"/>
     </bean>
 
 

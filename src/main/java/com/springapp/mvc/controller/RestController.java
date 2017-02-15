@@ -1,10 +1,12 @@
 package com.springapp.mvc.controller;
 
 
+import com.springapp.mvc.dto.DeviceWheelDto;
 import com.springapp.mvc.dto.ObdData;
 import com.springapp.mvc.dto.VibrationData;
 import com.springapp.mvc.service.CacheService;
 import com.springapp.mvc.utility.VibrationDataBuffer;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,7 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.*;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -27,18 +31,21 @@ public class RestController {
 
     @Autowired
     CacheService cacheService;
-    String status;
+    String status = "";
     Integer jobId;
 
     @RequestMapping(value = "/vibrationData/{espId}", method = RequestMethod.POST, headers = "content-type=application/json")
     public
     @ResponseBody
-    String add(@PathVariable("espId") Integer espId, @RequestBody VibrationData data) {
-        //  VibrationDataBuffer.insertData(jobId,espId,data);
-        cacheService.insertVibrationData(espId, data);
-        System.out.println("device id :" + espId + " xAxis :" + data.getxAxis()[0]);
-        setStatus("sd");
-        return status;
+    String add(@PathVariable("espId") Integer espId, @RequestBody String data) {
+        cacheService.insertDeviceData(espId, -1);
+        System.out.println("device id :" + espId + " xAxis :" + data);
+        Map<Integer,Integer> usedDevices=cacheService.getUsedDeviceMap();
+        if (usedDevices.containsKey(espId) && usedDevices.get(espId)==1) {
+            return "sd";
+        } else {
+            return "wifi";
+        }
 
     }
 
@@ -69,32 +76,45 @@ public class RestController {
         this.jobId = Integer.parseInt(jobId);
     }
 
-    @RequestMapping(value="/savefile",method=RequestMethod.POST)
-    public ModelAndView upload(@RequestParam CommonsMultipartFile file, HttpSession session){
-        String path=session.getServletContext().getRealPath("/");
-        String filename=file.getOriginalFilename();
+    @RequestMapping(value = "/savefile/{espId}", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String upload(@PathVariable("espId") Integer espId, @RequestPart("file") MultipartFile file, HttpSession session) {
+        String path = "E:\\Vector Data\\";
+        String filename = espId+"-"+file.getOriginalFilename();
 
-        System.out.println(path+" "+filename);
-        try{
-            byte barr[]=file.getBytes();
+        if(cacheService.getDeviceWheelMap().containsKey(espId)){
+            path+=cacheService.getDeviceWheelMap().get(espId)+"\\";
+        }
+        System.out.println(path + " " + filename);
+        try {
+            byte barr[] = file.getBytes();
 
-            BufferedOutputStream bout=new BufferedOutputStream(
-                    new FileOutputStream(path+"/"+filename));
+            BufferedOutputStream bout = new BufferedOutputStream(
+                    new FileOutputStream(path + "/" + filename));
             bout.write(barr);
             bout.flush();
             bout.close();
 
-        }catch(Exception e){System.out.println(e);}
-        return new ModelAndView("upload-success","filename",path+"/"+filename);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        if(cacheService.getUsedDeviceMap().containsKey(espId)){
+            cacheService.getUsedDeviceMap().set(espId,0);
+            return "wifi";
+        }
+        return "wifi";
     }
     public void setStatus(String status) {
         this.status = status;
     }
 
-    @RequestMapping(value = "/obdData/{obdID}", method=RequestMethod.POST)
-    public @ResponseBody String obdData(@PathVariable("obdID") Integer obdID,@RequestBody String indexData) {
+    @RequestMapping(value = "/obdData/{obdID}", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String obdData(@PathVariable("obdID") Integer obdID, @RequestBody String indexData) {
 
-        String value[]  = indexData.split("N");
+        String value[] = indexData.split("N");
         for (String string : value) {
             String splitVlue[] = string.split(",");
             for (String string2 : splitVlue) {
@@ -104,23 +124,76 @@ public class RestController {
         return "Success";
     }
 
-    @RequestMapping(value = "/obdRealTime/{obdID}", method=RequestMethod.POST)
-    public @ResponseBody String jobStatus(@PathVariable("obdID") Integer obdID, @RequestBody ObdData obdData) {
+    @RequestMapping(value = "/obdRealTime/{obdID}", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String jobStatus(@PathVariable("obdID") Integer obdID, @RequestBody ObdData obdData) {
         obdData.getRpm();
-        String text= VibrationDataBuffer.getStatus();
-        if(text.equals("RECORD")){
+        String text = VibrationDataBuffer.getStatus();
+        if (text.equals("RECORD")) {
             return "RECORD30000";
-        }
-        else {
-           return text;
+        } else {
+            return text;
         }
     }
 
-    @RequestMapping(value = "/jobStatus/{status}", method=RequestMethod.GET)
-    public @ResponseBody String changeJobStatus(@PathVariable("status") String status) {
-        String s=VibrationDataBuffer.getStatus();
-       VibrationDataBuffer.setStatus(status);
+    @RequestMapping(value = "/jobStatus/{status}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    String changeJobStatus(@PathVariable("status") String status) {
+        String s = VibrationDataBuffer.getStatus();
+        VibrationDataBuffer.setStatus(status);
         return status;
+    }
+
+    @RequestMapping(value = "/activeDevices", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    Integer[] getActiveDevices() {
+        Integer[] devices = new Integer[7];
+        int i = 0;
+        for (Map.Entry<Integer, Integer> entry : cacheService.getDeviceMap().entrySet()) {
+            devices[i] = entry.getKey();
+            i++;
+        }
+        //  Integer[] devices={1,2};
+        return devices;
+    }
+
+    @RequestMapping(value = "/activate", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    boolean startActiveDevices(@RequestBody DeviceWheelDto[] devices) {
+        for (DeviceWheelDto i : devices) {
+            cacheService.insertUsedDevices(i.getDeviceId(), 1);
+            cacheService.insertDeviceWheel(i.getDeviceId(),i.getWheelName());
+        }
+        return true;
+    }
+
+    @RequestMapping(value = "/testsave/{espId}", method = RequestMethod.POST)
+    public @ResponseBody
+    String uploadFileHandler(@PathVariable("espId") Integer espId,
+                             @RequestParam("file") MultipartFile file) {
+        System.out.println("file acquired "+espId);
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+                // Create the file on server
+                File serverFile = new File("E:\""+espId+"-datalog.txt");
+                BufferedOutputStream stream = new BufferedOutputStream(
+                        new FileOutputStream(serverFile));
+                stream.write(bytes);
+                stream.close();
+
+
+            } catch (Exception e) {
+                 e.getMessage();
+            }
+        } else {
+
+        }
+        return "wifi";
     }
 
 }

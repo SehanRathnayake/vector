@@ -10,6 +10,7 @@
 <script src="<c:url value="/resources/js/wheelwidget.js" />"></script>
 <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+<script src="<c:url value="/resources/js/jquery/jquery.ui.touch-punch.min.js" />"></script>
 
 <div class="vector-header">
 
@@ -163,7 +164,7 @@
 
                         </div>
                     </div>
-                    <div class="btn btn-success disabled" style="height:10%;width:100%">
+                    <div class="btn btn-success btn-start disabled" style="height:10%;width:100%">
                         Start
                     </div>
                 </div>

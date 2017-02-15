@@ -21,6 +21,7 @@
     <script src="<c:url value="/resources/js/bootstrap/bootstrap.min.js" />"></script>
     <script src="<c:url value="/resources/js/bootstrap/bootstrap-datepicker.js" />"></script>
     <script src="<c:url value="/resources/js/bootstrap/bootstrap-touchspin.js" />"></script>
+    <script src="<c:url value="/resources/js/jquery/jquery.ui.touch-punch.min.js" />"></script>
 
     <%-- utility libs --%>
     <script src="<c:url value="/resources/js/util/moment.js" />"></script>
