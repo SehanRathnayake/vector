@@ -6,6 +6,10 @@ VECTOR.namespace("module.home");
 
 VECTOR.module.home = function() {
     var idPrefix = "#H_";
+    var ip;
+    var getip = function(){
+        ip=$("#ipAddress").attr("value");
+    };
     var buttonClick = function () {
         if($("h1").css("color")=='rgb(255, 0, 0)'){
             $("h1").css({"color":"black"});
@@ -15,7 +19,8 @@ VECTOR.module.home = function() {
     };
     return {
         init : function() {
-           $(idPrefix+"testBtn").off('click').on('click',buttonClick);
+            getip();
+            return ip;
         }
     }
 }();

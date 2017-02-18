@@ -27,7 +27,7 @@
 
 .vector-header {
     width: 100%;
-    height: 15%;
+    height: 10%;
     background-color: #47759a;
     margin-bottom: 0px;
 }
@@ -315,4 +315,31 @@
 .wheel-device-name{
     text-align: center;
     line-height: 50%;
+}
+/*#CC_customerSearchList{
+    width: 90%;
+    display: none;
+    position: absolute;
+    top: 27px;
+    left: 16px;
+    background-color: white;
+    border: 1px solid rgba(128, 128, 128, 0.6);
+}*/
+.customer-search-item:hover{
+    background-color: #0044cc;
+}
+.vector-row{
+    margin-bottom: 5px;
+}
+#RS_resultSec{
+    position: absolute;
+    top: 11%;
+    left: 1%;
+    width: 98%;
+    height: 88%;
+    background-color: white;
+    border: 1px solid rgba(128, 128, 128, 0.67);
+    border-radius: 8px;
+    box-shadow: 0 0 6px #c7a0a0;
+    padding: 7px;
 }

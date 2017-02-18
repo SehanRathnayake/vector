@@ -39,13 +39,15 @@ public class HomeController {
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String printWelcome(ModelMap model) {
-
+        String ip=userService.configureIPandPort();
+        model.addAttribute("ip",ip);
         return "home";
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newJob(ModelMap model) {
-
+        String ip=userService.configureIPandPort();
+        model.addAttribute("ip",ip);
         return "carconfig";
     }
 
