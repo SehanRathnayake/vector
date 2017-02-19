@@ -15,4 +15,6 @@ public interface UserService {
 
     public void dosomething();
 
+    public String configureIPandPort();
+
 }

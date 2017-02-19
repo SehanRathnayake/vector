@@ -40,8 +40,8 @@ public class RestController {
     String add(@PathVariable("espId") Integer espId, @RequestBody String data) {
         cacheService.insertDeviceData(espId, -1);
         System.out.println("device id :" + espId + " xAxis :" + data);
-        Map<Integer,Integer> usedDevices=cacheService.getUsedDeviceMap();
-        if (usedDevices.containsKey(espId) && usedDevices.get(espId)==1) {
+        Map<Integer,DeviceWheelDto> usedDevices=cacheService.getDeviceWheelMap();
+        if (usedDevices.containsKey(espId) && usedDevices.get(espId).getStatus()==1) {
             return "sd";
         } else {
             return "wifi";
@@ -84,7 +84,7 @@ public class RestController {
         String filename = espId+"-"+file.getOriginalFilename();
 
         if(cacheService.getDeviceWheelMap().containsKey(espId)){
-            path+=cacheService.getDeviceWheelMap().get(espId)+"\\";
+            path+=cacheService.getDeviceWheelMap().get(espId).getWheelName()+"\\";
         }
         System.out.println(path + " " + filename);
         try {
@@ -95,13 +95,13 @@ public class RestController {
             bout.write(barr);
             bout.flush();
             bout.close();
+            DeviceWheelDto deviceWheelDto=cacheService.getDeviceWheelMap().get(espId);
+            deviceWheelDto.setFileRecieved(true);
+            deviceWheelDto.setStatus(-1);
+            cacheService.insertDeviceWheel(espId,deviceWheelDto);
 
         } catch (Exception e) {
             System.out.println(e);
-        }
-        if(cacheService.getUsedDeviceMap().containsKey(espId)){
-            cacheService.getUsedDeviceMap().set(espId,0);
-            return "wifi";
         }
         return "wifi";
     }
@@ -165,8 +165,8 @@ public class RestController {
     @ResponseBody
     boolean startActiveDevices(@RequestBody DeviceWheelDto[] devices) {
         for (DeviceWheelDto i : devices) {
-            cacheService.insertUsedDevices(i.getDeviceId(), 1);
-            cacheService.insertDeviceWheel(i.getDeviceId(),i.getWheelName());
+            i.setStatus(1);
+            cacheService.insertDeviceWheel(i.getDeviceId(),i);
         }
         return true;
     }
@@ -194,6 +194,18 @@ public class RestController {
 
         }
         return "wifi";
+    }
+    @RequestMapping(value = "/results", method = RequestMethod.POST)
+    public @ResponseBody
+    boolean getResults(@RequestBody DeviceWheelDto[] devices) {
+        boolean results=true;
+        for(DeviceWheelDto deviceWheelDto:devices){
+            if(!cacheService.getDeviceWheelMap().get(deviceWheelDto.getDeviceId()).isFileRecieved()){
+                results=false;
+            }
+        }
+        return results;
+
     }
 
 }

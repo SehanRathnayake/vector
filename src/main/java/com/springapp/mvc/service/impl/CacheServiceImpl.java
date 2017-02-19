@@ -1,6 +1,7 @@
 package com.springapp.mvc.service.impl;
 
 import com.hazelcast.core.IMap;
+import com.springapp.mvc.dto.DeviceWheelDto;
 import com.springapp.mvc.dto.VibrationData;
 import com.springapp.mvc.service.CacheService;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class CacheServiceImpl implements CacheService {
 
     private IMap<Integer, VibrationData> vibrationDataMap;
 
-    public IMap<Integer,String> deviceWheelMap;
+    public IMap<Integer,DeviceWheelDto> deviceWheelMap;
 
     public IMap<Integer, Integer> getDeviceMap() {
         return deviceMap;
@@ -58,6 +59,7 @@ public class CacheServiceImpl implements CacheService {
     public void setUsedDeviceMap(IMap<Integer, Integer> usedDeviceMap) {
         this.usedDeviceMap = usedDeviceMap;
     }
+
     public void insertUsedDevices(Integer deviceId, Integer status){
         usedDeviceMap.put(deviceId,status,65000,TimeUnit.MILLISECONDS);
     }
@@ -66,14 +68,18 @@ public class CacheServiceImpl implements CacheService {
         return usedDeviceMap;
     }
 
-    public IMap<Integer, String> getDeviceWheelMap() {
+    public IMap<Integer, DeviceWheelDto> getDeviceWheelMap() {
         return deviceWheelMap;
     }
 
-    public void setDeviceWheelMap(IMap<Integer, String> deviceWheelMap) {
+    public void setDeviceWheelMap(IMap<Integer, DeviceWheelDto> deviceWheelMap) {
         this.deviceWheelMap = deviceWheelMap;
     }
-    public void insertDeviceWheel(Integer deviceId, String wheel){
+    public void insertDeviceWheel(Integer deviceId, DeviceWheelDto wheel){
         deviceWheelMap.put(deviceId,wheel);
+    }
+
+    public DeviceWheelDto getDeviceWheelData(Integer id){
+        return deviceWheelMap.get(id);
     }
 }

@@ -1,6 +1,7 @@
 package com.springapp.mvc.service;
 
 import com.hazelcast.core.IMap;
+import com.springapp.mvc.dto.DeviceWheelDto;
 import com.springapp.mvc.dto.VibrationData;
 
 
@@ -29,10 +30,10 @@ public interface CacheService {
 
     public IMap<Integer, Integer> getUsedDeviceMap();
 
-    public IMap<Integer, String> getDeviceWheelMap();
+    public IMap<Integer, DeviceWheelDto> getDeviceWheelMap();
 
-    public void setDeviceWheelMap(IMap<Integer,String> deviceWheelMap);
+    public void setDeviceWheelMap(IMap<Integer,DeviceWheelDto> deviceWheelMap);
 
-    public void insertDeviceWheel(Integer deviceId, String wheel);
+    public void insertDeviceWheel(Integer deviceId, DeviceWheelDto wheel);
 
 }
