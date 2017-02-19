@@ -10,5 +10,6 @@ import java.util.List;
 public interface CustomerDao {
 
     public List<Customer> getCustomer(String customer_name);
+    public List<Customer> getCustomerList();
     public Customer createJob(Customer customer);
 }

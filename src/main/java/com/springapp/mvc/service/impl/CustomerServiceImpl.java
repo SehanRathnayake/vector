@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Created by Heshani Samarasekara on 8/15/2016.
  */
@@ -20,5 +22,14 @@ public class CustomerServiceImpl implements CustomerService{
     @Transactional(propagation = Propagation.REQUIRED)
     public Customer createJob(Customer customer){
         return customerDao.createJob(customer);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<Customer> viewList(){
+        return customerDao.getCustomerList();
+    }
+
+    public List<Customer> getCustomer(String name){
+        return customerDao.getCustomer(name);
     }
 }

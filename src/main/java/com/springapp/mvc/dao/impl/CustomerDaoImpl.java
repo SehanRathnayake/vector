@@ -25,10 +25,15 @@ public class CustomerDaoImpl extends BaseJpaDaoImpl<Customer> implements Custome
 
     @Transactional(propagation = Propagation.REQUIRED)
     public List<Customer> getCustomer(String customer_name) {
-
         String queryString = "SELECT c FROM Customer c WHERE c.cus_name = :customer_name";
         TypedQuery<Customer> query = this.entityManager.createQuery(queryString, Customer.class);
         query.setParameter("customer_name", customer_name);
+        return query.getResultList();
+    }
+
+    public List<Customer> getCustomerList() {
+        String queryString = "SELECT c FROM Customer c";
+        TypedQuery<Customer> query = this.entityManager.createQuery(queryString, Customer.class);
         return query.getResultList();
     }
 
