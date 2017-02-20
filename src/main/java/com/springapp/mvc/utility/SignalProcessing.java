@@ -25,32 +25,54 @@ public class SignalProcessing {
     private static ArrayList<double[]> axcelFrequencySpectrum;
     private static ArrayList<double[]> chassiFrequencySpectrum;
 
+
     public static void main(String[] args) {
-        String url = "C:\\Users\\Sehan Rathnayake\\Desktop\\New folder (2)\\Data\\test.xlsx";
+        String url = "C:\\Users\\Sehan Rathnayake\\Desktop\\New folder (2)\\Data engine off\\Vector Data\\civic\\civic high\\civic3.xlsx";
         chassiSignalFull = getSignal(url, "chassi");
-        axcelSignalFull = getSignal(url, "axcel");
+      //  axcelSignalFull = getSignal(url, "axcel");
 
         chassiSignalVertical = calibrate(chassiSignalFull);
-        axcelSignalVertical = calibrate(axcelSignalFull);
+      //  axcelSignalVertical = calibrate(axcelSignalFull);
 
         double chassiSampleRate = getSampleRate(chassiSignalVertical);
-        double axcelSampleRate = getSampleRate(axcelSignalVertical);
+      //  double axcelSampleRate = getSampleRate(axcelSignalVertical);
 
-        writeToExcel(url, "axcel Vertical", axcelSignalVertical);
-        writeToExcel(url, "chassi Vertical", chassiSignalVertical);
+      //  System.out.println("axcel sample rate : " + axcelSampleRate);
+      //  System.out.println("chassi sample rate : " + chassiSampleRate);
+
+     //  axcelSignalVertical = getResampledSignal(axcelSignalVertical, chassiSignalVertical);
+
+        chassiSampleRate = getSampleRate(chassiSignalVertical);
+     //   axcelSampleRate = getSampleRate(axcelSignalVertical);
+
+      //  System.out.println("axcel sample rate : " + axcelSampleRate);
+        System.out.println("chassi sample rate : " + chassiSampleRate);
+     //   writeToExcel(url,"axcel resampled",axcelSignalVertical);
+        //  axcelSignalVertical = lowPassFilter(axcelSignalVertical, 20, axcelSampleRate);
 
 
-        axcelSignalVertical = lowPassFilter(axcelSignalVertical, 20, axcelSampleRate);
-        chassiSignalVertical = lowPassFilter(chassiSignalVertical, 20, chassiSampleRate);
+        //  writeToExcel(url, "axcel filtered", axcelSignalVertical);
+        //writeToExcel(url, "chassi filtered", chassiSignalVertical);
 
-        writeToExcel(url, "axcel filtered", axcelSignalVertical);
-        writeToExcel(url, "chassi filtered", chassiSignalVertical);
+//        int axcelStartingPoint = findShockStartPoint(axcelSignalVertical);
+        int chassiStartingPoint = findShockStartPoint(chassiSignalVertical);
 
-        axcelFrequencySpectrum = fourierTransform(axcelSignalVertical, 10, axcelSampleRate);
-        chassiFrequencySpectrum = fourierTransform(chassiSignalVertical, 10, chassiSampleRate);
+       // System.out.println("axcel shock starting point : " + axcelStartingPoint);
+        System.out.println("chassi shock starting point : " + chassiStartingPoint);
 
-        writeToExcel(url, "axcel frequency", axcelFrequencySpectrum);
-        writeToExcel(url, "chassi frequency", chassiFrequencySpectrum);
+     //   axcelSignalVertical = new ArrayList<double[]>(axcelSignalVertical.subList(axcelStartingPoint - 400, axcelStartingPoint + 1200));
+        chassiSignalVertical = new ArrayList<double[]>(chassiSignalVertical.subList(chassiStartingPoint - 400, chassiStartingPoint + 1200));
+
+//        System.out.println("CHASSI RMS " + getRMS(chassiSignalVertical));
+//        System.out.println("Axcel RMS " + getRMS(axcelSignalVertical));
+//
+//
+//     chassiSignalVertical = new ArrayList<double[]>(chassiSignalVertical.subList(500, chassiSignalVertical.size()));
+  //     chassiFrequencySpectrum = fourierTransform(chassiSignalVertical, 4, chassiSampleRate);
+//
+    writeToExcel(url, "chassi acc with g", chassiSignalVertical);
+//        writeToExcel(url, "chassi  frequency spectrum", chassiFrequencySpectrum);
+
 
 
     }
@@ -197,7 +219,7 @@ public class SignalProcessing {
             valueY = values[2];
             valueZ = values[3];
             double finalValue = valueX * cosX + valueY * cosY + valueZ * cosZ;
-            signal.add(new double[]{values[0], finalValue - g});
+            signal.add(new double[]{values[0], (finalValue) * 9.8065 / g});
         }
 
         return signal;
@@ -300,5 +322,72 @@ public class SignalProcessing {
         return frequencySpectrum;
 
     }
+
+    private static ArrayList<double[]> getDisplacementSignal(ArrayList<double[]> accelerationSignal, double sampleRate) {
+        double t = 1 / sampleRate;
+        double displacement;
+        ArrayList<double[]> displacementSignal = new ArrayList<double[]>();
+
+        Iterator<double[]> iterator = accelerationSignal.iterator();
+        double[] value = iterator.next();
+
+        double veloPrev = 0;
+        displacementSignal.add(new double[]{value[0], 0});
+
+        while (iterator.hasNext()) {
+            value = iterator.next();
+            displacement = veloPrev * t + (value[1] * t * t) / 2;
+            veloPrev = veloPrev + value[1] * t;
+            displacementSignal.add(new double[]{value[0], displacement});
+        }
+
+        return displacementSignal;
+
+    }
+
+    private static ArrayList<double[]> getResampledSignal(ArrayList<double[]> signal, ArrayList<double[]> referenceSignal) {
+        ArrayList<double[]> resampledSignal = new ArrayList<double[]>();
+
+        Iterator<double[]> referenceIterator = referenceSignal.iterator();
+        double[] refvalue = referenceIterator.next();
+        Iterator<double[]> signalIterator = signal.iterator();
+
+        double[] value;
+        double[] nextvalue = signalIterator.next();
+        value = nextvalue;
+        double intrpolatedValue;
+
+        while (referenceIterator.hasNext() && signalIterator.hasNext()) {
+            while (nextvalue[0] <= refvalue[0] && signalIterator.hasNext()) {
+                value = nextvalue;
+                nextvalue = signalIterator.next();
+
+            }
+            intrpolatedValue = value[1] + ((refvalue[0] - value[0]) * (nextvalue[1] - value[1]) / (nextvalue[0] - value[0]));
+
+            resampledSignal.add(new double[]{refvalue[0], intrpolatedValue});
+            refvalue = referenceIterator.next();
+
+        }
+
+
+        return resampledSignal;
+
+
+    }
+
+    static double getRMS(ArrayList<double[]> signal) {
+        Iterator<double[]> iterator = signal.iterator();
+        double rms = 0, value;
+        int i = 0;
+        while (iterator.hasNext()) {
+            value = iterator.next()[1];
+            rms += (value * value);
+            i++;
+        }
+        rms = Math.sqrt(rms / i);
+        return rms;
+    }
+
 
 }
