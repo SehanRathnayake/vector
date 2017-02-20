@@ -6,6 +6,8 @@ VECTOR.namespace("module.carconfig");
 VECTOR.module.carconfig = function () {
     var idPrefix = "#CC_";
     // var ip="192.168.43.150" ;
+    var customerName ;
+    var vehicleName ;
     var ip = "localhost";
     var isNewCustomer = false;
     var wheelNames = ["Front Left", "Front Right", "Rear Left", "Rear Right"];
@@ -117,6 +119,12 @@ VECTOR.module.carconfig = function () {
     var nextSection = function () {
         $(idPrefix + "detailSection").hide();
         $(idPrefix + "wheelConfigSection").show('slide', {direction: 'right'}, 500);
+        customerName=$(idPrefix+"customerName").val();
+        if($(idPrefix+"vehicleBrand").hasClass("vector-hidden")){
+            vehicleName=$(idPrefix+"vehicleBrandCombo").html();
+        }else{
+            vehicleName=$(idPrefix+"vehicleBrand").val();
+        }
     };
 
     var previousSection = function () {
@@ -241,6 +249,8 @@ VECTOR.module.carconfig = function () {
                 var deviceWheel = {};
                 deviceWheel.deviceId = parseInt($(item).attr("id"));
                 deviceWheel.wheelName = wheelName;
+                deviceWheel.customerName = customerName;
+                deviceWheel.vehicleName=vehicleName;
                 deviceIds.push(deviceWheel);
                 $(item).attr("started", true);
             });
@@ -276,9 +286,15 @@ VECTOR.module.carconfig = function () {
                                         $(btn).removeClass("btn-warning");
                                         $(btn).removeClass("btn-info").addClass("btn-info");
                                         $(btn).html("Results");
+                                       $(btn).removeClass("btn-start");
                                         $(btn).removeClass("disabled");
+                                        $(btn).removeClass("btn-results").addClass("btn-results");
                                         _.each(devices, function (item) {
                                             $(item).attr("started", false);
+                                        });
+                                        $('.btn-results').off("click").on("click", function (){
+                                            $("#RS_resultSec").show();
+                                            VECTOR.module.wheelresults.getCharts(deviceIds);
                                         });
                                     } else {
                                         $(btn).html("Something went wrong");
@@ -286,6 +302,7 @@ VECTOR.module.carconfig = function () {
                                         $(btn).removeClass("btn-danger").addClass("btn-danger");
                                         $(btn).removeClass("disabled").addClass("disabled");
                                     }
+                                    
                                 }
                             });
 
@@ -322,6 +339,7 @@ VECTOR.module.carconfig = function () {
                 $(idPrefix+"vehicleBrandList").empty();
                 $(idPrefix+"vehicleBrandCombo").show();
                 $(idPrefix+"vehicleBrand").hide();
+                $(idPrefix+"vehicleBrand").removeClass("vector-hidden").addClass("vector-hidden");
                 var vehicleList=_.where(customerList,{name:$(idPrefix+"customerName").val()});
                 _.each(vehicleList[0].vehicles,function(item){
                     //var div='<div class="customer-search-item" style="padding-left: 5px;">'+item+'</div>';
@@ -333,6 +351,7 @@ VECTOR.module.carconfig = function () {
                 });
                 $(".vehicle-brand-item").off("click").on("click", function() {
                     $(idPrefix + "vehicleBrandCombo").html($(this).find('a').html());
+                    $(idPrefix+"nextBtn").removeClass("disabled")
                 });
             });
         }
@@ -345,7 +364,9 @@ VECTOR.module.carconfig = function () {
             $(idPrefix+"newVehicleSec").removeClass("vector-hidden");
             $(idPrefix+"vehicleBrandCombo").hide();
             $(idPrefix+"vehicleBrand").show();
+            $(idPrefix+"vehicleBrand").removeClass("vector-hidden");
             $(idPrefix+"customerName").val("");
+            $(idPrefix + "nextBtn").removeClass("disabled").addClass("disabled");
             isNewCustomer=true;
         }else{
             $(idPrefix+"newCustomerSec").slideUp(300);
@@ -385,6 +406,13 @@ VECTOR.module.carconfig = function () {
             }, 5000);
             $(idPrefix + "customerName").keyup(function (event) {
                 customerSearch(event);
+            });
+            $(idPrefix + "vehicleBrand").keyup(function (event) {
+                if($(idPrefix + "vehicleBrand").val().length>0){
+                    $(idPrefix + "nextBtn").removeClass("disabled");
+                }else{
+                    $(idPrefix + "nextBtn").removeClass("disabled").addClass("disabled");
+                }
             });
             $(document.body).on('click', function () {
                 $(idPrefix+"customerSearchList").hide();

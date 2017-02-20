@@ -11,7 +11,6 @@
     <security:authorize access="isAuthenticated()">
         <%@ include file="dashboard.jsp" %>
     </security:authorize>
-    <div id = "ipAddress" style="display: none" value="${ip}"></div>
 
 </div>
 

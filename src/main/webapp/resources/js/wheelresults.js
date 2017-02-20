@@ -5,34 +5,55 @@ VECTOR.namespace("module.wheelresults");
 
 VECTOR.module.wheelresults = function () {
     var idPrefix = "#RS_";
-    var setBasicChart = function (deviceId,width,height) {
+    var setBasicChart = function (deviceId, width, height) {
         var ip = "localhost";
         //var ip = "192.168.150.43";
+        var seriesList = [];
+        $.ajax({
+            url: 'http://' + ip + ':8082/vector/getRawData',
+            dataType: "json",
+            data: JSON.stringify(deviceId),
+            cache: false,
+            contentType: 'application/json;',
+            async: false,
+            type: 'POST',
+            success: function (result) {
+                _.each(result, function (item) {
+                    var series = [];
+                    _.each(item.vibration, function (vdata, key) {
+                        if (true) {
+                            var data = {
+                                x: item.time[key],
+                                y: vdata
+                            };
+                            series.push(data);
+                        }
+                    });
+                    seriesList.push(series);
+                })
+            }
+        });
         var chartOptions = {
-            title:{
-                text:"Raw vibrations"
+            title: {
+                text: "Raw vibrations"
             },
             chart: {
                 type: 'spline',
                 animation: Highcharts.svg, // don't animate in IE < IE 10.
                 marginRight: 10,
-                height: height*0.5,
-                width: width*0.95,
+                height: height * 0.5,
+                width: width * 0.95,
                 events: {
                     load: function () {
                         var chassis = this.series[0];
                         var axel = this.series[1];
-                       // zSeries.setData(randomDataGen(deviceId, "zAxis"));
+                        // zSeries.setData(randomDataGen(deviceId, "zAxis"));
                     }
                 }
             },
             colors: ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572',
                 '#FF9655', '#FFF263', '#6AF9C4'],
             xAxis: {
-                type: 'datetime',
-                dateTimeLabelFormats: {
-                    second: '%H:%M:%S'
-                },
                 tickPixelInterval: 10,
                 labels: {
                     style: {
@@ -85,31 +106,13 @@ VECTOR.module.wheelresults = function () {
             },
             series: [{
                 name: 'Chassis',
-                data: (function () {
-                    // generate an array of random data
-                    var data = [], time = (new Date()).getTime(), i;
-                    for (i = -100; i <= 0; i += 1) {
-                        data.push({
-                            x: time + i * 1000,
-                            y: Math.random()
-                        });
-                    }
-                    return data;
-                }()),
+                data: seriesList[0],
+                turboThreshold:0,
                 visible: true
-            },{
+            }, {
                 name: 'Axel',
-                data: (function () {
-                    // generate an array of random data
-                    var data = [], time = (new Date()).getTime(), i;
-                    for (i = -100; i <= 0; i += 1) {
-                        data.push({
-                            x: time + i * 1000,
-                            y: Math.random()
-                        });
-                    }
-                    return data;
-                }()),
+                data: seriesList[1],
+                turboThreshold:0,
                 visible: true
             }],
             global: {
@@ -119,7 +122,7 @@ VECTOR.module.wheelresults = function () {
         };
         return chartOptions;
     };
-    var setDampChart = function (deviceId,width,height) {
+    var setDampChart = function (deviceId, width, height) {
         var ip = "localhost";
         //var ip = "192.168.150.43";
         var dampingChartOptions = {
@@ -127,8 +130,8 @@ VECTOR.module.wheelresults = function () {
                 type: 'spline',
                 animation: Highcharts.svg, // don't animate in IE < IE 10.
                 marginRight: 10,
-                height: height*0.5,
-                width: width*0.4,
+                height: height * 0.5,
+                width: width * 0.4,
                 events: {
                     load: function () {
                         var chassis = this.series[0];
@@ -137,10 +140,10 @@ VECTOR.module.wheelresults = function () {
                 }
             },
 
-            title:{
-                text:"Raw vibrations"
+            title: {
+                text: "Raw vibrations"
             },
-            colors: [ '#64E572',
+            colors: ['#64E572',
                 '#FF9655', '#FFF263', '#6AF9C4'],
             xAxis: {
                 type: 'datetime',
@@ -219,19 +222,19 @@ VECTOR.module.wheelresults = function () {
         };
         return dampingChartOptions;
     };
-    var setFourierChart = function (deviceId,width,height) {
+    var setFourierChart = function (deviceId, width, height) {
         var ip = "localhost";
         //var ip = "192.168.150.43";
         var fourierChartOptions = {
-            title:{
-                text:"Frequency Domain"
+            title: {
+                text: "Frequency Domain"
             },
             chart: {
                 type: 'spline',
                 animation: Highcharts.svg, // don't animate in IE < IE 10.
                 marginRight: 10,
-                height: height*0.5,
-                width: width*0.4,
+                height: height * 0.5,
+                width: width * 0.4,
                 events: {
                     load: function () {
                         var chassis = this.series[0];
@@ -239,7 +242,7 @@ VECTOR.module.wheelresults = function () {
                     }
                 }
             },
-            colors: [ '#ED561B', '#DDDF00', '#24CBE5', '#64E572',
+            colors: ['#ED561B', '#DDDF00', '#24CBE5', '#64E572',
                 '#FF9655', '#FFF263', '#6AF9C4'],
             xAxis: {
                 type: 'datetime',
@@ -322,16 +325,18 @@ VECTOR.module.wheelresults = function () {
 
     return {
         init: function () {
-            var chartOptions = setBasicChart(1,$("#CC_detailSection").width(),$("#CC_detailSection").height());
-            $(idPrefix+"basicResultChart").highcharts(chartOptions);
-            var dChartOptions = setDampChart(1,$("#CC_detailSection").width(),$("#CC_detailSection").height());
-            $(idPrefix+"dampingChart").highcharts(dChartOptions);
-            var fChartOptions = setFourierChart(1,$("#CC_detailSection").width(),$("#CC_detailSection").height());
-            $(idPrefix+"fourierChart").highcharts(fChartOptions);
+
+        },
+        getCharts: function (devices) {
+            var chartOptions = setBasicChart(devices, $(idPrefix + "resultSec").width(), $(idPrefix + "resultSec").height());
+            $(idPrefix + "basicResultChart").highcharts(chartOptions);
+            var dChartOptions = setDampChart(1, $(idPrefix + "resultSec").width(), $(idPrefix + "resultSec").height());
+            $(idPrefix + "dampingChart").highcharts(dChartOptions);
+            var fChartOptions = setFourierChart(1, $(idPrefix + "resultSec").width(), $(idPrefix + "resultSec").height());
+            $(idPrefix + "fourierChart").highcharts(fChartOptions);
             Highcharts.setOptions(Highcharts.theme);
-            console.log("yayyy !!!!");
-            $(idPrefix+"resultSecClose").off("click").on("click",function(){
-                $(idPrefix+"resultSec").hide();
+            $(idPrefix + "resultSecClose").off("click").on("click", function () {
+                $(idPrefix + "resultSec").hide();
             })
         }
     }

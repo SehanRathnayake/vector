@@ -151,7 +151,7 @@
     </div>
     <div class="row config-nav-buttons">
         <div class="col-lg-12">
-            <div class="btn btn-primary right-float" id="CC_nextBtn">Next</div>
+            <div class="btn btn-primary right-float disabled" id="CC_nextBtn">Next</div>
         </div>
     </div>
 

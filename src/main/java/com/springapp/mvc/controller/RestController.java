@@ -84,9 +84,11 @@ public class RestController {
         String filename = espId+"-"+file.getOriginalFilename();
 
         if(cacheService.getDeviceWheelMap().containsKey(espId)){
-            path+=cacheService.getDeviceWheelMap().get(espId).getWheelName()+"\\";
+            DeviceWheelDto deviceWheelDto=cacheService.getDeviceWheelMap().get(espId);
+            path+=deviceWheelDto.getCustomerName()+"\\"+deviceWheelDto.getVehicleName()+"\\"+deviceWheelDto.getWheelName()+"\\";
         }
         System.out.println(path + " " + filename);
+        new File(path).mkdirs();
         try {
             byte barr[] = file.getBytes();
 

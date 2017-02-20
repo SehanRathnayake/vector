@@ -33,7 +33,7 @@
     float: right;
     background-color: '#47759a';
 ">
-                    <a href="new">Create new job</a>
+                    <a href="newJob">Create new job</a>
                 </li>
             </ul>
         </div>

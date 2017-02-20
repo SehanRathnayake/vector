@@ -44,13 +44,6 @@ public class HomeController {
         return "home";
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String newJob(ModelMap model) {
-        String ip=userService.configureIPandPort();
-        model.addAttribute("ip",ip);
-        return "carconfig";
-    }
-
     @RequestMapping(value = "/auth", method = RequestMethod.GET)
     public String auth(ModelMap model) {
         return "home";

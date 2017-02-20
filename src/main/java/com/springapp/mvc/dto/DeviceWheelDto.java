@@ -12,7 +12,24 @@ public class DeviceWheelDto implements Serializable{
     private int status;
     private String partName;
     private boolean fileRecieved;
+    private String customerName;
+    private String vehicleName;
 
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getVehicleName() {
+        return vehicleName;
+    }
+
+    public void setVehicleName(String vehicleName) {
+        this.vehicleName = vehicleName;
+    }
 
     public DeviceWheelDto(int deviceId) {
         this.deviceId = deviceId;
