@@ -6,8 +6,10 @@ VECTOR.namespace("module.carconfig");
 VECTOR.module.carconfig = function () {
     var idPrefix = "#CC_";
     // var ip="192.168.43.150" ;
-    var customerName ;
-    var vehicleName ;
+    var customerName;
+    var vehicleName;
+    var jobId = 1;
+    var pastJobId = 1;
     var ip = "localhost";
     var isNewCustomer = false;
     var wheelNames = ["Front Left", "Front Right", "Rear Left", "Rear Right"];
@@ -20,7 +22,13 @@ VECTOR.module.carconfig = function () {
         value: "A006",
         status: "inactive"
     }, {id: 7, value: "A007", status: "inactive"}]; //devices should be extracted from master data
-    var customerList = [{name:"Udith Rathnayake",vehicles:["Toyota Vios 2007","Hyundai Accent 2001"]}, {name:"Malith Fernando",vehicles:["Suzuki Alto 2017"]},{name:"Supun Prelis",vehicles:"Suzuki Alto 2013"}, {name:"Anjana Gunasekara",vehicles:["Honda Civic 2001"]}];
+    var customerList = [{
+        name: "Udith Rathnayake",
+        vehicles: ["Toyota Vios 2007", "Hyundai Accent 2001"]
+    }, {name: "Malith Fernando", vehicles: ["Suzuki Alto 2017"]}, {
+        name: "Supun Prelis",
+        vehicles: "Suzuki Alto 2013"
+    }, {name: "Anjana Gunasekara", vehicles: ["Honda Civic 2001"]}];
 
     var fillActiveDevices = function () {
         var activeDevices;
@@ -119,11 +127,11 @@ VECTOR.module.carconfig = function () {
     var nextSection = function () {
         $(idPrefix + "detailSection").hide();
         $(idPrefix + "wheelConfigSection").show('slide', {direction: 'right'}, 500);
-        customerName=$(idPrefix+"customerName").val();
-        if($(idPrefix+"vehicleBrand").hasClass("vector-hidden")){
-            vehicleName=$(idPrefix+"vehicleBrandCombo").html();
-        }else{
-            vehicleName=$(idPrefix+"vehicleBrand").val();
+        customerName = $(idPrefix + "customerName").val();
+        if ($(idPrefix + "vehicleBrand").hasClass("vector-hidden")) {
+            vehicleName = $(idPrefix + "vehicleBrandCombo").html();
+        } else {
+            vehicleName = $(idPrefix + "vehicleBrand").val();
         }
     };
 
@@ -250,7 +258,8 @@ VECTOR.module.carconfig = function () {
                 deviceWheel.deviceId = parseInt($(item).attr("id"));
                 deviceWheel.wheelName = wheelName;
                 deviceWheel.customerName = customerName;
-                deviceWheel.vehicleName=vehicleName;
+                deviceWheel.vehicleName = vehicleName;
+                deviceWheel.jobId = jobId;
                 deviceIds.push(deviceWheel);
                 $(item).attr("started", true);
             });
@@ -286,13 +295,13 @@ VECTOR.module.carconfig = function () {
                                         $(btn).removeClass("btn-warning");
                                         $(btn).removeClass("btn-info").addClass("btn-info");
                                         $(btn).html("Results");
-                                       $(btn).removeClass("btn-start");
+                                        $(btn).removeClass("btn-start");
                                         $(btn).removeClass("disabled");
                                         $(btn).removeClass("btn-results").addClass("btn-results");
                                         _.each(devices, function (item) {
                                             $(item).attr("started", false);
                                         });
-                                        $('.btn-results').off("click").on("click", function (){
+                                        $('.btn-results').off("click").on("click", function () {
                                             $("#RS_resultSec").show();
                                             VECTOR.module.wheelresults.getCharts(deviceIds);
                                         });
@@ -302,7 +311,7 @@ VECTOR.module.carconfig = function () {
                                         $(btn).removeClass("btn-danger").addClass("btn-danger");
                                         $(btn).removeClass("disabled").addClass("disabled");
                                     }
-                                    
+
                                 }
                             });
 
@@ -317,69 +326,172 @@ VECTOR.module.carconfig = function () {
     };
 
     var customerSearch = function (event) {
-        if(!isNewCustomer){
+        if (!isNewCustomer) {
             var str = $(idPrefix + "customerName").val();
-            var filteredList= _.filter(customerList, function (num) {
+            var filteredList = _.filter(customerList, function (num) {
                 return num.name.indexOf(str) >= 0;
             });
-            $(idPrefix+"customerSearchList").empty();
-            _.each(filteredList,function(item){
+            $(idPrefix + "customerSearchList").empty();
+            _.each(filteredList, function (item) {
                 //var div='<div class="customer-search-item" style="padding-left: 5px;">'+item+'</div>';
-                var div='<li class="customer-search-item" role="presentation"><a role="menuitem" tabindex="-1"'
-                    +'href="#">'+item.name+'</a>'
-                    +'</li>';
-                $(idPrefix+"customerSearchList").append(div);
+                var div = '<li class="customer-search-item" role="presentation"><a role="menuitem" tabindex="-1"'
+                    + 'href="#">' + item.name + '</a>'
+                    + '</li>';
+                $(idPrefix + "customerSearchList").append(div);
             });
-            if(filteredList.length>0){
-                $(idPrefix+"customerSearchList").show();
+            if (filteredList.length > 0) {
+                $(idPrefix + "customerSearchList").show();
             }
-            $(".customer-search-item").off("click").on("click", function(){
-                $(idPrefix+"customerName").val($(this).find('a').html());
-                $(idPrefix+"customerSearchList").hide();
-                $(idPrefix+"vehicleBrandList").empty();
-                $(idPrefix+"vehicleBrandCombo").show();
-                $(idPrefix+"vehicleBrand").hide();
-                $(idPrefix+"vehicleBrand").removeClass("vector-hidden").addClass("vector-hidden");
-                var vehicleList=_.where(customerList,{name:$(idPrefix+"customerName").val()});
-                _.each(vehicleList[0].vehicles,function(item){
+            $(".customer-search-item").off("click").on("click", function () {
+                $(idPrefix + "customerName").val($(this).find('a').html());
+                $(idPrefix + "customerSearchList").hide();
+                $(idPrefix + "vehicleBrandList").empty();
+                $(idPrefix + "vehicleBrandCombo").show();
+                $(idPrefix + "vehicleBrandCombo").html("Select Vehicle");
+                disablePastResults();
+                $(idPrefix + "vehicleBrand").hide();
+                customerName = $(idPrefix + "customerName").val();
+                $(idPrefix + "vehicleBrand").removeClass("vector-hidden").addClass("vector-hidden");
+                var vehicleList = _.where(customerList, {name: $(idPrefix + "customerName").val()});
+                _.each(vehicleList[0].vehicles, function (item) {
                     //var div='<div class="customer-search-item" style="padding-left: 5px;">'+item+'</div>';
                     var vehicleDetails = item.split(" ");
-                    var div1='<li class="vehicle-brand-item" role="presentation"><a role="menuitem" tabindex="-1"'
-                        +'href="#">'+vehicleDetails[0] +" "+ vehicleDetails[1] +'</a>'
-                        +'</li>';
-                    $(idPrefix+"vehicleBrandList").append(div1);
+                    var div1 = '<li class="vehicle-brand-item" role="presentation"><a role="menuitem" tabindex="-1"'
+                        + 'href="#">' + vehicleDetails[0] + " " + vehicleDetails[1] + '</a>'
+                        + '</li>';
+                    $(idPrefix + "vehicleBrandList").append(div1);
                 });
-                $(".vehicle-brand-item").off("click").on("click", function() {
+                $(".vehicle-brand-item").off("click").on("click", function () {
                     $(idPrefix + "vehicleBrandCombo").html($(this).find('a').html());
-                    $(idPrefix+"nextBtn").removeClass("disabled")
+                    vehicleName = $(idPrefix + "vehicleBrandCombo").html();
+                    disablePastResults();
+                    $(idPrefix + "nextBtn").removeClass("disabled");
+                    getJobId();
+                    setPastJobs();
                 });
             });
         }
     };
-    var showNewDetails =  function () {
-        if($(idPrefix+"newCustomerSec").hasClass("vector-hidden")){
-            $(idPrefix+"newCustomerSec").slideDown(300);
-            $(idPrefix+"newVehicleSec").slideDown(300);
-            $(idPrefix+"newCustomerSec").removeClass("vector-hidden");
-            $(idPrefix+"newVehicleSec").removeClass("vector-hidden");
-            $(idPrefix+"vehicleBrandCombo").hide();
-            $(idPrefix+"vehicleBrand").show();
-            $(idPrefix+"vehicleBrand").removeClass("vector-hidden");
-            $(idPrefix+"customerName").val("");
+    var disablePastResults = function () {
+        $(idPrefix + "frontLeftBtn").removeClass("disabled").addClass("disabled");
+        $(idPrefix + "frontRightBtn").removeClass("disabled").addClass("disabled");
+        $(idPrefix + "rearLeftBtn").removeClass("disabled").addClass("disabled");
+        $(idPrefix + "rearRightBtn").removeClass("disabled").addClass("disabled");
+    };
+    var showNewDetails = function () {
+        if ($(idPrefix + "newCustomerSec").hasClass("vector-hidden")) {
+            $(idPrefix + "newCustomerSec").slideDown(300);
+            $(idPrefix + "newVehicleSec").slideDown(300);
+            $(idPrefix + "newCustomerSec").removeClass("vector-hidden");
+            $(idPrefix + "newVehicleSec").removeClass("vector-hidden");
+            $(idPrefix + "vehicleBrandCombo").hide();
+            $(idPrefix + "vehicleBrand").show();
+            $(idPrefix + "vehicleBrand").removeClass("vector-hidden");
+            $(idPrefix + "customerName").val("");
             $(idPrefix + "nextBtn").removeClass("disabled").addClass("disabled");
-            isNewCustomer=true;
-        }else{
-            $(idPrefix+"newCustomerSec").slideUp(300);
-            $(idPrefix+"newVehicleSec").slideUp(300);
-            $(idPrefix+"newCustomerSec").removeClass("vector-hidden").addClass("vector-hidden");
-            $(idPrefix+"newVehicleSec").removeClass("vector-hidden").addClass("vector-hidden");
-            isNewCustomer=false;
+            $(idPrefix + "pastResults").slideUp(300);
+            disablePastResults();
+            isNewCustomer = true;
+            jobId = 1;
+        } else {
+            $(idPrefix + "newCustomerSec").slideUp(300);
+            $(idPrefix + "newVehicleSec").slideUp(300);
+            $(idPrefix + "pastResults").slideDown(300);
+            $(idPrefix + "newCustomerSec").removeClass("vector-hidden").addClass("vector-hidden");
+            $(idPrefix + "newVehicleSec").removeClass("vector-hidden").addClass("vector-hidden");
+            isNewCustomer = false;
         }
+    };
+    var getJobId = function () {
+        $.ajax({
+            url: 'http://' + ip + ':8082/vector/getJobId',
+            dataType: "json",
+            data: customerName + "_" + vehicleName,
+            cache: false,
+            contentType: 'application/json;',
+            type: 'POST',
+            async:false,
+            success: function (result) {
+                jobId = result;
+            }
+        });
+    };
+    var setPastJobs = function () {
+        $(idPrefix+"jobIdUl").empty();
+        if(jobId>1){
+            $(idPrefix + "jobIdCombo").removeClass("disabled");
+        }
+        for (var i=0;i<jobId-1;i++){
+            var div = '<li class="job-item" role="presentation"><a role="menuitem" tabindex="-1"'
+                + 'href="#">' +"Job "+(i+1)+ '</a>'
+                + '</li>';
+            $(idPrefix+"jobIdUl").append(div);
+        }
+        $(".job-item").off("click").on("click", function () {
+            $(idPrefix + "jobIdCombo").html($(this).find('a').html());
+            var jI=$(this).find('a').html().split(" ");
+            pastJobId = jI[1];
+            disablePastResults();
+            $.ajax({
+                url: 'http://' + ip + ':8082/vector/getWheelNames',
+                dataType: "json",
+                data: customerName + "_" + vehicleName + "_" + jI[1],
+                cache: false,
+                contentType: 'application/json;',
+                type: 'POST',
+                success: function (result) {
+                    _.each(result, function (item) {
+                        switch (item) {
+                            case "Front Left":
+                                $(idPrefix + "frontLeftBtn").removeClass("disabled");
+                                break;
+                            case "Front Right":
+                                $(idPrefix + "frontRightBtn").removeClass("disabled");
+                                break;
+                            case "Rear Left":
+                                $(idPrefix + "rearLeftBtn").removeClass("disabled");
+                                break;
+                            case "Rear Right":
+                                $(idPrefix + "rearRightBtn").removeClass("disabled");
+                                break;
+                        }
+                    })
+                }
+            });
+        });
+    };
+    var getPastResults = function (wheelName) {
+        var devices = [1, 2];
+        var deviceIds = [];
+        _.each(devices, function (item) {
+            var deviceWheel = {};
+            deviceWheel.deviceId = item;
+            deviceWheel.wheelName = wheelName;
+            deviceWheel.customerName = customerName;
+            deviceWheel.vehicleName = vehicleName;
+            deviceWheel.jobId = pastJobId;
+            deviceIds.push(deviceWheel);
+        });
+        $("#RS_resultSec").show();
+        VECTOR.module.wheelresults.getCharts(deviceIds);
+    };
+    var refreshPage = function () {
+        $.ajax({
+            url: 'http://' + ip + ':8082/vector/newJob',
+            dataType: "json",
+            cache: false,
+            contentType: 'application/json;',
+            type: 'GET',
+            async:false,
+            success: function (result) {
+            }
+        });
     };
     return {
         init: function () {
             fillActiveDevices();
             $(idPrefix + "nextBtn").off("click").on("click", nextSection);
+            //$(idPrefix + "refreshBtn").off("click").on("click", refreshPage);
             $(idPrefix + "newCustomer").off("click").on("click", showNewDetails);
             $(idPrefix + "prevBtn").off("click").on("click", previousSection);
             $('body').off("click").on("click", '.well-inactive', function () {
@@ -395,8 +507,11 @@ VECTOR.module.carconfig = function () {
                     clearClick($(this));
                 });
             });
-            $(".job-select-li").off("click").on("click", function() {
+            $(".job-select-li").off("click").on("click", function () {
                 $(idPrefix + "jobTypeMenu").html($(this).find('a').html());
+            });
+            $(".past-result-btn").off("click").on("click", function () {
+                getPastResults($(this).html());
             });
             window.setInterval(function () {
                 fillActiveDevices();
@@ -408,14 +523,14 @@ VECTOR.module.carconfig = function () {
                 customerSearch(event);
             });
             $(idPrefix + "vehicleBrand").keyup(function (event) {
-                if($(idPrefix + "vehicleBrand").val().length>0){
+                if ($(idPrefix + "vehicleBrand").val().length > 0) {
                     $(idPrefix + "nextBtn").removeClass("disabled");
-                }else{
+                } else {
                     $(idPrefix + "nextBtn").removeClass("disabled").addClass("disabled");
                 }
             });
             $(document.body).on('click', function () {
-                $(idPrefix+"customerSearchList").hide();
+                $(idPrefix + "customerSearchList").hide();
             });
 
         }

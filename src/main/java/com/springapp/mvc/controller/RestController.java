@@ -85,7 +85,7 @@ public class RestController {
 
         if(cacheService.getDeviceWheelMap().containsKey(espId)){
             DeviceWheelDto deviceWheelDto=cacheService.getDeviceWheelMap().get(espId);
-            path+=deviceWheelDto.getCustomerName()+"\\"+deviceWheelDto.getVehicleName()+"\\"+deviceWheelDto.getWheelName()+"\\";
+            path+=deviceWheelDto.getCustomerName()+"\\"+deviceWheelDto.getVehicleName()+"\\"+deviceWheelDto.getJobId()+"\\"+deviceWheelDto.getWheelName()+"\\";
         }
         System.out.println(path + " " + filename);
         new File(path).mkdirs();

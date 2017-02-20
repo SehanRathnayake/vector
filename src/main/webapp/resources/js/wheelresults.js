@@ -5,9 +5,16 @@ VECTOR.namespace("module.wheelresults");
 
 VECTOR.module.wheelresults = function () {
     var idPrefix = "#RS_";
+    var customerName;
+    var vehicleName;
+    var wheel;
     var setBasicChart = function (deviceId, width, height) {
         var ip = "localhost";
         //var ip = "192.168.150.43";
+        customerName=deviceId[0].customerName;
+        vehicleName=deviceId[0].vehicleName;
+        wheel=deviceId[0].wheelName;
+        $(idPrefix+"resultSecTitle").html(customerName+" - "+vehicleName+" "+":"+wheel);
         var seriesList = [];
         $.ajax({
             url: 'http://' + ip + ':8082/vector/getRawData',
@@ -130,7 +137,7 @@ VECTOR.module.wheelresults = function () {
                 type: 'spline',
                 animation: Highcharts.svg, // don't animate in IE < IE 10.
                 marginRight: 10,
-                height: height * 0.5,
+                height: height * 0.4,
                 width: width * 0.4,
                 events: {
                     load: function () {
@@ -233,7 +240,7 @@ VECTOR.module.wheelresults = function () {
                 type: 'spline',
                 animation: Highcharts.svg, // don't animate in IE < IE 10.
                 marginRight: 10,
-                height: height * 0.5,
+                height: height * 0.4,
                 width: width * 0.4,
                 events: {
                     load: function () {
@@ -325,7 +332,6 @@ VECTOR.module.wheelresults = function () {
 
     return {
         init: function () {
-
         },
         getCharts: function (devices) {
             var chartOptions = setBasicChart(devices, $(idPrefix + "resultSec").width(), $(idPrefix + "resultSec").height());

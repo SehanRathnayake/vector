@@ -51,11 +51,13 @@
             <div class="col-lg-3">
                 <div class="dropdown">
                     <button class="btn btn-default dropdown-toggle" type="button" id="CC_jobTypeMenu"
-                            data-toggle="dropdown" style="width: 68%;">Select job Type
+                            data-toggle="dropdown" style="width: 68%;">Suspension check
                         <span class="caret"></span></button>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="jobTypeMenu">
-                        <li class="job-select-li" role="presentation" value="Front Left"><a role="menuitem" tabindex="-1"
-                                                                                              href="#">Suspension check</a>
+                        <li class="job-select-li" role="presentation" value="Front Left"><a role="menuitem"
+                                                                                            tabindex="-1"
+                                                                                            href="#">Suspension
+                            check</a>
                         </li>
                     </ul>
                 </div>
@@ -121,7 +123,8 @@
                     <button class="btn btn-default dropdown-toggle" type="button" id="CC_vehicleBrandCombo"
                             data-toggle="dropdown" style="width: 68%; display:none">Select Vehicle
                         <span class="caret"></span></button>
-                    <ul class="dropdown-menu" id="CC_vehicleBrandList" role="menu" aria-labelledby="CC_vehicleBrandCombo">
+                    <ul class="dropdown-menu" id="CC_vehicleBrandList" role="menu"
+                        aria-labelledby="CC_vehicleBrandCombo">
 
                     </ul>
                 </div>
@@ -149,9 +152,43 @@
             </div>
         </div>
     </div>
+    <div class="container well" id="CC_pastResults">
+        <div class="row vector-row">
+            <div class="col-lg-3">
+                <div class="col-lg-4">
+                    <div class>Past results</div>
+                </div>
+                <div class="col-lg-8">
+                    <button class="btn btn-default dropdown-toggle disabled" type="button" id="CC_jobIdCombo"
+                            data-toggle="dropdown" style="width: 68%;">Job Id
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="jobTypeMenu" id="CC_jobIdUl">
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <button class="btn btn-default disabled past-result-btn" type="button" id="CC_frontLeftBtn"
+                        data-toggle="dropdown" style="width: 68%">Front Left</button>
+            </div>
+            <div class="col-lg-2">
+                <button class="btn btn-default disabled past-result-btn" type="button" id="CC_frontRightBtn"
+                        data-toggle="dropdown" style="width: 68%">Front Right</button>
+            </div>
+            <div class="col-lg-2">
+                <button class="btn btn-default disabled past-result-btn" type="button" id="CC_rearLeftBtn"
+                        data-toggle="dropdown" style="width: 68%">Rear Left</button>
+            </div>
+            <div class="col-lg-2">
+                <button class="btn btn-default disabled past-result-btn" type="button" id="CC_resrRightBtn"
+                        data-toggle="dropdown" style="width: 68%">Rear Right</button>
+            </div>
+        </div>
+    </div>
     <div class="row config-nav-buttons">
         <div class="col-lg-12">
             <div class="btn btn-primary right-float disabled" id="CC_nextBtn">Next</div>
+            <div class="btn btn-primary right-float" id="CC_refreshBtn"><a href="newJob" style="    color: white;
+    text-decoration: none; ">Refresh to new Job</a></div>
         </div>
     </div>
 
@@ -213,25 +250,29 @@
             <div class="btn btn-primary right-float" id="CC_prevBtn">Back</div>
         </div>
     </div>
-    <div id="RS_resultSec">
-        <div class="row">
-            <div class="btn" id="RS_resultSecClose" style="float: right">X</div>
-        </div>
-        <div class="row">
-            <div class="col-lg-10 col-sm-10">
-                <div id="RS_basicResultChart"></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-5 col-sm-5">
-                <div id="RS_dampingChart"></div>
-            </div>
-            <div class="col-lg-5 col-sm-5">
-                <div id="RS_fourierChart"></div>
-            </div>
+
+</section>
+<div id="RS_resultSec">
+    <div class="row">
+        <div class="btn" id="RS_resultSecClose" style="float: right">X</div>
+    </div>
+    <div class="row">
+        <div id="RS_resultSecTitle"></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-10 col-sm-10">
+            <div id="RS_basicResultChart"></div>
         </div>
     </div>
-</section>
+    <div class="row">
+        <div class="col-lg-5 col-sm-5">
+            <div id="RS_dampingChart"></div>
+        </div>
+        <div class="col-lg-5 col-sm-5">
+            <div id="RS_fourierChart"></div>
+        </div>
+    </div>
+</div>
 <div id="CC_ipAddress" style="display: none" value="${ip}"></div>
 
 </body>

@@ -13,6 +13,7 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-aop:4.1.1.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-beans:4.1.1.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-context:4.1.1.RELEASE" />
+          <element id="library" level="project" name="Maven: javax.servlet:servlet-api:2.5" />
           <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:4.1.1.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-expression:4.1.1.RELEASE" />
           <element id="library" level="project" name="Maven: org.webjars:jquery:3.0.0" />
@@ -54,6 +55,9 @@
           <element id="library" level="project" name="Maven: org.apache.xmlbeans:xmlbeans:2.6.0" />
           <element id="library" level="project" name="Maven: stax:stax-api:1.0.1" />
           <element id="library" level="project" name="Maven: com.github.virtuald:curvesapi:1.04" />
+          <element id="library" level="project" name="Maven: gov.nist.math:jama:1.0.3" />
+          <element id="library" level="project" name="Maven: com.googlecode.efficient-java-matrix-library:ejml:0.25" />
+          <element id="library" level="project" name="flanagan" />
         </element>
       </element>
       <element id="directory" name="META-INF">

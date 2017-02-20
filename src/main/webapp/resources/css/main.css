@@ -340,7 +340,12 @@
     background-color: white;
     border: 1px solid rgba(128, 128, 128, 0.67);
     border-radius: 8px;
-    box-shadow: 0 0 6px #c7a0a0;
+    box-shadow: 0 0 6px #0e2386;
     padding: 7px;
     display: none;
+    opacity: 0.9;
+}
+#RS_resultSecTitle{
+    font-size: 16px;
+    padding-left: 32px;
 }
