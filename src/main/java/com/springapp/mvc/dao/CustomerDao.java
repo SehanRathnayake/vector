@@ -14,5 +14,5 @@ public interface CustomerDao {
     public List<Customer> getCustomerList();
     public Customer createJob(Customer customer);
     public void removeCustomer(long id);
-    public CustomerDto getSingleCustomer(int id);
+    public CustomerDto getSingleCustomer(long id);
 }

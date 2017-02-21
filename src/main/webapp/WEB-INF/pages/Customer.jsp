@@ -111,11 +111,8 @@
         </div>
         <div class="well-sm">
             <div class="center-block">Vehicle Details</div>
-            <div class="well">
-                <div type="input">Vehicle model:<input class="form-control customer-input"></div>
-                <div type="input">Number plate: <input class="form-control customer-input"></div>
-                <div type="input">Manufacture Date: <input class="form-control customer-input"></div>
-                <div type="input">Odometer: <input class="form-control customer-input"></div>
+            <div class="well" id="vehicleDetail">
+
             </div>
         </div>
         <button id="CUS_removeButton" type="button" class="btn btn-danger btn-sm pull-right">Remove</button>
@@ -140,7 +137,7 @@
 <section id="CUS_addCustomer" style="display: none">
     <div class ="col-sm-10" >
         <div class="well">
-    <form role="form">
+    <form role="form" id="CUS_addCustomerForm" onsubmit="return false;">
         <div class="form-group">
             <label for="addName">Name</label>
             <input id="addName" class="form-control col-sm-10" type="text">
@@ -158,22 +155,28 @@
             <input id="addEmail" class="form-control col-sm-10" type="email">
         </div>
         <div class="form-group">
-            <label for="addBrand">Brand</label>
-            <form id="addBrand">
-                <select name="item" class="form-control">
-                    <option value="Honda">Honda</option>
-                    <option value="Suzuki">Suzuki</option>
-                    <option value="kjdsa">kjdsa</option>
-                </select>
-            </form>
+            <button id="CUS_addCustomerBtn" class="btn btn-default" type="submit">Save</button>
+        </div>
+    </form>
+            <form role="form" id="CUS_addVehicleForm">
+        <div class="form-group">
+            <label>Add Vehicle</label>
+        </div>
+        <div class="form-group">
+            <label for="numberPlate">Number plate</label>
+            <input id="numberPlate" class="form-control col-sm-10" type="text">
+        </div>
+        <div class="form-group">
+            <label for="manufactDate">Number plate</label>
+            <input id="manufactDate" class="form-control col-sm-10" type="date">
         </div>
         <div class="form-group">
             <label for="addModel">Model</label>
             <form id="addModel">
                 <select name="item" class="form-control">
-                    <option value="Honda">Honda</option>
-                    <option value="Suzuki">Suzuki</option>
-                    <option value="kjdsa">kjdsa</option>
+                    <option value="abc">abc</option>
+                    <option value="abcd">abcd</option>
+                    <option value="abcde">abcde</option>
                 </select>
             </form>
         </div>
@@ -182,10 +185,14 @@
             <input id="addOdometer" class="form-control col-sm-10" type="number">
         </div>
         <div class="form-group">
-                <button id="CUS_addCustomerBtn" class="btn btn-default" type="submit">Save</button>
-                <button id="CUS_cancelAdd" class="btn btn-default" type="submit">Cancel</button>
+            <button id="CUS_addMore" class="btn btn-default alert-info" type="submit">+</button>
         </div>
-    </form>
+                <button id="CUS_addVehicleBtn" class="btn btn-default" type="submit">Save</button>
+</form>
+            <div>
+
+            </div>
+            <button id="CUS_done" class="btn btn-default" type="submit">Done</button>
             </div>
         </div>
 </section>

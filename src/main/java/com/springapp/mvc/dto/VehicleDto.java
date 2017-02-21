@@ -1,45 +1,23 @@
-package com.springapp.mvc.model;
+package com.springapp.mvc.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by Heshani Samarasekara on 8/16/2016.
+ * Created by Heshani Samarasekara on 2/21/2017.
  */
-
-@Entity
-@Table(name = "T_VEHICLE")
-public class Vehicle implements Serializable{
-
-    @Id
-    @Column (name = "VEHICLE_ID")
+public class VehicleDto implements Serializable {
     private int vehicleId;
-
-    @Column (name = "VEHICLE_MODEL_ID")
     private int vehicleModelId;
-
-    @Column (name = "NUMBER_PLATE")
     private String numberPlate;
-
-    @Column (name = "MANUFACT_DATE")
     private Date manufactDate;
-
-    @Column (name = "ODOMETER")
     private int odometer;
-
-    @Column (name = "CUSTOMER")
     private int customer;
 
     public int getVehicleId() {
         return vehicleId;
-    }
-
-    public void setVehicleId(int vehicleId) {
-        this.vehicleId = vehicleId;
     }
 
     public int getVehicleModelId() {
@@ -62,8 +40,15 @@ public class Vehicle implements Serializable{
         return manufactDate;
     }
 
-    public void setManufactDate(Date manufactDate) {
-        this.manufactDate = manufactDate;
+    public void setManufactDate(String manufactDate) {
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = fmt.parse("2001-01-01");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        this.manufactDate = date;
     }
 
     public int getOdometer() {
@@ -81,6 +66,4 @@ public class Vehicle implements Serializable{
     public void setCustomer(int customer) {
         this.customer = customer;
     }
-
-
 }

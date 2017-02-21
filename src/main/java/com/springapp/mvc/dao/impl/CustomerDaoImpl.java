@@ -1,11 +1,8 @@
 package com.springapp.mvc.dao.impl;
 
 import com.springapp.mvc.dao.CustomerDao;
-import com.springapp.mvc.dao.UserDao;
 import com.springapp.mvc.dto.CustomerDto;
 import com.springapp.mvc.model.Customer;
-import com.springapp.mvc.model.Job;
-import com.springapp.mvc.model.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -60,7 +57,7 @@ public class CustomerDaoImpl extends BaseJpaDaoImpl<Customer> implements Custome
         this.entityManager = entityManager;
     }
 
-    public CustomerDto getSingleCustomer(int id){
+    public CustomerDto getSingleCustomer(long id){
         Customer c = getEntity(Customer.class,id);
         CustomerDto customer = new CustomerDto();
         customer.setId(c.getCustomerid());
