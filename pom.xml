@@ -230,6 +230,12 @@
             <artifactId>ejml</artifactId>
             <version>0.25</version>
         </dependency>
+        <dependency>
+            <groupId>com.flanagan</groupId>
+            <artifactId>flanagan</artifactId>
+            <version>10.2.0</version>
+
+        </dependency>
 
     </dependencies>
     <repositories>

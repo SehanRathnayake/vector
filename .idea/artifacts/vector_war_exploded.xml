@@ -57,7 +57,7 @@
           <element id="library" level="project" name="Maven: com.github.virtuald:curvesapi:1.04" />
           <element id="library" level="project" name="Maven: gov.nist.math:jama:1.0.3" />
           <element id="library" level="project" name="Maven: com.googlecode.efficient-java-matrix-library:ejml:0.25" />
-          <element id="library" level="project" name="flanagan" />
+          <element id="library" level="project" name="Maven: com.flanagan:flanagan:10.2.0" />
         </element>
       </element>
       <element id="directory" name="META-INF">
