@@ -10,7 +10,6 @@
     <properties>
         <spring.version>4.1.1.RELEASE</spring.version>
         <spring.security.version>3.2.0.RELEASE</spring.security.version>
-
     </properties>
 
     <dependencies>
@@ -230,6 +229,13 @@
             <artifactId>ejml</artifactId>
             <version>0.25</version>
         </dependency>
+        <dependency>
+            <groupId>com.flanagan</groupId>
+            <artifactId>flanagan</artifactId>
+            <version>10.2.0</version>
+
+        </dependency>
+
         <dependency>
             <groupId>com.flanagan</groupId>
             <artifactId>flanagan</artifactId>

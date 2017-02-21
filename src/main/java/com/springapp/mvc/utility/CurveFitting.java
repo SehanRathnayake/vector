@@ -1,8 +1,10 @@
 package com.springapp.mvc.utility;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import Jama.*;
+import com.springapp.mvc.dto.SuspensionTestResults;
 import flanagan.complex.Complex;
 import flanagan.complex.ComplexMatrix;
 import org.ejml.data.Complex64F;
@@ -11,18 +13,25 @@ import org.ejml.factory.DecompositionFactory;
 import org.ejml.interfaces.decomposition.EigenDecomposition;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.cos;
 
 /**
  * Created by Sehan Rathnayake on 17/02/19.
  */
 public class CurveFitting {
     public static void main(String[] args) {
-        getDampedSineCurve();
+        //getDampedSineCurve();
 
     }
 
-    public static void getDampedSineCurve() {
-        double[] signal = new double[]{0, -0.5, -1, -.5, 0, 0.5, 1, 0.5, 0, -0.4, -0.9, -0.4};
+    public static SuspensionTestResults getDampedSineCurve(ArrayList<double[]> sigList,int range, double sampleRate) {
+        Iterator<double[]> iterator = sigList.iterator();
+        double[] signal = new double[range];
+        int pointer = 0;
+        while (pointer<range) {
+            signal[pointer++] = iterator.next()[1];
+        }
+
         double[] f = fourierTransform(signal);
         double max = f[0];
         int index = 0;
@@ -132,13 +141,118 @@ public class CurveFitting {
         double[][] M2 = new double[n][2];
         for (int i = 0; i < n; i++) {
             M2[i][0] = Math.exp(alphar * i) * Math.sin(i * wr);
-            M2[i][1] = Math.exp(alphar * i) * Math.cos(i * wr);
+            M2[i][1] = Math.exp(alphar * i) * cos(i * wr);
         }
 
-        Matrix temp8 = (new Matrix(M2).transpose().times(new Matrix(M2)));
-// double[][] coff2
+        Matrix temp8 = new Matrix(M2);
+        Matrix coff2 = (temp8.transpose().times(temp8)).inverse().times(temp8.transpose()).times(getMatrix(signal).transpose());
 
-        System.out.println();
+        ComplexLo cc = new ComplexLo(coff2.get(1, 0), coff2.get(0, 0));
+        double Ar = ComplexLo.abs(cc);
+        double phr = ComplexLo.arg(cc.conjugate());
+
+
+        double[] sig2r = new double[n];
+        for (int i = 0; i < n; i++) {
+            sig2r[i] = Ar * Math.exp(alphar * i) * cos(i * wr + phr);
+        }
+
+        double ind1a = -1;
+        double ind2a = -1;
+        double kk = 1;
+
+        while (true) {
+            nn = 1000;
+            double[] ee = new double[(int) nn];
+            double[] vv = new double[(int) nn];
+            for (int i = 0; i < vv.length; i++) {
+                vv[i] = 0.2 + 5 * (double) i / (double) nn;
+            }
+            double y = Double.MAX_VALUE;
+            int ind1 = 0;
+            for (int i = 0; i < nn; i++) {
+                double[] sigsig = new double[n];
+                for (int j = 0; j < n; j++) {
+                    sigsig[j] = Ar * Math.exp(vv[i] * alphar * (j)) * Math.cos(wr * (j) + phr);
+
+                }
+
+                double sum = 0;
+                for (int j = 0; j < n; j++) {
+                    sum += Math.abs(signal[j] - sigsig[j]);
+                }
+
+                ee[i] = sum;
+                if (sum < y) {
+                    y = sum;
+                    ind1 = i;
+                }
+            }
+            alphar = vv[ind1] * alphar;
+
+            y = Double.MAX_VALUE;
+            int ind2 = 0;
+
+            for (int i = 0; i < vv.length; i++) {
+                vv[i] = 0.5 + 2 * (i) / nn;
+            }
+
+
+            for (int i = 0; i < nn; i++) {
+                double[] sigsig = new double[n];
+                for (int j = 0; j < n; j++) {
+                    sigsig[j] = vv[i] * Ar * Math.exp(alphar * (j)) * Math.cos(wr * (j) + phr);
+
+                }
+
+                double sum = 0;
+                for (int j = 0; j < n; j++) {
+                    sum += Math.abs(signal[j] - sigsig[j]);
+                }
+
+                ee[i] = sum;
+                if (sum < y) {
+                    y = sum;
+                    ind2 = i;
+                }
+            }
+            Ar = vv[ind2] * Ar;
+            if (ind1 == ind1a) {
+                if (ind2 == ind2a)
+                    break;
+            }
+            ind1a = ind1;
+            ind2a = ind2;
+            kk = kk + 1;
+            if (kk > 100) break;
+
+        }
+
+        sig2r=new double[sigList.size()];
+        for (int i = 0; i < sigList.size(); i++) {
+            sig2r[i] = Ar * Math.exp(alphar * (i)) * Math.cos(wr * (i) + phr);
+        }
+
+        ArrayList<double[]> sineWave = new ArrayList<double[]>();
+        iterator = sigList.iterator();
+
+        pointer = 0;
+        while (iterator.hasNext()) {
+            double[] value = iterator.next();
+            sineWave.add(new double[]{value[0], value[1], sig2r[pointer++]});
+        }
+        double pi=Math.PI;
+        double c = Math.abs(alphar) / (Math.sqrt(wr * wr + alphar * alphar));
+        double fd = wr * sampleRate/(2*pi);
+        double fn = fd / Math.sqrt(1 - c * c);
+
+        SuspensionTestResults suspensionTestResults = new SuspensionTestResults();
+        suspensionTestResults.setDampedFrequency(fd);
+        suspensionTestResults.setDampingFactor(c);
+        suspensionTestResults.setNaturalFrequency(fn);
+        suspensionTestResults.setSinewave(sineWave);
+
+        return suspensionTestResults;
     }
 
     public static double[] fourierTransform(double[] signal) {
@@ -157,7 +271,7 @@ public class CurveFitting {
 
             for (int k = 0; k < n; k++) {
                 double twoPInjk = ((2 * Math.PI) / n) * (j * k);
-                firstSummation += signal[k] * Math.cos(twoPInjk);
+                firstSummation += signal[k] * cos(twoPInjk);
                 secondSummation += signal[k] * Math.sin(twoPInjk);
             }
 
