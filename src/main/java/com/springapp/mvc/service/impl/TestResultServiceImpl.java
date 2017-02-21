@@ -1,5 +1,6 @@
 package com.springapp.mvc.service.impl;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -9,9 +10,7 @@ import com.springapp.mvc.dto.SuspensionTestResults;
 import com.springapp.mvc.utility.CurveFitting;
 import com.springapp.mvc.utility.ExcelManipulations;
 
-import static com.springapp.mvc.utility.ExcelManipulations.getSignal;
-import static com.springapp.mvc.utility.ExcelManipulations.insertToSpreadsheet;
-import static com.springapp.mvc.utility.ExcelManipulations.writeToExcel;
+import static com.springapp.mvc.utility.ExcelManipulations.*;
 import static com.springapp.mvc.utility.SignalProcessing.*;
 
 /**
@@ -50,22 +49,31 @@ public class TestResultServiceImpl {
     private static double maxAccStability = 0.1;
     private static double cutOffFrequency = 2;
 
+    private boolean writeToexcel = false;
 
     private ArrayList<double[]> axcelFrequencySpectrum;
     private ArrayList<double[]> chassiFrequencySpectrum;
 
     public static void main(String[] args) {
-        new TestResultServiceImpl().getResults("sehan", "corolla", "job1", "Rear Left");
+        SuspensionTestResults s = new TestResultServiceImpl().getResults("sehan", "corolla", "job1", "Rear Left");
+
+
     }
 
-    public void getResults(String customer, String vehicle, String job, String wheel) {
+    public SuspensionTestResults getResults(String customer, String vehicle, String job, String wheel) {
         String url = baseUrl + customer + "\\" + vehicle + "\\" + job + "\\" + wheel + "\\";
         String excelFileName = customer + "-" + vehicle + "-" + job + "-" + wheel + ".xlsx";
-        insertToSpreadsheet(url, excelFileName);
-
         String excelUrl = url + excelFileName;
-        chassiSignalFull = getSignal(excelUrl, "chassi");
-        axcelSignalFull = getSignal(excelUrl, "axcel");
+        if (writeToexcel) {
+            insertToSpreadsheet(url, excelFileName);
+            chassiSignalFull = getSignal(excelUrl, "chassi");
+            axcelSignalFull = getSignal(excelUrl, "axcel");
+        } else {
+            String chassiData = url + "\\2-datalog.txt";
+            String axcelData = url + "\\1-datalog.txt";
+            chassiSignalFull = getSignalFromText(chassiData);
+            axcelSignalFull = getSignalFromText(axcelData);
+        }
 
         axcelSignalVertical = calibrate(axcelSignalFull);
         chassiSignalVertical = calibrate(chassiSignalFull);
@@ -106,11 +114,26 @@ public class TestResultServiceImpl {
         suspensionTestResults.setAxcelPeakValue(axcelPeakValue);
         suspensionTestResults.setChassiPeakValue(chassiPeakValue);
 
-        saveResults(suspensionTestResults, excelUrl);
+        if (writeToexcel) {
+            saveResultsToExcel(suspensionTestResults, excelUrl);
+        }
 
+        FileOutputStream fout = null;
+        try {
+            fout = new FileOutputStream(url + "results.ser");
+            ObjectOutputStream oos = new ObjectOutputStream(fout);
+            oos.writeObject(suspensionTestResults);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return suspensionTestResults;
     }
 
-    public static void saveResults(SuspensionTestResults suspensionTestResults, String url) {
+    public static void saveResultsToExcel(SuspensionTestResults suspensionTestResults, String url) {
 
         writeToExcel(url, "axcel clipped", suspensionTestResults.getAxcelSignalClipped());
         writeToExcel(url, "chassi clipped", suspensionTestResults.getChassiSignalClipped());
@@ -127,5 +150,29 @@ public class TestResultServiceImpl {
         writeToExcel(url, "result", map);
 
     }
+
+    public SuspensionTestResults getPastResults(String customer, String vehicle, String job, String wheel) {
+        String url = baseUrl + customer + "\\" + vehicle + "\\" + job + "\\" + wheel + "\\" + "results.ser";
+        FileInputStream f_in = null;
+        SuspensionTestResults suspensionTestResults = null;
+        try {
+            f_in = new FileInputStream(url);
+            ObjectInputStream obj_in =
+                    new ObjectInputStream(f_in);
+
+            Object obj = obj_in.readObject();
+            suspensionTestResults = (SuspensionTestResults) obj;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return suspensionTestResults;
+    }
+
 
 }

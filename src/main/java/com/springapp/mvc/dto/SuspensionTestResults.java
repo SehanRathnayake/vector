@@ -1,11 +1,12 @@
 package com.springapp.mvc.dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Sehan Rathnayake on 17/02/21.
  */
-public class SuspensionTestResults {
+public class SuspensionTestResults implements Serializable{
 
     private double chassiPeakValue;
     private double axcelPeakValue;
@@ -108,4 +109,6 @@ public class SuspensionTestResults {
     public void setChassiFrequencySpectrum(ArrayList<double[]> chassiFrequencySpectrum) {
         this.chassiFrequencySpectrum = chassiFrequencySpectrum;
     }
+
+
 }

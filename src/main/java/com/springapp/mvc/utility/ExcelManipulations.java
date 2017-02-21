@@ -165,4 +165,41 @@ public class ExcelManipulations {
 
     }
 
+    public static ArrayList<double[]> getSignalFromText(String url) {
+
+        InputStream targetStream = null;
+        BufferedReader br = null;
+
+        ArrayList<double[]> signal = new ArrayList<double[]>();
+
+        try {
+
+            String sCurrentLine;
+            br = new BufferedReader(new FileReader(url));
+            int i = 0;
+            Row row;
+            String[] parts;
+            double[] temp;
+            while ((sCurrentLine = br.readLine()) != null) {
+
+
+                parts = sCurrentLine.split(" ");
+                temp = new double[4];
+                temp[0] = Double.parseDouble(parts[3]);
+                for (int j = 0; j < parts.length - 1; j++) {
+                    temp[j + 1] = Double.parseDouble(parts[j]);
+                }
+                signal.add(temp);
+
+            }
+
+            br.close();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return signal;
+    }
+
 }
