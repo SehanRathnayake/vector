@@ -1,5 +1,6 @@
 package com.springapp.mvc.utility;
 
+import com.springapp.mvc.dto.SuspensionTestResults;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -16,127 +17,12 @@ import static java.lang.Math.sqrt;
  */
 public class SignalProcessing {
 
-    private static ArrayList<double[]> chassiSignalFull;
-    private static ArrayList<double[]> chassiSignalVertical;
-
-    private static ArrayList<double[]> axcelSignalFull;
-    private static ArrayList<double[]> axcelSignalVertical;
-
-    private static ArrayList<double[]> axcelFrequencySpectrum;
-    private static ArrayList<double[]> chassiFrequencySpectrum;
-
 
     public static void main(String[] args) {
-        String url = "C:\\Users\\Sehan Rathnayake\\Desktop\\New folder (2)\\Data engine off\\Vector Data\\civic\\civic high\\civic3.xlsx";
-        chassiSignalFull = getSignal(url, "chassi");
-      //  axcelSignalFull = getSignal(url, "axcel");
-
-        chassiSignalVertical = calibrate(chassiSignalFull);
-      //  axcelSignalVertical = calibrate(axcelSignalFull);
-
-        double chassiSampleRate = getSampleRate(chassiSignalVertical);
-      //  double axcelSampleRate = getSampleRate(axcelSignalVertical);
-
-      //  System.out.println("axcel sample rate : " + axcelSampleRate);
-      //  System.out.println("chassi sample rate : " + chassiSampleRate);
-
-     //  axcelSignalVertical = getResampledSignal(axcelSignalVertical, chassiSignalVertical);
-
-        chassiSampleRate = getSampleRate(chassiSignalVertical);
-     //   axcelSampleRate = getSampleRate(axcelSignalVertical);
-
-      //  System.out.println("axcel sample rate : " + axcelSampleRate);
-        System.out.println("chassi sample rate : " + chassiSampleRate);
-     //   writeToExcel(url,"axcel resampled",axcelSignalVertical);
-        //  axcelSignalVertical = lowPassFilter(axcelSignalVertical, 20, axcelSampleRate);
-
-
-        //  writeToExcel(url, "axcel filtered", axcelSignalVertical);
-        //writeToExcel(url, "chassi filtered", chassiSignalVertical);
-
-//        int axcelStartingPoint = findShockStartPoint(axcelSignalVertical);
-        int chassiStartingPoint = findShockStartPoint(chassiSignalVertical);
-
-       // System.out.println("axcel shock starting point : " + axcelStartingPoint);
-        System.out.println("chassi shock starting point : " + chassiStartingPoint);
-
-     //   axcelSignalVertical = new ArrayList<double[]>(axcelSignalVertical.subList(axcelStartingPoint - 400, axcelStartingPoint + 1200));
-        chassiSignalVertical = new ArrayList<double[]>(chassiSignalVertical.subList(chassiStartingPoint - 400, chassiStartingPoint + 1200));
-
-//        System.out.println("CHASSI RMS " + getRMS(chassiSignalVertical));
-//        System.out.println("Axcel RMS " + getRMS(axcelSignalVertical));
-//
-//
-//     chassiSignalVertical = new ArrayList<double[]>(chassiSignalVertical.subList(500, chassiSignalVertical.size()));
-  //     chassiFrequencySpectrum = fourierTransform(chassiSignalVertical, 4, chassiSampleRate);
-//
-    writeToExcel(url, "chassi acc with g", chassiSignalVertical);
-//        writeToExcel(url, "chassi  frequency spectrum", chassiFrequencySpectrum);
-
 
 
     }
 
-    private static ArrayList<double[]> getSignal(String url, String sheet) {
-        File initialFile = new File(url);
-        InputStream targetStream = null;
-        ArrayList<double[]> signal = new ArrayList<double[]>();
-        try {
-
-            targetStream = new FileInputStream(initialFile);
-
-            XSSFWorkbook workbook = new XSSFWorkbook(targetStream);
-
-            XSSFSheet inputSheet = workbook.getSheet(sheet);
-            Iterator<Row> rowIteratorRead = inputSheet.iterator();
-
-            Row rowRead;
-            double[] temp;
-            while (rowIteratorRead.hasNext()) {
-                rowRead = rowIteratorRead.next();
-                temp = new double[]{rowRead.getCell(3).getNumericCellValue(), rowRead.getCell(0).getNumericCellValue(), rowRead.getCell(1).getNumericCellValue(), rowRead.getCell(2).getNumericCellValue()};
-                signal.add(temp);
-            }
-            workbook.close();
-            targetStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return signal;
-    }
-
-    private static void writeToExcel(String url, String sheetName, ArrayList<double[]> data) {
-        File initialFile = new File(url);
-        InputStream targetStream = null;
-        ArrayList<double[]> signal = new ArrayList<double[]>();
-        try {
-
-            targetStream = new FileInputStream(initialFile);
-
-            XSSFWorkbook workbook = new XSSFWorkbook(targetStream);
-            XSSFSheet sheet = workbook.createSheet(sheetName);
-            Iterator<double[]> iterator = data.iterator();
-            double[] values;
-            int i = 0;
-            Row row;
-            while (iterator.hasNext()) {
-                values = iterator.next();
-                row = sheet.createRow(i);
-                for (int j = 0; j < values.length; j++) {
-                    row.createCell(j).setCellValue(values[j]);
-                }
-                i++;
-            }
-            targetStream.close();
-            FileOutputStream outputStream = new FileOutputStream(new File(url));
-            workbook.write(outputStream);
-            workbook.close();
-            outputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     public static ArrayList<double[]> calibrate(ArrayList<double[]> signalFull) {
         int distance = 1000;
@@ -219,7 +105,7 @@ public class SignalProcessing {
             valueY = values[2];
             valueZ = values[3];
             double finalValue = valueX * cosX + valueY * cosY + valueZ * cosZ;
-            signal.add(new double[]{values[0], (finalValue) * 9.8065 / g});
+            signal.add(new double[]{values[0], (finalValue - g) * 9.8065 / g});
         }
 
         return signal;
@@ -234,8 +120,8 @@ public class SignalProcessing {
         return (noOFSamples * 1000 / (endTime - startTime));
     }
 
-    public static int findShockStartPoint(ArrayList<double[]> signal) {
-        int shockStartPoint = 0;
+    public static double[] findPeakPoint(ArrayList<double[]> signal) {
+        int peakPoint = 0;
         Iterator<double[]> iterator = signal.iterator();
 
         double maxVariation = 0;
@@ -245,11 +131,11 @@ public class SignalProcessing {
             values = iterator.next();
             if (abs(values[1]) > maxVariation) {
                 maxVariation = abs(values[1]);
-                shockStartPoint = i;
+                peakPoint = i;
             }
             i++;
         }
-        return shockStartPoint;
+        return new double[]{peakPoint, maxVariation};
     }
 
     public static ArrayList<double[]> lowPassFilter(ArrayList<double[]> signal, double cutOffFrequency, double sampleRate) {
@@ -274,10 +160,12 @@ public class SignalProcessing {
 
     }
 
-    public static ArrayList<double[]> fourierTransform(ArrayList<double[]> signal, double time, double sampleRate) {
+    public static ArrayList<double[]> fourierTransform(ArrayList<double[]> signal, double sampleRate) {
         double value;
         int i = 0;
-        int n = (int) (sampleRate * time);
+        //   int n = (int) (sampleRate * time);
+        int n = signal.size();
+        double time = (double) n / sampleRate;
 //   double T = n/sampleRate;
         // float sample_rate = n / T;
         //Calculate the number of equidistant points in time
@@ -317,7 +205,7 @@ public class SignalProcessing {
             double frequency = j * h / time * sampleRate;
             //  System.out.println("frequency = " + frequency + ", amp = " + amplitude);
             // System.out.println(frequency + "," + amplitude);
-            frequencySpectrum.add(new double[]{frequency, amplitude});
+            if (frequency <= 150.0) frequencySpectrum.add(new double[]{frequency, amplitude});
         }
         return frequencySpectrum;
 
@@ -345,7 +233,7 @@ public class SignalProcessing {
 
     }
 
-    private static ArrayList<double[]> getResampledSignal(ArrayList<double[]> signal, ArrayList<double[]> referenceSignal) {
+    public static ArrayList<double[]> getResampledSignal(ArrayList<double[]> signal, ArrayList<double[]> referenceSignal) {
         ArrayList<double[]> resampledSignal = new ArrayList<double[]>();
 
         Iterator<double[]> referenceIterator = referenceSignal.iterator();
@@ -376,7 +264,7 @@ public class SignalProcessing {
 
     }
 
-    static double getRMS(ArrayList<double[]> signal) {
+    public static double getRMS(ArrayList<double[]> signal) {
         Iterator<double[]> iterator = signal.iterator();
         double rms = 0, value;
         int i = 0;
@@ -387,6 +275,36 @@ public class SignalProcessing {
         }
         rms = Math.sqrt(rms / i);
         return rms;
+    }
+
+    public static double[] getFirstStablePoint(ArrayList<double[]> signal, int windowSize, double maxAccStability) {
+        //Iterator<double[]> iterator = signal.iterator();
+        double value;
+        int length = signal.size();
+        int j;
+        for (int i = 0; i < length - windowSize; ) {
+
+            for (j = 0; j < windowSize; j++) {
+                value = Math.abs(signal.get(i + j)[1]);
+                if (value > maxAccStability) {
+                    i = i + j + 1;
+                    break;
+
+                }
+            }
+            if (j == windowSize) {
+                return new double[]{i, signal.get(i)[0]};
+            }
+
+        }
+        return new double[]{length - 1, signal.get(length - 1)[0]};
+
+    }
+
+    public void test() {
+        String url = "C:\\Users\\Sehan Rathnayake\\Desktop\\New folder (2)\\Data engine off\\Vector Data\\civic\\civic high\\civic3.xlsx";
+
+
     }
 
 
