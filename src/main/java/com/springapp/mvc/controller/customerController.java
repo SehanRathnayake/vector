@@ -46,20 +46,13 @@ public class CustomerController {
     @RequestMapping(value = "/addCustomer", method = RequestMethod.POST)
     public @ResponseBody
     void addCustomer(@RequestBody String [] customerDetail){
-//        Customer c=new Customer();
-//        c.setCustomerName(data[0]);
-//        c.setCustomerEmail("jsbc@nkvd.com");
-//        c.setCustomerPhone("15361");
-//        c.setCustomerAddress("skdhbviakjcs");
-//        customerService.createJob(c);
-
         Customer customer = new Customer();
-        customer.setCustomerid(Long.parseLong(customerDetail[0]));
-        customer.setCustomerName(customerDetail[1]);
-        customer.setCustomerAddress(customerDetail[2]);
-        customer.setCustomerPhone(customerDetail[3]);
-        customer.setCustomerEmail(customerDetail[4]);
-        customerService.createJob(customer);
+//        customer.setCustomerid(Long.parseLong(customerDetail[0]));
+//        customer.setCustomerName(customerDetail[1]);
+//        customer.setCustomerAddress(customerDetail[2]);
+//        customer.setCustomerPhone(customerDetail[3]);
+//        customer.setCustomerEmail(customerDetail[4]);
+//        customerService.createJob(customer);
     }
 
     @RequestMapping(value = "/removeCustomer", method = RequestMethod.POST)
