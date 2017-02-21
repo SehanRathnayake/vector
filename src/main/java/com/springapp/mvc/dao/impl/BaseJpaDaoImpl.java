@@ -52,4 +52,5 @@ public class BaseJpaDaoImpl<T> implements BaseJPADao<T>{
     public void persistEntity(T t) {
         this.entityManager.persist(t);
     }
+
 }

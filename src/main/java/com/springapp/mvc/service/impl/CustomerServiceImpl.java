@@ -1,6 +1,7 @@
 package com.springapp.mvc.service.impl;
 
 import com.springapp.mvc.dao.CustomerDao;
+import com.springapp.mvc.dto.CustomerDto;
 import com.springapp.mvc.model.Customer;
 import com.springapp.mvc.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,13 @@ public class CustomerServiceImpl implements CustomerService{
 
     public List<Customer> getCustomer(String name){
         return customerDao.getCustomer(name);
+    }
+
+    public void removeCustomer(int id){
+        customerDao.removeCustomer(id);
+    }
+
+    public CustomerDto getSingleCustomer(int id){
+        return customerDao.getSingleCustomer(id);
     }
 }

@@ -26,7 +26,7 @@ public class Customer implements Serializable{
     private String cus_address;
 
     @Column  (name = "PHONE")
-    private int cus_phone;
+    private String cus_phone;
 
     @Column  (name = "EMAIL")
     private String cus_email;
@@ -43,9 +43,9 @@ public class Customer implements Serializable{
 
     public void setCustomerAddress(String cus_address){this.cus_address = cus_address;}
 
-    public int getCustomerPhone(){return cus_phone;}
+    public String getCustomerPhone(){return cus_phone;}
 
-    public void setCustomerPhone(int cus_phone){this.cus_phone=cus_phone;}
+    public void setCustomerPhone(String cus_phone){this.cus_phone=cus_phone;}
 
     public String getCustomerEmail(){return cus_email;}
 

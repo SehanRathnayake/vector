@@ -1,15 +1,12 @@
 package com.springapp.mvc.controller;
 
+import com.springapp.mvc.dto.CustomerDto;
 import com.springapp.mvc.model.Customer;
 import com.springapp.mvc.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,32 +21,65 @@ public class CustomerController {
     CustomerService customerService;
 
     @RequestMapping(value = "/customer", method = RequestMethod.GET)
+    public String customer(ModelMap model){
+        return "customer";
+    }
+
+    @RequestMapping(value = "/customerList", method = RequestMethod.POST)
     public @ResponseBody
-    List<Customer> viewCustomers(){
+    List<Customer> viewCustomers(ModelMap model){
         List<Customer> list = customerService.viewList();
         return list;
     }
 
     @RequestMapping(value = "/addCustomer", method = RequestMethod.POST)
     public @ResponseBody
-    String viewCustomer(@RequestParam(value = "array")String[]array){
-        Customer c=new Customer();
-        c.setCustomerName("ksncj");
-        c.setCustomerEmail("jsbc@nkvd.com");
-        c.setCustomerPhone(2365451);
-        c.setCustomerAddress("skdhbviakjcs");
-        customerService.createJob(c);
-        return "addCust";
+    void addCustomer(@RequestBody String [] customerDetail){
+//        Customer c=new Customer();
+//        c.setCustomerName(data[0]);
+//        c.setCustomerEmail("jsbc@nkvd.com");
+//        c.setCustomerPhone("15361");
+//        c.setCustomerAddress("skdhbviakjcs");
+//        customerService.createJob(c);
+
+        Customer customer = new Customer();
+        customer.setCustomerid(Long.parseLong(customerDetail[0]));
+        customer.setCustomerName(customerDetail[1]);
+        customer.setCustomerAddress(customerDetail[2]);
+        customer.setCustomerPhone(customerDetail[3]);
+        customer.setCustomerEmail(customerDetail[4]);
+        customerService.createJob(customer);
     }
 
     @RequestMapping(value = "/removeCustomer", method = RequestMethod.POST)
-    public String removeCustomer(ModelMap model){
-        return "remove";
+    public String removeCustomer(@RequestBody int removeId){
+        int customerId = removeId;
+        customerService.removeCustomer(customerId);
+        return "customer";
     }
 
-    @RequestMapping(value = "/customerDetail", method = RequestMethod.GET)
-    public String viewCustomerDetails(){
-        return "customerDetail";
+    @RequestMapping(value = "/viewCustomerDetail", method = RequestMethod.POST)
+    public @ResponseBody
+    CustomerDto viewCustomerDetails(@RequestBody String id){
+        CustomerDto c = new CustomerDto();
+//        This is not working
+//customerService.getSingleCustomer(1);
+        c.setId(Long.parseLong(id));
+        c.setCustName("Heshani");
+        c.setCustEmail("heshanisamarasekara@gmail.com");
+        c.setCustAddress("Deshani,Kirnida");
+        c.setCustTp("0712189826");
+        return c;
     }
 
+    @RequestMapping(value = "/editCustomerDetail", method = RequestMethod.POST)
+    public @ResponseBody
+    void editCustomerDetails(@RequestBody String [] customerDetail){
+        Customer customer = new Customer();
+        customer.setCustomerid(Long.parseLong(customerDetail[0]));
+        customer.setCustomerName(customerDetail[1]);
+        customer.setCustomerAddress(customerDetail[2]);
+        customer.setCustomerPhone(customerDetail[3]);
+        customer.setCustomerEmail(customerDetail[4]);
+    }
 }

@@ -2,6 +2,7 @@ package com.springapp.mvc.dao.impl;
 
 import com.springapp.mvc.dao.CustomerDao;
 import com.springapp.mvc.dao.UserDao;
+import com.springapp.mvc.dto.CustomerDto;
 import com.springapp.mvc.model.Customer;
 import com.springapp.mvc.model.Job;
 import com.springapp.mvc.model.User;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
+import javax.validation.constraints.Null;
 import java.util.List;
 
 /**
@@ -37,6 +39,15 @@ public class CustomerDaoImpl extends BaseJpaDaoImpl<Customer> implements Custome
         return query.getResultList();
     }
 
+    public void removeCustomer(long id){
+        String queryString = "SELECT c FROM Customer c WHERE c.cus_id = :id";
+        TypedQuery<Customer> query = this.entityManager.createQuery(queryString, Customer.class);
+        query.setParameter("id", id);
+        Customer customer = query.getSingleResult();
+        System.out.println(customer);
+        deleteEntity(customer);
+    }
+
     public Customer createJob(Customer customer){
         return saveEntity(customer);
     }
@@ -47,5 +58,16 @@ public class CustomerDaoImpl extends BaseJpaDaoImpl<Customer> implements Custome
 
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
+    }
+
+    public CustomerDto getSingleCustomer(int id){
+        Customer c = getEntity(Customer.class,id);
+        CustomerDto customer = new CustomerDto();
+        customer.setId(c.getCustomerid());
+        customer.setCustName(c.getCustomerName());
+        customer.setCustAddress(c.getCustomerAddress());
+        customer.setCustTp(c.getCustomerPhone());
+        customer.setCustEmail(c.getCustomerEmail());
+        return customer;
     }
 }
