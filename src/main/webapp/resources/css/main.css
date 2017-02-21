@@ -349,3 +349,19 @@
     font-size: 16px;
     padding-left: 32px;
 }
+
+
+@media (max-width: 1300px) {
+    div { font-size: 90%; }
+    .btn { font-size: 90%; }
+     a { font-size: 90%; }
+
+}
+@media (max-width: 500px) {
+    div { font-size: 80%; }
+    button { font-size: 80%; }
+    a { font-size: 80%; }
+}
+body{
+    overflow: hidden !important;
+}

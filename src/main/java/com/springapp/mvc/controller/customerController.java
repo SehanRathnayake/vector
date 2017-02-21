@@ -22,7 +22,7 @@ public class CustomerController {
 
     @RequestMapping(value = "/customer", method = RequestMethod.GET)
     public String customer(ModelMap model){
-        return "customer";
+        return "Customer";
     }
 
     @RequestMapping(value = "/customerList", method = RequestMethod.POST)
@@ -61,14 +61,7 @@ public class CustomerController {
     @RequestMapping(value = "/viewCustomerDetail", method = RequestMethod.POST)
     public @ResponseBody
     CustomerDto viewCustomerDetails(@RequestBody String id){
-        CustomerDto c = new CustomerDto();
-//        This is not working
-//customerService.getSingleCustomer(1);
-        c.setId(Long.parseLong(id));
-        c.setCustName("Heshani");
-        c.setCustEmail("heshanisamarasekara@gmail.com");
-        c.setCustAddress("Deshani,Kirnida");
-        c.setCustTp("0712189826");
+        CustomerDto c = customerService.getSingleCustomer(1);;
         return c;
     }
 

@@ -5,7 +5,7 @@ VECTOR.namespace("module.carconfig");
 
 VECTOR.module.carconfig = function () {
     var idPrefix = "#CC_";
-    // var ip="192.168.43.150" ;
+    //var ip="192.168.43.150" ;
     var customerName;
     var vehicleName;
     var jobId = 1;
@@ -25,10 +25,10 @@ VECTOR.module.carconfig = function () {
     var customerList = [{
         name: "Udith Rathnayake",
         vehicles: ["Toyota Vios 2007", "Hyundai Accent 2001"]
-    }, {name: "Malith Fernando", vehicles: ["Suzuki Alto 2017"]}, {
-        name: "Supun Prelis",
-        vehicles: "Suzuki Alto 2013"
-    }, {name: "Anjana Gunasekara", vehicles: ["Honda Civic 2001"]}];
+    }, {name: "Malith Fernando", vehicles: ["Suzuki Alto 2017"]},
+        {name: "Supun Prelis", vehicles: ["Suzuki Alto 2013"]
+    }, {name: "Anjana Gunasekara", vehicles: ["Honda Civic 2001"]},
+        {name: "Asiri Karunathilake", vehicles: ["Nissan SunnyFB14 2001"]}];
 
     var fillActiveDevices = function () {
         var activeDevices;
@@ -136,8 +136,8 @@ VECTOR.module.carconfig = function () {
     };
 
     var previousSection = function () {
-        $(idPrefix + "detailSection").show('slide', {direction: 'left'}, 500);
         $(idPrefix + "wheelConfigSection").hide();
+        $(idPrefix + "detailSection").show('slide', {direction: 'left'}, 500);
     };
 
     var addWheelConfig = function (ele, wheelName) {
@@ -348,6 +348,8 @@ VECTOR.module.carconfig = function () {
                 $(idPrefix + "vehicleBrandList").empty();
                 $(idPrefix + "vehicleBrandCombo").show();
                 $(idPrefix + "vehicleBrandCombo").html("Select Vehicle");
+                $(idPrefix + "jobIdCombo").html("Job Id");
+                $(idPrefix + "jobIdCombo").removeClass("disabled").addClass("disabled");
                 disablePastResults();
                 $(idPrefix + "vehicleBrand").hide();
                 customerName = $(idPrefix + "customerName").val();
@@ -364,6 +366,7 @@ VECTOR.module.carconfig = function () {
                 $(".vehicle-brand-item").off("click").on("click", function () {
                     $(idPrefix + "vehicleBrandCombo").html($(this).find('a').html());
                     vehicleName = $(idPrefix + "vehicleBrandCombo").html();
+                    $(idPrefix + "jobIdCombo").html("Job Id");
                     disablePastResults();
                     $(idPrefix + "nextBtn").removeClass("disabled");
                     getJobId();
@@ -410,26 +413,26 @@ VECTOR.module.carconfig = function () {
             cache: false,
             contentType: 'application/json;',
             type: 'POST',
-            async:false,
+            async: false,
             success: function (result) {
                 jobId = result;
             }
         });
     };
     var setPastJobs = function () {
-        $(idPrefix+"jobIdUl").empty();
-        if(jobId>1){
+        $(idPrefix + "jobIdUl").empty();
+        if (jobId > 1) {
             $(idPrefix + "jobIdCombo").removeClass("disabled");
         }
-        for (var i=0;i<jobId-1;i++){
+        for (var i = 0; i < jobId - 1; i++) {
             var div = '<li class="job-item" role="presentation"><a role="menuitem" tabindex="-1"'
-                + 'href="#">' +"Job "+(i+1)+ '</a>'
+                + 'href="#">' + "Job " + (i + 1) + '</a>'
                 + '</li>';
-            $(idPrefix+"jobIdUl").append(div);
+            $(idPrefix + "jobIdUl").append(div);
         }
         $(".job-item").off("click").on("click", function () {
             $(idPrefix + "jobIdCombo").html($(this).find('a').html());
-            var jI=$(this).find('a').html().split(" ");
+            var jI = $(this).find('a').html().split(" ");
             pastJobId = jI[1];
             disablePastResults();
             $.ajax({
@@ -482,14 +485,41 @@ VECTOR.module.carconfig = function () {
             cache: false,
             contentType: 'application/json;',
             type: 'GET',
-            async:false,
+            async: false,
             success: function (result) {
+            }
+        });
+    };
+    var getCustomerList = function () {
+        $.ajax({
+            url: 'http://' + ip + ':8082/vector/customerList',
+            dataType: "json",
+            cache: false,
+            contentType: 'application/json;',
+            type: 'GET',
+            success: function (result) {
+                customerList = result;
+            }
+        });
+    };
+    var addNewCustomer = function () {
+        var newCustomer = {};
+        $.ajax({
+            url: 'http://' + ip + ':8082/vector/addCustomer',
+            dataType: "json",
+            cache: false,
+            data: JSON.stringify(newCustomer),
+            contentType: 'application/json;',
+            type: 'GET',
+            success: function (result) {
+                customerList = result;
             }
         });
     };
     return {
         init: function () {
             fillActiveDevices();
+            //getCustomerList();
             $(idPrefix + "nextBtn").off("click").on("click", nextSection);
             //$(idPrefix + "refreshBtn").off("click").on("click", refreshPage);
             $(idPrefix + "newCustomer").off("click").on("click", showNewDetails);

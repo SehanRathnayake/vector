@@ -42,13 +42,14 @@
         <div class="label-primary" style="padding-left: 50px">Progress Bar</div>
     </div>
 </div>--%>
+<div id="CC_sectionContainer">
 <section id="CC_detailSection" class="configsection">
     <div class="container well">
         <div class="row vector-row">
-            <div class="col-lg-3">
+            <div class="col-lg-3 col-sm-3">
                 <div>Job Type</div>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-3 col-sm-3">
                 <div class="dropdown">
                     <button class="btn btn-default dropdown-toggle" type="button" id="CC_jobTypeMenu"
                             data-toggle="dropdown" style="width: 68%;">Suspension check
@@ -62,16 +63,16 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-lg-3"></div>
-            <div class="col-lg-3"></div>
+            <div class="col-lg-3 col-sm-3"></div>
+            <div class="col-lg-3 col-sm-3"></div>
         </div>
     </div>
     <div class="container well">
         <div class="row vector-row">
-            <div class="col-lg-3">
+            <div class="col-lg-3 col-sm-3">
                 <div class>Customer Name</div>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-3 col-sm-3">
                 <input id="CC_customerName"></input>
                 <div class="dropdown">
                     <ul class="dropdown-menu" id="CC_customerSearchList" role="menu" aria-labelledby="jobTypeMenu">
@@ -79,18 +80,18 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-3 col-sm-3">
                 <a id="CC_newCustomer" style="width: 100%;">New Customer
                 </a>
             </div>
-            <div class="col-lg-3"></div>
+            <div class="col-lg-3 col-sm-3"></div>
         </div>
         <div id="CC_newCustomerSec" class="vector-hidden" style="display: none">
             <div class="row vector-row">
-                <div class="col-lg-3">
+                <div class="col-lg-3 col-sm-3">
                     <div class>Address</div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-3 col-sm-3">
                     <textarea id="CC_customerAddress"></textarea>
                 </div>
             </div>
@@ -98,15 +99,15 @@
                 <div class="col-lg-3">
                     <div class>Phone</div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-3 col-sm-3">
                     <input id="CC_customerPhone"></input>
                 </div>
             </div>
             <div class="row vector-row">
-                <div class="col-lg-3">
+                <div class="col-lg-3 col-sm-3">
                     <div class>Email</div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-3 col-sm-3">
                     <input id="CC_customerEmail"></input>
                 </div>
             </div>
@@ -114,10 +115,10 @@
     </div>
     <div class="container well">
         <div class="row vector-row">
-            <div class="col-lg-3">
+            <div class="col-lg-3 col-sm-3">
                 <div class>Vehicle Name</div>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-3 col-sm-3">
                 <input id="CC_vehicleBrand"></input>
                 <div class="dropdown">
                     <button class="btn btn-default dropdown-toggle" type="button" id="CC_vehicleBrandCombo"
@@ -132,10 +133,10 @@
         </div>
         <div id="CC_newVehicleSec" class="vector-hidden" style="display: none">
             <div class="row vector-row">
-                <div class="col-lg-3">
+                <div class="col-lg-3 col-sm-3">
                     <div class>Model year</div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-3 col-sm-3">
                     <input id="CC_modelYear"></input>
                     <button class="btn btn-default dropdown-toggle" type="button" id="CC_modelYearCombo"
                             data-toggle="dropdown" style="width: 100%; display:none">Select Model Year
@@ -143,10 +144,10 @@
                 </div>
             </div>
             <div class="row vector-row">
-                <div class="col-lg-3">
+                <div class="col-lg-3 col-sm-3">
                     <div class>Registration Number</div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-3 col-sm-3">
                     <input id="CC_vehicalRegNo"></input>
                 </div>
             </div>
@@ -154,11 +155,11 @@
     </div>
     <div class="container well" id="CC_pastResults">
         <div class="row vector-row">
-            <div class="col-lg-3">
-                <div class="col-lg-4">
+            <div class="col-lg-3 col-sm-3">
+                <div class="col-lg-4 col-sm-4">
                     <div class>Past results</div>
                 </div>
-                <div class="col-lg-8">
+                <div class="col-lg-8 col-sm-8">
                     <button class="btn btn-default dropdown-toggle disabled" type="button" id="CC_jobIdCombo"
                             data-toggle="dropdown" style="width: 68%;">Job Id
                         <span class="caret"></span></button>
@@ -166,26 +167,26 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-lg-2">
+            <div class="col-lg-2 col-sm-2">
                 <button class="btn btn-default disabled past-result-btn" type="button" id="CC_frontLeftBtn"
                         data-toggle="dropdown" style="width: 68%">Front Left</button>
             </div>
-            <div class="col-lg-2">
+            <div class="col-lg-2 col-sm-2">
                 <button class="btn btn-default disabled past-result-btn" type="button" id="CC_frontRightBtn"
                         data-toggle="dropdown" style="width: 68%">Front Right</button>
             </div>
-            <div class="col-lg-2">
+            <div class="col-lg-2 col-sm-2">
                 <button class="btn btn-default disabled past-result-btn" type="button" id="CC_rearLeftBtn"
                         data-toggle="dropdown" style="width: 68%">Rear Left</button>
             </div>
-            <div class="col-lg-2">
-                <button class="btn btn-default disabled past-result-btn" type="button" id="CC_resrRightBtn"
+            <div class="col-lg-2 col-sm-2">
+                <button class="btn btn-default disabled past-result-btn" type="button" id="CC_rearRightBtn"
                         data-toggle="dropdown" style="width: 68%">Rear Right</button>
             </div>
         </div>
     </div>
     <div class="row config-nav-buttons">
-        <div class="col-lg-12">
+        <div class="col-lg-12 col-sm-12">
             <div class="btn btn-primary right-float disabled" id="CC_nextBtn">Next</div>
             <div class="btn btn-primary right-float" id="CC_refreshBtn"><a href="newJob" style="    color: white;
     text-decoration: none; ">Refresh to new Job</a></div>
@@ -252,6 +253,7 @@
     </div>
 
 </section>
+</div>
 <div id="RS_resultSec">
     <div class="row">
         <div class="btn" id="RS_resultSecClose" style="float: right">X</div>
@@ -260,16 +262,22 @@
         <div id="RS_resultSecTitle"></div>
     </div>
     <div class="row">
-        <div class="col-lg-10 col-sm-10">
+        <div class="col-lg-6 col-sm-6">
             <div id="RS_basicResultChart"></div>
+        </div>
+        <div class="col-lg-6 col-sm-6">
+            <div id="RS_fourierChart"></div>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-5 col-sm-5">
+        <div class="col-lg-6 col-sm-6">
             <div id="RS_dampingChart"></div>
         </div>
-        <div class="col-lg-5 col-sm-5">
-            <div id="RS_fourierChart"></div>
+        <div class="col-lg-6 col-sm-6">
+            <div id="RS_dampingFactor"></div>
+            <div id="RS_dampedFrequency"></div>
+            <div id="RS_naturalFrequency"></div>
+            <div id="RS_disturbanceTime"></div>
         </div>
     </div>
 </div>

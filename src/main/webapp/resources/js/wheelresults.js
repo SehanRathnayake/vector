@@ -8,16 +8,16 @@ VECTOR.module.wheelresults = function () {
     var customerName;
     var vehicleName;
     var wheel;
-    var setBasicChart = function (deviceId, width, height) {
-        var ip = "localhost";
-        //var ip = "192.168.150.43";
-        customerName=deviceId[0].customerName;
-        vehicleName=deviceId[0].vehicleName;
-        wheel=deviceId[0].wheelName;
-        $(idPrefix+"resultSecTitle").html(customerName+" - "+vehicleName+" "+":"+wheel);
-        var seriesList = [];
+    var ip = "localhost";
+    //var ip = "192.168.43.150";
+    var allResults;
+    var basicSeriesList = [];
+    var frequencySpectrum;
+    var sineWave = [];
+
+    var setSeriesLists = function (deviceId) {
         $.ajax({
-            url: 'http://' + ip + ':8082/vector/getRawData',
+            url: 'http://' + ip + ':8082/vector/getChartData',
             dataType: "json",
             data: JSON.stringify(deviceId),
             cache: false,
@@ -25,21 +25,45 @@ VECTOR.module.wheelresults = function () {
             async: false,
             type: 'POST',
             success: function (result) {
-                _.each(result, function (item) {
-                    var series = [];
-                    _.each(item.vibration, function (vdata, key) {
-                        if (true) {
-                            var data = {
-                                x: item.time[key],
-                                y: vdata
-                            };
-                            series.push(data);
-                        }
-                    });
-                    seriesList.push(series);
-                })
+                allResults = result;
+                var chassisClippedData =  _.map(result.chassiSignalClipped,function (num) {
+                   return {x:num[0],y:num[1]}
+                });
+                var axelClippedData =  _.map(result.axcelSignalClipped,function (num) {
+                   return {x:num[0],y:num[1]}
+                });
+                basicSeriesList=[];
+                basicSeriesList.push(chassisClippedData);
+                basicSeriesList.push(axelClippedData);
+                frequencySpectrum=_.map(result.chassiFrequencySpectrum,function (num) {
+                    return {x:num[0],y:num[1]}
+                });
+
+                var sineOriginal =_.map(result.sinewave,function (num) {
+                    return {x:num[0],y:num[1]}
+                });
+                var sineCreated =_.map(result.sinewave,function (num) {
+                    return {x:num[0],y:num[2]}
+                });
+                sineWave=[];
+                sineWave.push(sineOriginal);
+                sineWave.push(sineCreated);
+                $(idPrefix+"disturbanceTime").html("DisturbanceTime : "+result.disturbanceTime);
+                $(idPrefix+"dampingFactor").html("DampingFactor : "+result.dampingFactor);
+                $(idPrefix+"dampedFrequency").html("DampedFrequency : "+result.dampedFrequency);
+                $(idPrefix+"naturalFrequency").html("NaturalFrequency : "+result.naturalFrequency);
             }
         });
+    };
+
+    var setBasicChart = function (deviceId, width, height) {
+
+        customerName = deviceId[0].customerName;
+        vehicleName = deviceId[0].vehicleName;
+        wheel = deviceId[0].wheelName;
+        $(idPrefix + "resultSecTitle").html(customerName + " - " + vehicleName + " " + ":" + wheel);
+        var seriesList = [];
+
         var chartOptions = {
             title: {
                 text: "Raw vibrations"
@@ -49,7 +73,7 @@ VECTOR.module.wheelresults = function () {
                 animation: Highcharts.svg, // don't animate in IE < IE 10.
                 marginRight: 10,
                 height: height * 0.5,
-                width: width * 0.95,
+                width: width * 0.4,
                 events: {
                     load: function () {
                         var chassis = this.series[0];
@@ -80,8 +104,7 @@ VECTOR.module.wheelresults = function () {
             },
             tooltip: {
                 formatter: function () {
-                    return '<b>' + this.series.name + '</b><br/>' +
-                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                    return '<b>' + this.series.name + '</b><br/><br/>' +
                         Highcharts.numberFormat(this.y, 2);
                 }
             },
@@ -106,20 +129,25 @@ VECTOR.module.wheelresults = function () {
                     "font-size": "8px"
                 },
                 borderWidth: 0,
-                enabled: true
+                enabled: true,
+                align :'right',
+                verticalAlign: 'top',
+                layout: 'vertical',
+                x: 0,
+                y: 10
             },
             exporting: {
                 enabled: false
             },
             series: [{
                 name: 'Chassis',
-                data: seriesList[0],
-                turboThreshold:0,
+                data: basicSeriesList[0],
+                turboThreshold: 0,
                 visible: true
             }, {
                 name: 'Axel',
-                data: seriesList[1],
-                turboThreshold:0,
+                data: basicSeriesList[1],
+                turboThreshold: 0,
                 visible: true
             }],
             global: {
@@ -134,7 +162,7 @@ VECTOR.module.wheelresults = function () {
         //var ip = "192.168.150.43";
         var dampingChartOptions = {
             chart: {
-                type: 'spline',
+                type: 'column',
                 animation: Highcharts.svg, // don't animate in IE < IE 10.
                 marginRight: 10,
                 height: height * 0.4,
@@ -148,16 +176,11 @@ VECTOR.module.wheelresults = function () {
             },
 
             title: {
-                text: "Raw vibrations"
+                text: "Frequency Spectrum"
             },
             colors: ['#64E572',
                 '#FF9655', '#FFF263', '#6AF9C4'],
             xAxis: {
-                type: 'datetime',
-                dateTimeLabelFormats: {
-                    second: '%H:%M:%S'
-                },
-                tickPixelInterval: 10,
                 labels: {
                     style: {
                         "font-size": "8px"
@@ -202,24 +225,19 @@ VECTOR.module.wheelresults = function () {
                     "font-size": "8px"
                 },
                 borderWidth: 0,
-                enabled: true
+                enabled: true,
+                align : 'right',
+                verticalAlign: 'top',
+                layout: 'vertical',
+                x: 0,
+                y: 10
             },
             exporting: {
                 enabled: false
             },
             series: [{
                 name: 'Chassis',
-                data: (function () {
-                    // generate an array of random data
-                    var data = [], time = (new Date()).getTime(), i;
-                    for (i = -100; i <= 0; i += 1) {
-                        data.push({
-                            x: time + i * 1000,
-                            y: Math.random()
-                        });
-                    }
-                    return data;
-                }()),
+                data: frequencySpectrum,
                 visible: true
             }],
             global: {
@@ -234,13 +252,13 @@ VECTOR.module.wheelresults = function () {
         //var ip = "192.168.150.43";
         var fourierChartOptions = {
             title: {
-                text: "Frequency Domain"
+                text: "Sine wave"
             },
             chart: {
                 type: 'spline',
                 animation: Highcharts.svg, // don't animate in IE < IE 10.
                 marginRight: 10,
-                height: height * 0.4,
+                height: height * 0.5,
                 width: width * 0.4,
                 events: {
                     load: function () {
@@ -249,14 +267,9 @@ VECTOR.module.wheelresults = function () {
                     }
                 }
             },
-            colors: ['#ED561B', '#DDDF00', '#24CBE5', '#64E572',
+            colors: [ '#DDDF00', '#24CBE5', '#64E572',
                 '#FF9655', '#FFF263', '#6AF9C4'],
             xAxis: {
-                type: 'datetime',
-                dateTimeLabelFormats: {
-                    second: '%H:%M:%S'
-                },
-                tickPixelInterval: 10,
                 labels: {
                     style: {
                         "font-size": "8px"
@@ -301,24 +314,24 @@ VECTOR.module.wheelresults = function () {
                     "font-size": "8px"
                 },
                 borderWidth: 0,
-                enabled: true
+                enabled: true,
+                align : 'right',
+                verticalAlign: 'top',
+                layout: 'vertical',
+                x: 0,
+                y: 10
             },
             exporting: {
                 enabled: false
             },
             series: [{
-                name: 'Chassis',
-                data: (function () {
-                    // generate an array of random data
-                    var data = [], time = (new Date()).getTime(), i;
-                    for (i = -100; i <= 0; i += 1) {
-                        data.push({
-                            x: time + i * 1000,
-                            y: Math.random()
-                        });
-                    }
-                    return data;
-                }()),
+                name: 'Original wave',
+                data: sineWave[0],
+                visible: true,
+                lineWidth: 1
+            },{
+                name: 'Approximated wave',
+                data: sineWave[1],
                 visible: true
             }],
             global: {
@@ -334,6 +347,7 @@ VECTOR.module.wheelresults = function () {
         init: function () {
         },
         getCharts: function (devices) {
+            setSeriesLists(devices);
             var chartOptions = setBasicChart(devices, $(idPrefix + "resultSec").width(), $(idPrefix + "resultSec").height());
             $(idPrefix + "basicResultChart").highcharts(chartOptions);
             var dChartOptions = setDampChart(1, $(idPrefix + "resultSec").width(), $(idPrefix + "resultSec").height());

@@ -2,7 +2,9 @@ package com.springapp.mvc.controller;
 
 import com.springapp.mvc.dto.DeviceWheelDto;
 import com.springapp.mvc.dto.RawDataDto;
+import com.springapp.mvc.dto.SuspensionTestResults;
 import com.springapp.mvc.service.CacheService;
+import com.springapp.mvc.service.impl.TestResultServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.object.RdbmsOperation;
 import org.springframework.stereotype.Controller;
@@ -29,36 +31,12 @@ public class JobController {
         return "carconfig";
     }
 
-    @RequestMapping(value = "/getRawData", method = RequestMethod.POST, headers = "content-type=application/json")
+    @RequestMapping(value = "/getChartData", method = RequestMethod.POST, headers = "content-type=application/json")
     public
     @ResponseBody
-    List<RawDataDto> add(@RequestBody DeviceWheelDto[] devices) {
-        List<RawDataDto> dataList = new ArrayList<RawDataDto>();
-        for (DeviceWheelDto deviceWheelDto : devices) {
-            RawDataDto r = new RawDataDto();
-            String path = "E:\\Vector Data\\";
-            path += deviceWheelDto.getCustomerName() + "\\" + deviceWheelDto.getVehicleName() + "\\"+deviceWheelDto.getJobId()+"\\" + deviceWheelDto.getWheelName() + "\\";
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(path + "\\" + deviceWheelDto.getDeviceId() + "-datalog.txt"));
-                String line = br.readLine();
-                List<Integer> vibrations = new ArrayList<Integer>();
-                List<Integer> time = new ArrayList<Integer>();
-                while (line != null) {
-                    String[] split = line.split(" ");
-                    vibrations.add(Integer.parseInt(split[0]));
-                    time.add(Integer.parseInt(split[3]));
-                    line = br.readLine();
-                }
-                r.setVibration(vibrations);
-                r.setTime(time);
-                dataList.add(r);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return dataList;
+    SuspensionTestResults add(@RequestBody DeviceWheelDto[] devices) {
+        SuspensionTestResults s = new TestResultServiceImpl().getResults(devices[0].getCustomerName(), devices[0].getVehicleName(), devices[0].getJobId()+"", devices[0].getWheelName());
+        return s;
     }
 
     @RequestMapping(value = "/getWheelNames", method = RequestMethod.POST, headers = "content-type=application/json")

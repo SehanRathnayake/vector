@@ -39,8 +39,8 @@ public class HomeController {
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String printWelcome(ModelMap model) {
-        String ip=userService.configureIPandPort();
-        model.addAttribute("ip",ip);
+       // String ip=userService.configureIPandPort();
+        //model.addAttribute("ip",ip);
         return "home";
     }
 
