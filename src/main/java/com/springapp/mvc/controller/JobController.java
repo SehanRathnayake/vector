@@ -35,7 +35,7 @@ public class JobController {
     public
     @ResponseBody
     SuspensionTestResults add(@RequestBody DeviceWheelDto[] devices) {
-        SuspensionTestResults s = new TestResultServiceImpl().getResults(devices[0].getCustomerName(), devices[0].getVehicleName(), devices[0].getJobId()+"", devices[0].getWheelName());
+        SuspensionTestResults s = new TestResultServiceImpl().getResults(devices[0].getCustomerName(), devices[0].getVehicleName(), devices[0].getJobId() + "", devices[0].getWheelName());
         return s;
     }
 
@@ -45,11 +45,11 @@ public class JobController {
     List<String> add(@RequestBody String nameVehicle) {
         String[] split = nameVehicle.split("_");
         List<String> wheelNames = new ArrayList<String>();
-        String path = "E:\\Vector Data\\";
-        path += split[0] + "\\" + split[1] + "\\"+split[2]+"\\";
+        String path = "D:\\Vector Data\\";
+        path += split[0] + "\\" + split[1] + "\\" + split[2] + "\\";
         File file = new File(path);
         String[] names = file.list();
-        if (names!= null) {
+        if (names != null) {
             for (String name : names) {
                 if (new File(path + name).isDirectory()) {
                     wheelNames.add(name);
@@ -65,11 +65,11 @@ public class JobController {
     Integer getJobId(@RequestBody String nameVehicle) {
         String[] split = nameVehicle.split("_");
         List<Integer> jobs = new ArrayList<Integer>();
-        String path = "E:\\Vector Data\\";
+        String path = "D:\\Vector Data\\";
         path += split[0] + "\\" + split[1] + "\\";
         File file = new File(path);
         String[] names = file.list();
-        if (names!= null) {
+        if (names != null) {
             for (String name : names) {
                 if (new File(path + name).isDirectory()) {
                     try {

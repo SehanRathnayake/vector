@@ -24,11 +24,11 @@ public class CurveFitting {
 
     }
 
-    public static SuspensionTestResults getDampedSineCurve(ArrayList<double[]> sigList,int range, double sampleRate) {
+    public static SuspensionTestResults getDampedSineCurve(ArrayList<double[]> sigList, int range, double sampleRate) {
         Iterator<double[]> iterator = sigList.iterator();
         double[] signal = new double[range];
         int pointer = 0;
-        while (pointer<range) {
+        while (pointer < range) {
             signal[pointer++] = iterator.next()[1];
         }
 
@@ -228,7 +228,7 @@ public class CurveFitting {
 
         }
 
-        sig2r=new double[sigList.size()];
+        sig2r = new double[sigList.size()];
         for (int i = 0; i < sigList.size(); i++) {
             sig2r[i] = Ar * Math.exp(alphar * (i)) * Math.cos(wr * (i) + phr);
         }
@@ -241,9 +241,9 @@ public class CurveFitting {
             double[] value = iterator.next();
             sineWave.add(new double[]{value[0], value[1], sig2r[pointer++]});
         }
-        double pi=Math.PI;
+        double pi = Math.PI;
         double c = Math.abs(alphar) / (Math.sqrt(wr * wr + alphar * alphar));
-        double fd = wr * sampleRate/(2*pi);
+        double fd = wr * sampleRate / (2 * pi);
         double fn = fd / Math.sqrt(1 - c * c);
 
         SuspensionTestResults suspensionTestResults = new SuspensionTestResults();
@@ -438,6 +438,7 @@ public class CurveFitting {
                 a[i][j] = new ComplexLo(b[i][j].getReal(), b[i][j].getImag());
             }
         }
+
         return a;
 
     }

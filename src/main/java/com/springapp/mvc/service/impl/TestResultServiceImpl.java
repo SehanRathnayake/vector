@@ -18,7 +18,7 @@ import static com.springapp.mvc.utility.SignalProcessing.*;
  */
 public class TestResultServiceImpl {
 
-    private static String baseUrl = "C:\\Users\\Sehan Rathnayake\\Desktop\\New folder (2)\\Data engine off\\Vector Data\\Data\\";
+    private static String baseUrl = "D:\\Vector Data\\";
 
     private ArrayList<double[]> chassiSignalFull;
     private ArrayList<double[]> chassiSignalVertical;
