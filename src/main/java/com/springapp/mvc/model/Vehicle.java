@@ -1,9 +1,6 @@
 package com.springapp.mvc.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,8 +12,12 @@ import java.util.Date;
 @Table(name = "T_VEHICLE")
 public class Vehicle implements Serializable{
 
+    @SequenceGenerator(name = "Vehicle_Gen", sequenceName = "Vehicle_Seq")
+    @GeneratedValue(generator = "Vehicle_Gen")
+
     @Id
-    @Column (name = "VEHICLE_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "VEHICLE_ID", nullable = false)
     private int vehicleId;
 
     @Column (name = "VEHICLE_MODEL_ID")

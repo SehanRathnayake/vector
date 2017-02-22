@@ -13,10 +13,12 @@ import java.util.List;
 @Table(name = "T_CUSTOMER")
 public class Customer implements Serializable{
 
-    @SequenceGenerator(name = "customer_id", sequenceName = "CUSTOMERID_SEQ")
+    @SequenceGenerator(name = "CUSTOMER_GEN", sequenceName = "CUSTOMERID_SEQ")
+
     @Id
-    @GeneratedValue(generator = "customer_id")
-    @Column  (name = "CUSTOMER_ID")
+    @GeneratedValue(generator = "CUSTOMER_GEN")
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn  (name = "CUSTOMER_ID")
     private long cus_id;
 
     @Column  (name = "NAME")
