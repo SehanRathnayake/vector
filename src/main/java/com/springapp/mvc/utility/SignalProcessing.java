@@ -138,6 +138,24 @@ public class SignalProcessing {
         return new double[]{peakPoint, maxVariation};
     }
 
+    public static double[] findPositivePeakPoint(ArrayList<double[]> signal) {
+        int peakPoint = 0;
+        Iterator<double[]> iterator = signal.iterator();
+
+        double maxVariation = 0;
+        int i = 0;
+        double[] values;
+        while (iterator.hasNext()) {
+            values = iterator.next();
+            if (values[1] > maxVariation) {
+                maxVariation = values[1];
+                peakPoint = i;
+            }
+            i++;
+        }
+        return new double[]{peakPoint, maxVariation};
+    }
+
     public static ArrayList<double[]> lowPassFilter(ArrayList<double[]> signal, double cutOffFrequency, double sampleRate) {
         double rc = 1 / (2 * Math.PI * cutOffFrequency);
         double dt = 1 / sampleRate;
@@ -205,7 +223,7 @@ public class SignalProcessing {
             double frequency = j * h / time * sampleRate;
             //  System.out.println("frequency = " + frequency + ", amp = " + amplitude);
             // System.out.println(frequency + "," + amplitude);
-            if (frequency <= 150.0) frequencySpectrum.add(new double[]{frequency, amplitude});
+            if (frequency <= 100.0) frequencySpectrum.add(new double[]{frequency, amplitude});
         }
         return frequencySpectrum;
 
@@ -231,6 +249,51 @@ public class SignalProcessing {
 
         return displacementSignal;
 
+    }
+
+    public static ArrayList<double[]> getResampledSignal(ArrayList<double[]> signal) {
+        ArrayList<double[]> resampledSignal = new ArrayList<double[]>();
+        int timeGap = 3;
+
+        Iterator<double[]> signalIterator = signal.iterator();
+
+        double[] value;
+        double[] nextvalue = signalIterator.next();
+        value = nextvalue;
+        double intrpolatedValue;
+
+        int i = 0;
+        int startTime = (int) signal.get(0)[0] + (timeGap - ((int) signal.get(0)[0] % timeGap));
+
+        while (signalIterator.hasNext()) {
+            while (nextvalue[0] <= startTime + i * timeGap && signalIterator.hasNext()) {
+                value = nextvalue;
+                nextvalue = signalIterator.next();
+
+            }
+            intrpolatedValue = value[1] + ((startTime + i * timeGap - value[0]) * (nextvalue[1] - value[1]) / (nextvalue[0] - value[0]));
+
+            resampledSignal.add(new double[]{i * timeGap, intrpolatedValue});
+            i++;
+
+        }
+
+
+        return resampledSignal;
+
+
+    }
+
+    public static ArrayList<double[]> changeStartingTime(ArrayList<double[]> signal, double time) {
+        ArrayList<double[]> newSignal = new ArrayList<double[]>();
+        double[] values;
+        Iterator<double[]> signalIterator = signal.iterator();
+        while (signalIterator.hasNext()) {
+
+            values = signalIterator.next();
+            newSignal.add(new double[]{values[0] - time, values[1]});
+        }
+        return newSignal;
     }
 
     public static ArrayList<double[]> getResampledSignal(ArrayList<double[]> signal, ArrayList<double[]> referenceSignal) {
@@ -261,6 +324,69 @@ public class SignalProcessing {
 
         return resampledSignal;
 
+
+    }
+
+    public static ArrayList<double[]> getDifferenceSignal(ArrayList<double[]> signal1, ArrayList<double[]> signal2) {
+        ArrayList<double[]> difference = new ArrayList<double[]>();
+
+        Iterator<double[]> iterator1 = signal1.iterator();
+
+        Iterator<double[]> iterator2 = signal1.iterator();
+        double[] value1, value2;
+
+        while (iterator1.hasNext() && iterator2.hasNext()) {
+            value1 = iterator1.next();
+            value2 = iterator2.next();
+            difference.add(new double[]{value1[0], value1[1] - value2[1]});
+        }
+        return difference;
+
+
+    }
+
+    public static int getShockStartPoint(ArrayList<double[]> signal, double minAccShockStartingPoint, int windowSize, double maxAccStability) {
+        Iterator<double[]> iterator = signal.iterator();
+        double value;
+        int i = 0;
+        while (iterator.hasNext()) {
+            value = iterator.next()[1];
+            if (value < minAccShockStartingPoint) {
+                break;
+            }
+            i++;
+        }
+
+//
+//        for (int j = i; i > 0 + windowSize; ) {
+//
+//            for (j = 0; j < windowSize; j++) {
+//                value = Math.abs(signal.get(i - j)[1]);
+//                if (value > maxAccStability) {
+//                    i = i - j - 1;
+//                    break;
+//
+//                }
+//            }
+//            if (j == windowSize) {
+//                return i;
+//            }
+//
+//        }
+//        return 0;
+        int j;
+        double minimum = 0;
+        int minIndex = i;
+        for (j = i; j < signal.size(); j++) {
+            value = signal.get(j)[1];
+            if (value > 0) break;
+            if (value < minimum) {
+                minIndex = j;
+                minimum = value;
+            }
+
+        }
+        return minIndex;
 
     }
 

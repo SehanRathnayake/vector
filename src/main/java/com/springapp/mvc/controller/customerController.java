@@ -21,20 +21,22 @@ public class CustomerController {
     CustomerService customerService;
 
     @RequestMapping(value = "/customer", method = RequestMethod.GET)
-    public String customer(ModelMap model){
+    public String customer(ModelMap model) {
         return "Customer";
     }
 
     @RequestMapping(value = "/customerList", method = RequestMethod.POST)
-    public @ResponseBody
-    List<Customer> viewCustomers(ModelMap model){
+    public
+    @ResponseBody
+    List<Customer> viewCustomers(ModelMap model) {
         List<Customer> list = customerService.viewList();
         return list;
     }
 
     @RequestMapping(value = "/addCustomer", method = RequestMethod.POST)
-    public @ResponseBody
-    void addCustomer(@RequestBody String [] customerDetail){
+    public
+    @ResponseBody
+    void addCustomer(@RequestBody String[] customerDetail) {
 //        Customer c=new Customer();
 //        c.setCustomerName(data[0]);
 //        c.setCustomerEmail("jsbc@nkvd.com");
@@ -52,22 +54,25 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/removeCustomer", method = RequestMethod.POST)
-    public String removeCustomer(@RequestBody int removeId){
+    public String removeCustomer(@RequestBody int removeId) {
         int customerId = removeId;
         customerService.removeCustomer(customerId);
         return "customer";
     }
 
     @RequestMapping(value = "/viewCustomerDetail", method = RequestMethod.POST)
-    public @ResponseBody
-    CustomerDto viewCustomerDetails(@RequestBody String id){
-        CustomerDto c = customerService.getSingleCustomer(1);;
+    public
+    @ResponseBody
+    CustomerDto viewCustomerDetails(@RequestBody String id) {
+        CustomerDto c = customerService.getSingleCustomer(1);
+        ;
         return c;
     }
 
     @RequestMapping(value = "/editCustomerDetail", method = RequestMethod.POST)
-    public @ResponseBody
-    void editCustomerDetails(@RequestBody String [] customerDetail){
+    public
+    @ResponseBody
+    void editCustomerDetails(@RequestBody String[] customerDetail) {
         Customer customer = new Customer();
         customer.setCustomerid(Long.parseLong(customerDetail[0]));
         customer.setCustomerName(customerDetail[1]);
