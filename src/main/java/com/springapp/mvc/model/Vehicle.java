@@ -16,11 +16,11 @@ public class Vehicle implements Serializable{
     @GeneratedValue(generator = "Vehicle_Gen")
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "VEHICLE_ID", nullable = false)
+//    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "VEHICLE_ID", nullable = false)
     private int vehicleId;
 
-    @Column (name = "VEHICLE_MODEL_ID")
+    @Column (name = "MODEL_ID")
     private int vehicleModelId;
 
     @Column (name = "NUMBER_PLATE")

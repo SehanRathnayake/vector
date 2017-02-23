@@ -7,6 +7,7 @@ import com.springapp.mvc.model.Vehicle;
 import com.springapp.mvc.service.VehicleService;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -20,19 +21,19 @@ public class VehicleServiceImpl implements VehicleService {
     @Autowired
     private VehicleDao vehicleDao;
 
-    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public Vehicle createVehicle(Vehicle vehicle) {
-        return null;
+        return vehicleDao.createVehicle(vehicle);
     }
 
     @Override
     public List<Vehicle> viewList() {
-        return null;
+        return vehicleDao.viewList();
     }
 
-    @Override
-    public List<VehicleDto> getVehicle(long customerId) {
-        return null;
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<VehicleDto> getVehicle(long id){
+        return vehicleDao.getVehicle(id);
     }
 
     @Override

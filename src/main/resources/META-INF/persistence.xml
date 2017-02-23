@@ -10,6 +10,7 @@
         <class>com.springapp.mvc.model.Position</class>
         <class>com.springapp.mvc.model.Device</class>
         <class>com.springapp.mvc.model.Customer</class>
+        <class>com.springapp.mvc.model.Vehicle</class>
         <class>com.springapp.mvc.model.Manufacturer</class>
         <class>com.springapp.mvc.model.Model</class>
     </persistence-unit>

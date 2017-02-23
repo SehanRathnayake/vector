@@ -16,8 +16,8 @@ public class Manufacturer implements Serializable{
     @GeneratedValue(generator = "Manufacturer_Gen")
 
     @Id
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MANUFACTURER_ID")
+//    @OneToMany(fetch = FetchType.LAZY)
+    @Column(name = "MANUFACTURER_ID")
     private int manufacturerId;
 
     @Column(name = "MANUFACT_NAME")

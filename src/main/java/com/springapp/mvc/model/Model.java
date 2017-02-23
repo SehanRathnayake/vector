@@ -14,8 +14,8 @@ public class Model implements Serializable{
     @GeneratedValue(generator = "Model_Gen")
 
     @Id
-    @OneToMany(fetch = FetchType.LAZY)
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @Column(name = "VEHICLE_MODEL_ID")
     private int vehicleModelId;
 
