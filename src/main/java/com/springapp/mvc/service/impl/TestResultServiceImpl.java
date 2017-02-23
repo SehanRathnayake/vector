@@ -27,6 +27,7 @@ public class TestResultServiceImpl {
     private ArrayList<double[]> axcelSignalVertical;
 
     private ArrayList<double[]> axcelSignalClipped;
+    private ArrayList<double[]> differenceSignalClipped;
     private ArrayList<double[]> chassiSignalClipped;
 
     private ArrayList<double[]> chassiSignalFiltered;
@@ -47,7 +48,9 @@ public class TestResultServiceImpl {
 
     private static int stabilityWindow = 20;
     private static double maxAccStability = 0.1;
-    private static double cutOffFrequency = 2;
+    private double cutOffFrequency = 10;
+
+    private static double minAccShockStartingPoint = -1.0;
 
     private boolean writeToexcel = false;
 
@@ -55,9 +58,31 @@ public class TestResultServiceImpl {
     private ArrayList<double[]> chassiFrequencySpectrum;
 
     public static void main(String[] args) {
-        SuspensionTestResults s = new TestResultServiceImpl().getResults("sehan", "corolla", "job1", "Rear Left");
+        // SuspensionTestResults s = new TestResultServiceImpl().getResults("sehan", "corolla", "job1", "Rear Left");
+        String customer = "sehan";
+        String vehicle = "corolla";
+        String job = "job1";
+        String wheel = "Rear Left";
 
 
+        String url = baseUrl + customer + "\\" + vehicle + "\\" + job + "\\" + wheel + "\\";
+        String excelFileName = customer + "-" + vehicle + "-" + job + "-" + wheel + ".xlsx";
+        String excelUrl = url + excelFileName;
+
+        insertToSpreadsheet(url, excelFileName);
+        ArrayList<double[]> chassiSignalFull = getSignal(excelUrl, "chassi");
+        ArrayList<double[]> axcelSignalFull = getSignal(excelUrl, "axcel");
+
+        String chassiData = url + "\\2-datalog.txt";
+        String axcelData = url + "\\1-datalog.txt";
+        chassiSignalFull = getSignalFromText(chassiData);
+        axcelSignalFull = getSignalFromText(axcelData);
+
+        ArrayList<double[]> axcelSignalVertical = calibrate(axcelSignalFull);
+        ArrayList<double[]> chassiSignalVertical = calibrate(chassiSignalFull);
+
+        writeToExcel(excelUrl, "without resample", axcelSignalVertical);
+        writeToExcel(excelUrl, "resample", getResampledSignal(axcelSignalVertical));
     }
 
     public SuspensionTestResults getResults(String customer, String vehicle, String job, String wheel) {
@@ -81,6 +106,26 @@ public class TestResultServiceImpl {
         chassiSampleRate = getSampleRate(chassiSignalVertical);
         axcelSignalVertical = getResampledSignal(axcelSignalVertical, chassiSignalVertical);
 
+        axcelSignalVertical = getResampledSignal(axcelSignalVertical);
+        chassiSignalVertical = getResampledSignal(chassiSignalVertical);
+
+        int chassiShockStartPoint = getShockStartPoint(chassiSignalVertical, minAccShockStartingPoint, stabilityWindow, 2 * maxAccStability);
+        int axcelShockStartPoint = getShockStartPoint(axcelSignalVertical, minAccShockStartingPoint, stabilityWindow, 2 * maxAccStability);
+
+//TODO set range
+        if (chassiShockStartPoint > axcelShockStartPoint) {
+            int gap = chassiShockStartPoint - axcelShockStartPoint;
+            chassiSignalVertical = new ArrayList<double[]>(chassiSignalVertical.subList(gap, chassiSignalVertical.size()));
+            double startTime = chassiSignalVertical.get(0)[0];
+            chassiSignalVertical = changeStartingTime(chassiSignalVertical, startTime);
+        } else if (chassiShockStartPoint < axcelShockStartPoint) {
+            int gap = axcelShockStartPoint - chassiShockStartPoint;
+            axcelSignalVertical = new ArrayList<double[]>(axcelSignalVertical.subList(gap, axcelSignalVertical.size()));
+            double startTime = axcelSignalVertical.get(0)[0];
+            axcelSignalVertical = changeStartingTime(axcelSignalVertical, startTime);
+        }
+
+
         double[] peakPoint = findPeakPoint(axcelSignalVertical);
         axcelPeakPoint = (int) peakPoint[0];
         axcelPeakValue = peakPoint[1];
@@ -93,9 +138,11 @@ public class TestResultServiceImpl {
         axcelSignalClipped = new ArrayList<double[]>(axcelSignalVertical.subList(axcelPeakPoint - clipingWindowLeft, axcelPeakPoint + clipingWindowRight));
         chassiSignalClipped = new ArrayList<double[]>(chassiSignalVertical.subList(axcelPeakPoint - clipingWindowLeft, axcelPeakPoint + clipingWindowRight));
 
+        differenceSignalClipped = getDifferenceSignal(axcelSignalClipped, chassiSignalClipped);
+
         chassiSignalFiltered = lowPassFilter(chassiSignalClipped, cutOffFrequency, chassiSampleRate);
 
-        peakPoint = findPeakPoint(chassiSignalFiltered);
+        peakPoint = findPositivePeakPoint(chassiSignalFiltered);
         int curveFittingStartPoint = (int) peakPoint[0];
 
         chassiSignalForCurveFitting = new ArrayList<double[]>(chassiSignalFiltered.subList(curveFittingStartPoint, chassiSignalFiltered.size()));
