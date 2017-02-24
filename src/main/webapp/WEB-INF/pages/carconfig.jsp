@@ -209,14 +209,15 @@
 <section class="wheelsection" id="CC_wheelConfigSection" style="display: none">
     <div class="container" style="height:70%">
         <div class="row wheel-device">
-            <div class="col-lg-10 col-sm-10" id="CC_wheelRow" count="1">
-                <div class="col-lg-2 col-sm-2">
-                    <div class="col-lg-10 col-sm-12">
-                        <div class="well" id="CC_activeDeviceInnerContainer">
+            <div class="col-lg-2 col-sm-2">
+                <div class="col-lg-10 col-sm-12">
+                    <div class="well" id="CC_activeDeviceInnerContainer">
 
-                        </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-lg-10 col-sm-10" id="CC_wheelRow" count="1">
+
                 <div class="col-lg-3 col-sm-4">
                     <div class="well well-suspension well-inactive" style="height:60%">
                         <div class="wheel-device-container">
@@ -254,11 +255,11 @@
                     <div class="btn btn-success btn-start disabled" style="height:10%;width:100%;font-size: 1.5vw;line-height:5%;padding-top: 1vw;">
                         Start
                     </div>
-                    <div class = "vector-result-progress">
+                    <div class = "vector-result-progress" id="CC_resultProgressRearLeft">
                         <div>Wait 70 seconds</div>
                         <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:70%">
-                                <span class="sr-only">70% Complete</span>
+                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                                <span class="sr-only">0% Complete</span>
                             </div>
                         </div>
                     </div>
