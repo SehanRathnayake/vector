@@ -13,15 +13,11 @@ VECTOR.module.carconfig = function () {
     var ip = "localhost";
     var isNewCustomer = false;
     var wheelNames = ["Front Left", "Front Right", "Rear Left", "Rear Right"];
-    var devices = [{id: 1, value: "A001", status: "inactive"}, {id: 2, value: "A002", status: "inactive"}, {
+    var devices = [{id: 1, value: "A001", status: "active"}, {id: 2, value: "A002", status: "inactive"}, {
         id: 3,
         value: "A003",
         status: "inactive"
-    }, {id: 4, value: "A004", status: "inactive"}, {id: 5, value: "A005", status: "inactive"}, {
-        id: 6,
-        value: "A006",
-        status: "inactive"
-    }, {id: 7, value: "A007", status: "inactive"}]; //devices should be extracted from master data
+    }, {id: 4, value: "A004", status: "inactive"}]; //devices should be extracted from master data
     var customerList = [{
         name: "Udith Rathnayake",
         vehicles: ["Toyota Vios 2007", "Hyundai Accent 2001"]
@@ -42,7 +38,7 @@ VECTOR.module.carconfig = function () {
             success: function (result) {
                 activeDevices = result;
                 _.each(devices, function (item) {
-                    item.status = "inactive";
+                    item.status = "active";
                 });
                 _.each(result, function (item) {
                     var d = _.where(devices, {id: item});
@@ -58,7 +54,7 @@ VECTOR.module.carconfig = function () {
         _.each(devices, function (item) {
             var div;
             div = '<div class="block-device ui-widget-content device-' + item.status + '" value="';
-            div += item.value + '" id="' + item.id + '">' + item.value + '</div>';
+            div += item.value + '" id="' + item.id + '" title = "A00'+item.id+'"></div>';
             $(idPrefix + "activeDeviceInnerContainer").append(div);
             containerHeight += $(".block-device").outerHeight(true);
         });
@@ -66,6 +62,18 @@ VECTOR.module.carconfig = function () {
         $(".device-active").draggable({
             revert: true,
             cursor: "hand"
+        });
+        $(".block-device").tooltip({
+            position: {
+                using: function (position, feedback) {
+                    $(this).css(position);
+                    $("<div>")
+                        .addClass("arrow")
+                        .addClass(feedback.vertical)
+                        .addClass(feedback.horizontal)
+                        .appendTo(this);
+                }
+            }
         });
 
     };
@@ -93,14 +101,14 @@ VECTOR.module.carconfig = function () {
         });
         var containers = $(idPrefix + "wheelRow").find(".device-container");
         _.each(containers, function (conts) {
-            if ($(conts).attr("started") == "false") {
+            if ($(conts).attr("started") == "false" && !$(conts).hasClass("container-not-filled")) {
                 $(conts).removeClass("device-inactive").addClass("device-inactive");
                 $(conts).removeClass("device-active");
             }
         });
         _.each(activeDevices, function (item) {
             _.each(containers, function (conts) {
-                if ($(conts).attr("started") == "false") {
+                if ($(conts).attr("started") == "false" && !$(conts).hasClass("container-not-filled")) {
                     if ($(conts).attr("id") == item) {
                         $(conts).removeClass("device-active").addClass("device-active");
                         $(conts).removeClass("device-inactive");
@@ -113,6 +121,8 @@ VECTOR.module.carconfig = function () {
         ele.parent().parent().droppable("enable");
         ele.parent().fadeOut(200);
         ele.parent().removeClass('container-not-filled').addClass('container-not-filled');
+        ele.parent().removeClass('device-active');
+        ele.parent().removeClass('device-inactive');
         $(idPrefix + "activeDeviceInnerContainer").append('<div class="block-device ui-widget-content" value="' + ele.parent().attr("value") + '">' + ele.parent().attr("value") + '</div>');
         $(".device-active").draggable({
             revert: true
@@ -166,7 +176,7 @@ VECTOR.module.carconfig = function () {
             + '<div class="wheel-device-name">'
             + '</div>'
             + '</div>'
-            + '<div class="btn btn-success btn-start disabled" style="height:10%;width:100%" > Start'
+            + '<div class="btn btn-success btn-start disabled" style="height:10%;width:100%;font-size: 1.5vw;line-height:5%;padding-top: 1vw;" > Start'
             + '</div>'
             + '</div>';
         var count = parseInt($(idPrefix + "wheelRow").attr("count"));
@@ -192,10 +202,11 @@ VECTOR.module.carconfig = function () {
                 }
             }
         });
+
         ele.find(".device-area").droppable({
             accept: ".block-device",
             over: function (event, ui) {
-                $(this).css({'background-color': "#47759A"});
+               // $(this).css({'background-color': "#47759A",'opacity':0.4});
             },
             out: function (event, ui) {
                 $(this).css({'background-color': 'transparent'});
@@ -205,7 +216,7 @@ VECTOR.module.carconfig = function () {
                 $(this).find('.device-container').removeClass("container-not-filled");
                 $('.container-not-filled').hide();
                 $(this).css({'background-color': 'transparent'});
-                $(this).find('.device-container').css({'display': "block", 'background-color': "#71d2a9"});
+                $(this).find('.device-container').css({'display': "block"});
                 $(this).find('.device-container').addClass("device-active");
                 $(this).find('.device-container').attr("value", ui.draggable.attr("value"));
                 $(this).find('.device-container').attr("title", ui.draggable.attr("value"));
@@ -233,7 +244,7 @@ VECTOR.module.carconfig = function () {
                 }
             },
             activate: function (event, ui) {
-                $(this).find('.device-container').css({'display': "block", 'background-color': "#47759A"});
+                $(this).find('.device-container').css({'display': "block"});
             },
             deactivate: function (event, ui) {
                 $('.container-not-filled').hide();
@@ -241,6 +252,7 @@ VECTOR.module.carconfig = function () {
         });
         $(".wheel-select-li").off("click").on("click", function () {
             $(this).parent().parent().parent().find(".wheel-device-container").vectorWheelContent();
+            $(this).parent().parent().parent().addClass("device-main-container");
             addWheelConfig($(this).parent().parent().parent().find(".wheel-device-container"), $(this).attr("value"));
             $(".wheel-select-popup").hide();
             $(this).parent().parent().parent().parent().find(".wheel-device-name").html($(this).attr("value"));
@@ -279,8 +291,8 @@ VECTOR.module.carconfig = function () {
                     var interval = setInterval(function () {
                         timesRun += 1;
 
-                        $(btn).html("Wait " + (70 - parseInt(timesRun)) + " seconds for results !");
-                        if (timesRun === 70) {
+                        $(btn).html("Wait " + (80 - parseInt(timesRun)) + " seconds !");
+                        if (timesRun === 80) {
                             clearInterval(interval);
                             $.ajax({
                                 url: 'http://' + ip + ':8082/vector/rest/results',
@@ -306,7 +318,7 @@ VECTOR.module.carconfig = function () {
                                             VECTOR.module.wheelresults.getCharts(deviceIds);
                                         });
                                     } else {
-                                        $(btn).html("Something went wrong");
+                                        $(btn).html("Something went\nwrong");
                                         $(btn).removeClass("btn-warning");
                                         $(btn).removeClass("btn-danger").addClass("btn-danger");
                                         $(btn).removeClass("disabled").addClass("disabled");
@@ -392,6 +404,7 @@ VECTOR.module.carconfig = function () {
             $(idPrefix + "vehicleBrand").removeClass("vector-hidden");
             $(idPrefix + "customerName").val("");
             $(idPrefix + "nextBtn").removeClass("disabled").addClass("disabled");
+            $(idPrefix + "jobIdCombo").removeClass("disabled").addClass("disabled");
             $(idPrefix + "pastResults").slideUp(300);
             disablePastResults();
             isNewCustomer = true;
@@ -492,11 +505,12 @@ VECTOR.module.carconfig = function () {
     };
     var getCustomerList = function () {
         $.ajax({
-            url: 'http://' + ip + ':8082/vector/customerList',
+            url: 'http://' + ip + ':8082/vector/getCustomerNames',
             dataType: "json",
             cache: false,
+            data : "sa",
             contentType: 'application/json;',
-            type: 'GET',
+            type: 'POST',
             success: function (result) {
                 customerList = result;
             }
@@ -510,7 +524,7 @@ VECTOR.module.carconfig = function () {
             cache: false,
             data: JSON.stringify(newCustomer),
             contentType: 'application/json;',
-            type: 'GET',
+            type: 'POST',
             success: function (result) {
                 customerList = result;
             }
@@ -518,6 +532,7 @@ VECTOR.module.carconfig = function () {
     };
     return {
         init: function () {
+            getCustomerList();
             fillActiveDevices();
             //getCustomerList();
             $(idPrefix + "nextBtn").off("click").on("click", nextSection);
@@ -529,6 +544,7 @@ VECTOR.module.carconfig = function () {
             });
             $(".wheel-select-li").off("click").on("click", function () {
                 $(this).parent().parent().parent().find(".wheel-device-container").vectorWheelContent();
+                $(this).parent().parent().parent().addClass("device-main-container");
                 addWheelConfig($(this).parent().parent().parent().find(".wheel-device-container"), $(this).attr("value"));
                 $(".wheel-select-popup").hide();
                 $(this).parent().parent().parent().parent().find(".wheel-device-name").html($(this).attr("value"));

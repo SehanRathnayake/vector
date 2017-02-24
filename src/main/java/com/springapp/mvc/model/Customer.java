@@ -17,8 +17,8 @@ public class Customer implements Serializable{
 
     @Id
     @GeneratedValue(generator = "CUSTOMER_GEN")
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn  (name = "CUSTOMER_ID")
+//    @OneToMany(fetch = FetchType.LAZY)
+    @Column  (name = "CUSTOMER_ID")
     private long cus_id;
 
     @Column  (name = "NAME")
@@ -32,6 +32,7 @@ public class Customer implements Serializable{
 
     @Column  (name = "EMAIL")
     private String cus_email;
+
 
     public long getCustomerid(){return cus_id;}
 

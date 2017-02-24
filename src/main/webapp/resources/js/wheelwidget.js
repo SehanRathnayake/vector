@@ -4,12 +4,13 @@
  */
 (function ($) {
 
-    var div = '<div class="device-area suspension-part">'
+    var div = '<div class="device-im">'
+        +'</div><div class="device-area suspension-part-up">'
         + '<div class="device-container container-not-filled">'
         + '<div class="device-clear"></div>'
         + '</div>'
         + '</div>'
-        + '<div class="device-area suspension-part">'
+        + '<div class="device-area suspension-part-down">'
         + '<div class="device-container container-not-filled">'
         + '<div class="device-clear"></div>'
         + '</div>'

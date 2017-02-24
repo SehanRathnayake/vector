@@ -4,7 +4,21 @@
 <head>
     <title>Customer Details</title>
 </head>
-
+<div class="vector-header" style="
+    font-size: 30px;
+    font-family: inherit;
+    line-height: 2;
+    padding: 8px;
+    color: white;
+">
+    Hi, <security:authentication property="principal.fullname"/>.
+    <a href="${logoutUrl}" style="
+    float: right;
+        font-size: 15px;
+    margin-right: 10px;
+    color: whitesmoke;
+">Log out</a>
+</div>
 <div>
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -12,9 +26,14 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="home">Dashboard</a></li>
-                <li class="active" style="float: right; background-color: '#47759a'"><a href="#">Customer</a></li>
+                <li><a href="customer">Customer</a></li>
                 <li><a href="vehicle">Vehicle</a></li>
-                <li><a href="new">Create new job</a></li>
+                <li style="
+    float: right;
+    background-color: '#47759a';
+">
+                    <a href="newJob">Create new job</a>
+                </li>
             </ul>
         </div>
     </nav>

@@ -4,10 +4,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * Created by Heshani Samarasekara on 2/22/2017.
- */
-
 @Entity
 @Table(name = "T_MANUFACTURER")
 public class Manufacturer implements Serializable{
@@ -16,8 +12,8 @@ public class Manufacturer implements Serializable{
     @GeneratedValue(generator = "Manufacturer_Gen")
 
     @Id
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MANUFACTURER_ID")
+//    @OneToMany(fetch = FetchType.LAZY)
+    @Column(name = "MANUFACTURER_ID")
     private int manufacturerId;
 
     @Column(name = "MANUFACT_NAME")

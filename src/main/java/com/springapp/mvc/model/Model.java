@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * Created by Heshani Samarasekara on 2/22/2017.
- */
+ * Created by Heshani Samarasekara on 2/22/2017.*/
+
 
 @Entity
 @Table(name = "T_MODEL")
@@ -14,8 +14,8 @@ public class Model implements Serializable{
     @GeneratedValue(generator = "Model_Gen")
 
     @Id
-    @OneToMany(fetch = FetchType.LAZY)
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @Column(name = "VEHICLE_MODEL_ID")
     private int vehicleModelId;
 

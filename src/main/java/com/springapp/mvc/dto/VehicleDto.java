@@ -16,6 +16,10 @@ public class VehicleDto implements Serializable {
     private int odometer;
     private int customer;
 
+    public void setVehicleId(int vehicleId) {
+        this.vehicleId = vehicleId;
+    }
+
     public int getVehicleId() {
         return vehicleId;
     }
