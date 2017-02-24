@@ -41,6 +41,8 @@ public class HomeController {
     public String printWelcome(ModelMap model) {
        // String ip=userService.configureIPandPort();
         //model.addAttribute("ip",ip);
+//        Long jobid=jobService.createNewJob(new Long(555));
+//        Long sub=jobService.createSubJob(jobid,"LEFT");
         return "home";
     }
 

@@ -11,13 +11,16 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class JobDaoImpl extends BaseJpaDaoImpl<Job> implements JobDao {
 
-    public Job createJob(Job job){
+
+    public Job createJob(Job job) {
 
         return saveEntity(job);
     }
 
-    public void deleteJob(Long id){
-        deleteEntity(Job.class,id);
+
+
+    public void deleteJob(Long id) {
+        deleteEntity(Job.class, id);
     }
 
 }

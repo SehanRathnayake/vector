@@ -20,16 +20,17 @@ public class Job implements Serializable {
     @Column(name = "JOB_ID")
     private long jobId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
-    private User user;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "USER_ID")
+//    private User user;
 
     @Column(name = "START_DATE")
     @Temporal(TemporalType.DATE)
     private java.util.Calendar startedDate;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "job")
-    private List<DeviceMapping> devices;
+//
+//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "job")
+//    private List<DeviceMapping> devices;
 
 
     public long getJobId() {
@@ -40,13 +41,13 @@ public class Job implements Serializable {
         this.jobId = jobId;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
 
     public Calendar getStartedDate() {
         return startedDate;
@@ -56,11 +57,11 @@ public class Job implements Serializable {
         this.startedDate = date;
     }
 
-    public List<DeviceMapping> getDevices() {
-        return devices;
-    }
-
-    public void setDevices(List<DeviceMapping> devices) {
-        this.devices = devices;
-    }
+//    public List<DeviceMapping> getDevices() {
+//        return devices;
+//    }
+//
+//    public void setDevices(List<DeviceMapping> devices) {
+//        this.devices = devices;
+//    }
 }

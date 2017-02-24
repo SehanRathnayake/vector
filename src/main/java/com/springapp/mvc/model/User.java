@@ -41,8 +41,8 @@ public class User implements Serializable {
     @Column(name = "STATUS")
     private String status;
 
-    @OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="user")
-    private List<Job> jobs;
+//    @OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="user")
+//    private List<Job> jobs;
 
     public long getUserId() {
         return userId;
