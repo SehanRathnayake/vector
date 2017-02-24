@@ -21,7 +21,7 @@ public class CustomerServiceImpl implements CustomerService{
     private CustomerDao customerDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Customer createJob(Customer customer){
+    public Customer createJob(CustomerDto customer){
         return customerDao.createJob(customer);
     }
 

@@ -16,8 +16,13 @@ import java.util.List;
 public class VehicleDaoImpl extends BaseJpaDaoImpl<Vehicle> implements VehicleDao{
 
     @Override
-    public Vehicle createVehicle(Vehicle vehicle) {
-        return saveEntity(vehicle);
+    public Vehicle createVehicle(VehicleDto vehicle) {
+        Vehicle veh = new Vehicle();
+        veh.setCustomer(vehicle.getCustomer());
+        veh.setOdometer(vehicle.getOdometer());
+        veh.setNumberPlate(vehicle.getNumberPlate());
+        veh.setVehicleModelId(vehicle.getVehicleModelId());
+        return saveEntity(veh);
     }
 
     @Override
@@ -30,7 +35,7 @@ public class VehicleDaoImpl extends BaseJpaDaoImpl<Vehicle> implements VehicleDa
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<VehicleDto> getVehicle(long customerId) {
+    public List<VehicleDto> getVehicle(int customerId) {
         String queryString = "SELECT v FROM Vehicle v WHERE v.customer= :id";
         TypedQuery<Vehicle> query = this.entityManager.createQuery(queryString, Vehicle.class);
         query.setParameter("id", ((int) customerId));
@@ -42,7 +47,7 @@ public class VehicleDaoImpl extends BaseJpaDaoImpl<Vehicle> implements VehicleDa
             dto.setNumberPlate(veh.getNumberPlate());
             dto.setVehicleModelId(veh.getVehicleModelId());
             dto.setOdometer(veh.getOdometer());
-            dto.setCustomer(veh.getCustomer());
+//            dto.setCustomer(veh.getCustomer());
 
             vehicleDto.add(dto);
         }
@@ -61,7 +66,7 @@ public class VehicleDaoImpl extends BaseJpaDaoImpl<Vehicle> implements VehicleDa
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public VehicleDto getSingleVehicle(long id) {
+    public VehicleDto getSingleVehicle(int id) {
 //        Customer c = getEntity(Customer.class,id);
         String queryString = "SELECT v FROM Vehicle v WHERE v.customer = :id";
         TypedQuery<Vehicle> query = this.entityManager.createQuery(queryString, Vehicle.class);

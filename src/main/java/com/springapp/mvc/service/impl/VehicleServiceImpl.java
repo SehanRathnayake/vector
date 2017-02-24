@@ -23,7 +23,7 @@ public class VehicleServiceImpl implements VehicleService {
     private VehicleDao vehicleDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Vehicle createVehicle(Vehicle vehicle) {
+    public Vehicle createVehicle(VehicleDto vehicle) {
         return vehicleDao.createVehicle(vehicle);
     }
 
@@ -33,7 +33,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<VehicleDto> getVehicle(long id){
+    public List<VehicleDto> getVehicle(int id){
         return vehicleDao.getVehicle(id);
     }
 

@@ -33,7 +33,7 @@ public class Vehicle implements Serializable{
     @Column (name = "ODOMETER")
     private int odometer;
 
-    @Column (name = "CUSTOMER")
+    @Column(name = "CUSTOMER")
     private int customer;
 
     public int getVehicleId() {
@@ -83,6 +83,4 @@ public class Vehicle implements Serializable{
     public void setCustomer(int customer) {
         this.customer = customer;
     }
-
-
 }

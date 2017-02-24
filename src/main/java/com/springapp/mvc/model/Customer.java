@@ -19,7 +19,7 @@ public class Customer implements Serializable{
     @GeneratedValue(generator = "CUSTOMER_GEN")
 //    @OneToMany(fetch = FetchType.LAZY)
     @Column  (name = "CUSTOMER_ID")
-    private long cus_id;
+    private int cus_id;
 
     @Column  (name = "NAME")
     private String cus_name;
@@ -33,24 +33,54 @@ public class Customer implements Serializable{
     @Column  (name = "EMAIL")
     private String cus_email;
 
+    /*@OneToMany(fetch = FetchType.EAGER)
+   private  Collection<Vehicle> vehicles;
+*/
+    public int getCus_id() {
+        return cus_id;
+    }
 
-    public long getCustomerid(){return cus_id;}
+    public void setCus_id(int cus_id) {
+        this.cus_id = cus_id;
+    }
 
-    public void setCustomerid(long cus_id) {this.cus_id = cus_id;}
+    public String getCus_name() {
+        return cus_name;
+    }
 
-    public String getCustomerName(){return cus_name;}
+    public void setCus_name(String cus_name) {
+        this.cus_name = cus_name;
+    }
 
-    public void setCustomerName(String cus_name){this.cus_name = cus_name;}
+    public String getCus_address() {
+        return cus_address;
+    }
 
-    public String getCustomerAddress(){return cus_address;}
+    public void setCus_address(String cus_address) {
+        this.cus_address = cus_address;
+    }
 
-    public void setCustomerAddress(String cus_address){this.cus_address = cus_address;}
+    public String getCus_phone() {
+        return cus_phone;
+    }
 
-    public String getCustomerPhone(){return cus_phone;}
+    public void setCus_phone(String cus_phone) {
+        this.cus_phone = cus_phone;
+    }
 
-    public void setCustomerPhone(String cus_phone){this.cus_phone=cus_phone;}
+    public String getCus_email() {
+        return cus_email;
+    }
 
-    public String getCustomerEmail(){return cus_email;}
+    public void setCus_email(String cus_email) {
+        this.cus_email = cus_email;
+    }
+/*
+    public Collection<Vehicle> getVehicles() {
+        return vehicles;
+    }
 
-    public void setCustomerEmail(String cus_email){this.cus_email = cus_email;}
+    public void setVehicles(List<Vehicle> vehicles) {
+        this.vehicles = vehicles;
+    }*/
 }

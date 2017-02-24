@@ -11,7 +11,7 @@ import java.util.List;
 public interface CustomerDao {
     public List<Customer> getCustomer(String customer_name);
     public List<Customer> getCustomerList();
-    public Customer createJob(Customer customer);
-    public void removeCustomer(long id);
-    public CustomerDto getSingleCustomer(long id);
+    public Customer createJob(CustomerDto customer);
+    public void removeCustomer(int id);
+    public CustomerDto getSingleCustomer(int id);
 }
