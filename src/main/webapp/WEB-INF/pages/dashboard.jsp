@@ -2,7 +2,6 @@
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="<c:url value="/resources/js/graphwidget.js" />"></script>
 <script src="<c:url value="/resources/js/dashboard.js" />"></script>
-
 <div class="vector-header" style="
     font-size: 30px;
     font-family: inherit;
@@ -18,15 +17,13 @@
     color: whitesmoke;
 ">Log out</a>
 </div>
-<!--sample graph | use SG_ as id prefix-->
-
 <div>
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
             </div>
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Dashboard</a></li>
+                <li><a href="home">Dashboard</a></li>
                 <li><a href="customer">Customer</a></li>
                 <li><a href="vehicle">Vehicle</a></li>
                 <li style="
@@ -39,6 +36,8 @@
         </div>
     </nav>
 </div>
+
+<!--sample graph | use SG_ as id prefix-->
 
 <%--<div class = "block-graph" align="center" name = "Sample Graph">
 

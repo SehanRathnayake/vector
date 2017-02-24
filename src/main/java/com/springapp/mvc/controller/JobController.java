@@ -1,5 +1,6 @@
 package com.springapp.mvc.controller;
 
+import com.springapp.mvc.dto.CustVehicleTempDto;
 import com.springapp.mvc.dto.DeviceWheelDto;
 import com.springapp.mvc.dto.RawDataDto;
 import com.springapp.mvc.dto.SuspensionTestResults;
@@ -45,7 +46,7 @@ public class JobController {
     List<String> add(@RequestBody String nameVehicle) {
         String[] split = nameVehicle.split("_");
         List<String> wheelNames = new ArrayList<String>();
-        String path = "D:\\Vector Data\\";
+        String path = "E:\\Vector Data\\";
         path += split[0] + "\\" + split[1] + "\\" + split[2] + "\\";
         File file = new File(path);
         String[] names = file.list();
@@ -58,6 +59,38 @@ public class JobController {
         }
         return wheelNames;
     }
+    @RequestMapping(value = "/getCustomerNames", method = RequestMethod.POST, headers = "content-type=application/json")
+    public
+    @ResponseBody
+    List<CustVehicleTempDto> customers(@RequestBody String nameVehicle) {
+        List<String> wheelNames = new ArrayList<String>();
+        String path = "E:\\Vector Data\\";
+        File file = new File(path);
+        String[] names = file.list();
+        List<CustVehicleTempDto> custVehicleTempDtos = new ArrayList<CustVehicleTempDto>();
+        if (names!= null) {
+            for (String name : names) {
+                CustVehicleTempDto dto = new CustVehicleTempDto();
+                dto.setName(name);
+                if (new File(path + name).isDirectory()) {
+                    String newPath =path+name+"\\";
+                    File newfile = new File(newPath);
+                    String[] newNames = newfile.list();
+                    List<String> vehicles = new ArrayList<String>();
+                    if (newNames!= null) {
+                        for (String x : newNames) {
+                            if (new File(newPath + x).isDirectory()) {
+                                vehicles.add(x);
+                            }
+                        }
+                    }
+                    dto.setVehicles(vehicles);
+                }
+                custVehicleTempDtos.add(dto);
+            }
+        }
+        return custVehicleTempDtos;
+    }
 
     @RequestMapping(value = "/getJobId", method = RequestMethod.POST, headers = "content-type=application/json")
     public
@@ -65,7 +98,7 @@ public class JobController {
     Integer getJobId(@RequestBody String nameVehicle) {
         String[] split = nameVehicle.split("_");
         List<Integer> jobs = new ArrayList<Integer>();
-        String path = "D:\\Vector Data\\";
+        String path = "E:\\Vector Data\\";
         path += split[0] + "\\" + split[1] + "\\";
         File file = new File(path);
         String[] names = file.list();

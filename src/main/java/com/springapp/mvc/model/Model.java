@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * Created by Heshani Samarasekara on 2/22/2017.
- */
+ * Created by Heshani Samarasekara on 2/22/2017.*/
+
 
 @Entity
 @Table(name = "T_MODEL")

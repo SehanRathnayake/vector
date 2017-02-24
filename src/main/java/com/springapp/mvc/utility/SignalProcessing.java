@@ -332,7 +332,7 @@ public class SignalProcessing {
 
         Iterator<double[]> iterator1 = signal1.iterator();
 
-        Iterator<double[]> iterator2 = signal1.iterator();
+        Iterator<double[]> iterator2 = signal2.iterator();
         double[] value1, value2;
 
         while (iterator1.hasNext() && iterator2.hasNext()) {

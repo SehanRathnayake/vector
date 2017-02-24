@@ -11,9 +11,6 @@ import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Heshani Samarasekara on 8/16/2016.
- */
 
 @Repository
 public class VehicleDaoImpl extends BaseJpaDaoImpl<Vehicle> implements VehicleDao{

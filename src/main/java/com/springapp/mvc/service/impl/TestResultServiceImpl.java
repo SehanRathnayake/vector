@@ -18,7 +18,7 @@ import static com.springapp.mvc.utility.SignalProcessing.*;
  */
 public class TestResultServiceImpl {
 
-    private static String baseUrl = "D:\\Vector Data\\";
+    private static String baseUrl = "E:\\Vector Data\\";
 
     private ArrayList<double[]> chassiSignalFull;
     private ArrayList<double[]> chassiSignalVertical;
@@ -149,12 +149,17 @@ public class TestResultServiceImpl {
         double[] stablePoint = getFirstStablePoint(chassiSignalForCurveFitting, stabilityWindow, maxAccStability);
         // chassiSignalForCurveFitting = new ArrayList<double[]>(chassiSignalForCurveFitting.subList(0, (int) stablePoint[0]));
 
+        SuspensionTestResults suspensionTestResults= new SuspensionTestResults();
+       try{
+           suspensionTestResults = CurveFitting.getDampedSineCurve(chassiSignalForCurveFitting, (int) stablePoint[0], chassiSampleRate);
+       }catch (Exception eaz){
 
-        SuspensionTestResults suspensionTestResults = CurveFitting.getDampedSineCurve(chassiSignalForCurveFitting, (int) stablePoint[0], chassiSampleRate);
+       }
         chassiFrequencySpectrum = fourierTransform(chassiSignalClipped, chassiSampleRate);
 
         suspensionTestResults.setAxcelSignalClipped(axcelSignalClipped);
         suspensionTestResults.setChassiSignalClipped(chassiSignalClipped);
+        suspensionTestResults.setDifferenceSignal(differenceSignalClipped);
         suspensionTestResults.setChassiSignalFiltered(chassiSignalFiltered);
         suspensionTestResults.setChassiFrequencySpectrum(chassiFrequencySpectrum);
 

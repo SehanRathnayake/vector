@@ -15,6 +15,7 @@ import java.util.List;
 /**
  * Created by Heshani Samarasekara on 2/21/2017.
  */
+
 @Service
 public class VehicleServiceImpl implements VehicleService {
 

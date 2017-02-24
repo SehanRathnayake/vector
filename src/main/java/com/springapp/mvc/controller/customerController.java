@@ -3,9 +3,9 @@ package com.springapp.mvc.controller;
 import com.springapp.mvc.dto.CustomerDto;
 import com.springapp.mvc.dto.VehicleDto;
 import com.springapp.mvc.model.Customer;
-import com.springapp.mvc.model.Vehicle;
+//import com.springapp.mvc.model.Vehicle;
 import com.springapp.mvc.service.CustomerService;
-import com.springapp.mvc.service.VehicleService;
+//import com.springapp.mvc.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -28,12 +28,12 @@ public class CustomerController {
 
     @Autowired
     CustomerService customerService;
-    @Autowired
-    VehicleService vehicleService;
+    //@Autowired
+   // VehicleService vehicleService;
 
     @RequestMapping(value = "/customer", method = RequestMethod.GET)
     public String customer(ModelMap model){
-        return "customer";
+        return "Customer";
     }
 
     @RequestMapping(value = "/customerList", method = RequestMethod.POST)

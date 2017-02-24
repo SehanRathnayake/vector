@@ -5,8 +5,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Created by Heshani Samarasekara on 8/16/2016.
- */
+ * Created by Heshani Samarasekara on 8/16/2016.*/
+
+
 
 @Entity
 @Table(name = "T_VEHICLE")

@@ -19,6 +19,7 @@ public class SuspensionTestResults implements Serializable{
     private ArrayList<double[]> sinewave;
     private  ArrayList<double[]> axcelSignalClipped;
     private  ArrayList<double[]> chassiSignalClipped;
+    private  ArrayList<double[]> differenceSignal;
     private ArrayList<double[]> chassiSignalFiltered;
     private ArrayList<double[]> chassiFrequencySpectrum;
 
@@ -110,5 +111,11 @@ public class SuspensionTestResults implements Serializable{
         this.chassiFrequencySpectrum = chassiFrequencySpectrum;
     }
 
+    public ArrayList<double[]> getDifferenceSignal() {
+        return differenceSignal;
+    }
 
+    public void setDifferenceSignal(ArrayList<double[]> differenceSignal) {
+        this.differenceSignal = differenceSignal;
+    }
 }

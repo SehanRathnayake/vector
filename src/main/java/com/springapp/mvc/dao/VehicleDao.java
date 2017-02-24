@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * Created by Heshani Samarasekara on 8/16/2016.
  */
+
 public interface VehicleDao {
     public Vehicle createVehicle(Vehicle vehicle);
     public List<Vehicle> viewList();

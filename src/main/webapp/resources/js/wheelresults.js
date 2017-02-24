@@ -9,7 +9,7 @@ VECTOR.module.wheelresults = function () {
     var vehicleName;
     var wheel;
     var ip = "localhost";
-    //var ip = "192.168.43.150";
+   // var ip = "192.168.43.150";
     var allResults;
     var basicSeriesList = [];
     var frequencySpectrum;
@@ -32,9 +32,13 @@ VECTOR.module.wheelresults = function () {
                 var axelClippedData =  _.map(result.axcelSignalClipped,function (num) {
                    return {x:num[0],y:num[1]}
                 });
+                var differenceData =  _.map(result.differenceSignal,function (num) {
+                    return {x:num[0],y:num[1]}
+                });
                 basicSeriesList=[];
                 basicSeriesList.push(chassisClippedData);
                 basicSeriesList.push(axelClippedData);
+                basicSeriesList.push(differenceData);
                 frequencySpectrum=_.map(result.chassiFrequencySpectrum,function (num) {
                     return {x:num[0],y:num[1]}
                 });
@@ -149,7 +153,13 @@ VECTOR.module.wheelresults = function () {
                 data: basicSeriesList[1],
                 turboThreshold: 0,
                 visible: true
-            }],
+            },
+                {
+                    name: 'Difference',
+                    data: basicSeriesList[2],
+                    turboThreshold: 0,
+                    visible: false
+                }],
             global: {
                 useUTC: false
             }
