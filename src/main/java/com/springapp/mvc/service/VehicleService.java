@@ -1,5 +1,6 @@
 package com.springapp.mvc.service;
 
+import com.springapp.mvc.dto.ModelDto;
 import com.springapp.mvc.dto.VehicleDto;
 import com.springapp.mvc.model.Vehicle;
 
@@ -16,4 +17,6 @@ public interface VehicleService {
     public void removeVehicle(int id);
     public VehicleDto getSingleVehicle(int id);
     public void update(VehicleDto vehicle);
+    public List<ModelDto> getModelList();
+
 }

@@ -1,6 +1,7 @@
 package com.springapp.mvc.service.impl;
 
 
+import com.springapp.mvc.dto.ModelDto;
 import com.springapp.mvc.dto.VehicleDto;
 import com.springapp.mvc.dao.VehicleDao;
 import com.springapp.mvc.model.Vehicle;
@@ -50,5 +51,10 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public void update(VehicleDto vehicle){
         vehicleDao.update(vehicle);
+    }
+
+    @Override
+    public List<ModelDto> getModelList(){
+        return vehicleDao.getModelList();
     }
 }
