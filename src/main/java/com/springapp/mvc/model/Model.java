@@ -22,14 +22,16 @@ public class Model implements Serializable{
     @Column(name = "VEHICLE_TYPE")
     private String vehicleType;
 
+    @Column(name = "MANUFACTURER")
+    private String manufacturer;
+
+
     @Column(name = "ENGINE_SIZE")
     private int engineSize;
 
     @Column(name = "FUEL_TYPE")
     private String fuelType;
 
-    @Column(name = "VEHICLE_ID")
-    private int vehicleId;
 
     public int getVehicleModelId() {
         return vehicleModelId;
@@ -63,11 +65,12 @@ public class Model implements Serializable{
         this.fuelType = fuelType;
     }
 
-    public int getVehicleId() {
-        return vehicleId;
+
+    public String getManufacturer() {
+        return manufacturer;
     }
 
-    public void setVehicleId(int vehicleId) {
-        this.vehicleId = vehicleId;
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
     }
 }

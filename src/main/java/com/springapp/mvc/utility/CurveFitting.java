@@ -1,4 +1,3 @@
-/*
 package com.springapp.mvc.utility;
 
 import java.util.ArrayList;
@@ -16,11 +15,9 @@ import org.ejml.interfaces.decomposition.EigenDecomposition;
 import static java.lang.Math.abs;
 import static java.lang.Math.cos;
 
-*/
 /**
  * Created by Sehan Rathnayake on 17/02/19.
- *//*
-
+ */
 public class CurveFitting {
     public static void main(String[] args) {
         //getDampedSineCurve();
@@ -446,4 +443,3 @@ public class CurveFitting {
 
     }
 }
-*/

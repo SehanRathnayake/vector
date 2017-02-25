@@ -28,7 +28,7 @@ public class JobServiceImpl implements JobService {
     private SubJobDao subJobDao;
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Long createNewJob(Long vehicleId,Long userId) {
+    public Long createNewJob(Long vehicleId, Long userId) {
 
         Job job = new Job();
         Date utilDate = new Date(Calendar.getInstance().getTimeInMillis());
@@ -49,8 +49,18 @@ public class JobServiceImpl implements JobService {
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public List<Job> getJobs(long vehicleId) {
-        return jobDao.getJobs(vehicleId);
+    public List<JobDto> getJobs(long vehicleId) {
+        List<Job> jobList = jobDao.getJobs(vehicleId);
+        List<JobDto> jobDtoList = new LinkedList<JobDto>();
+
+        for (Job j : jobList) {
+            JobDto jobDto = new JobDto();
+            jobDto.setJobId(j.getJobId());
+            jobDto.setExecutedDate(j.getExecutedDate());
+            jobDto.setSubJobs(subJobDao.getSubJobs(j.getJobId()));
+            jobDtoList.add(jobDto);
+        }
+        return jobDtoList;
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)

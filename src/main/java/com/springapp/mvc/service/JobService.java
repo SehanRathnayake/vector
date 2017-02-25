@@ -1,6 +1,7 @@
 package com.springapp.mvc.service;
 
 
+import com.springapp.mvc.dto.JobDto;
 import com.springapp.mvc.model.Job;
 
 import java.util.HashMap;
@@ -15,7 +16,7 @@ public interface JobService {
 
     public Long createSubJob(Long jobId, String wheel);
 
-    public List<Job> getJobs(long vehicleId);
+    public List<JobDto> getJobs(long vehicleId);
 
     public HashMap<String, Long> getSubJobs(long jobId);
 

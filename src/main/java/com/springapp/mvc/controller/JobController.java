@@ -1,4 +1,3 @@
-/*
 package com.springapp.mvc.controller;
 
 import com.springapp.mvc.dto.CustVehicleTempDto;
@@ -6,7 +5,7 @@ import com.springapp.mvc.dto.DeviceWheelDto;
 import com.springapp.mvc.dto.RawDataDto;
 import com.springapp.mvc.dto.SuspensionTestResults;
 import com.springapp.mvc.service.CacheService;
-//import com.springapp.mvc.service.impl.TestResultServiceImpl;
+import com.springapp.mvc.service.impl.TestResultServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.object.RdbmsOperation;
 import org.springframework.stereotype.Controller;
@@ -18,12 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-*/
 /**
  * @author MaN
  *         on 2/20/2017.
- *//*
-
+ */
 @Controller
 @RequestMapping("/")
 public class JobController {
@@ -120,4 +117,3 @@ public class JobController {
     }
 
 }
-*/
