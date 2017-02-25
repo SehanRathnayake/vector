@@ -41,21 +41,19 @@ public class CustomerController {
 
     @RequestMapping(value = "/addCustomer", method = RequestMethod.POST)
     public @ResponseBody
-    int addCustomer(@RequestBody DetailDto data){
+    void addCustomer(@RequestBody DetailDto data){
 
         System.out.println(data);
         DetailDto detail = data;
         CustomerDto customer = data.getCustomer();
-        List<VehicleDto> vehicle = detail.getVehicleList();
+        List<VehicleDto> vehicle = data.getVehicleList();
 
         customerService.createJob(customer);
-        ;
+
         for (VehicleDto veh:vehicle) {
             veh.setCustomer(customerService.getCustomer(customer.getCustName()).getCus_id());
             vehicleService.createVehicle(veh);
         }
-
-        return 1;
     }
 
     @RequestMapping(value = "/removeCustomer", method = RequestMethod.POST)
@@ -83,12 +81,17 @@ public class CustomerController {
 
     @RequestMapping(value = "/editCustomerDetail", method = RequestMethod.POST)
     public @ResponseBody
-    void editCustomerDetails(@RequestBody CustomerDto customer, VehicleDto vehicle){
-//        Customer customer = new Customer();
-        /*customer.setCustomerid(Integer.parseInt(customerDetail[0]));
-        customer.setCustomerName(customerDetail[1]);
-        customer.setCustomerAddress(customerDetail[2]);
-        customer.setCustomerPhone(customerDetail[3]);
-        customer.setCustomerEmail(customerDetail[4]);*/
+    void editCustomerDetails(@RequestBody DetailDto data){
+        DetailDto detail = data;
+        CustomerDto customer = data.getCustomer();
+        List<VehicleDto> vehicle = data.getVehicleList();
+
+        customerService.update(customer);
+
+        for (VehicleDto veh:vehicle) {
+            veh.setCustomer(customerService.getCustomer(customer.getCustName()).getCus_id());
+            vehicleService.update(veh);
+        }
+
     }
 }

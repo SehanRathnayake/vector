@@ -41,4 +41,9 @@ public class CustomerServiceImpl implements CustomerService{
     public CustomerDto getSingleCustomer(int id){
         return customerDao.getSingleCustomer(id);
     }
+
+    @Override
+    public void update(CustomerDto customer){
+        customerDao.update(customer);
+    }
 }

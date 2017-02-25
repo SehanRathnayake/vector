@@ -75,4 +75,9 @@ public class CustomerDaoImpl extends BaseJpaDaoImpl<Customer> implements Custome
         customer.setCustEmail(c.getCus_email());
         return customer;
     }
+
+    @Override
+    public void update(CustomerDto customer){
+        this.entityManager.refresh(customer);
+    }
 }

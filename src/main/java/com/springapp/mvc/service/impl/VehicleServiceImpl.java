@@ -46,4 +46,9 @@ public class VehicleServiceImpl implements VehicleService {
     public VehicleDto getSingleVehicle(int id) {
         return vehicleDao.getSingleVehicle(id);
     }
+
+    @Override
+    public void update(VehicleDto vehicle){
+        vehicleDao.update(vehicle);
+    }
 }

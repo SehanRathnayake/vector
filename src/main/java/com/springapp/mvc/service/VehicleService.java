@@ -15,4 +15,5 @@ public interface VehicleService {
     public List<VehicleDto> getVehicle(int custoemrId);
     public void removeVehicle(int id);
     public VehicleDto getSingleVehicle(int id);
+    public void update(VehicleDto vehicle);
 }

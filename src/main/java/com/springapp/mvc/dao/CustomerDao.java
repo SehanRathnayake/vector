@@ -14,4 +14,5 @@ public interface CustomerDao {
     public Customer createJob(CustomerDto customer);
     public void removeCustomer(int id);
     public CustomerDto getSingleCustomer(int id);
+    public void update(CustomerDto customer);
 }
