@@ -1,6 +1,7 @@
 package com.springapp.mvc.controller;
 
 import com.springapp.mvc.dto.CustomerDto;
+import com.springapp.mvc.dto.CustomerVehicleDto;
 import com.springapp.mvc.dto.DetailDto;
 import com.springapp.mvc.dto.VehicleDto;
 import com.springapp.mvc.model.Customer;
@@ -29,6 +30,9 @@ public class CustomerController {
 
     @RequestMapping(value = "/customer", method = RequestMethod.GET)
     public String customer(ModelMap model){
+
+        List<CustomerVehicleDto> list=customerService.getCustomerVehicleList();
+
         return "customer";
     }
 

@@ -48,7 +48,7 @@ public class CustomerDaoImpl extends BaseJpaDaoImpl<Customer> implements Custome
         deleteEntity(customer);
     }
 
-    public Customer createJob(CustomerDto cust){
+    public Customer createCustomer(CustomerDto cust){
         Customer customer = new Customer();
         customer.setCus_name(cust.getCustName());
         customer.setCus_email(cust.getCustEmail());

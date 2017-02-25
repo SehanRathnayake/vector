@@ -32,9 +32,10 @@ public class VehicleServiceImpl implements VehicleService {
         return vehicleDao.viewList();
     }
 
+
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<VehicleDto> getVehicle(int id){
-        return vehicleDao.getVehicle(id);
+    public List<VehicleDto> getVehicle(int customerId) {
+        return vehicleDao.getVehicle(customerId);
     }
 
     @Override
@@ -46,4 +47,5 @@ public class VehicleServiceImpl implements VehicleService {
     public VehicleDto getSingleVehicle(int id) {
         return vehicleDao.getSingleVehicle(id);
     }
+
 }

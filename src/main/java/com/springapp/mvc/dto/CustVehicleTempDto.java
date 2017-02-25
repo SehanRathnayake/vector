@@ -7,6 +7,7 @@ import java.util.List;
  *         on 2/23/2017.
  */
 public class CustVehicleTempDto {
+
     private String name;
     private List<String> vehicles;
 

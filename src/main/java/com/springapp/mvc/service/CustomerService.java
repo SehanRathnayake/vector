@@ -1,6 +1,7 @@
 package com.springapp.mvc.service;
 
 import com.springapp.mvc.dto.CustomerDto;
+import com.springapp.mvc.dto.CustomerVehicleDto;
 import com.springapp.mvc.model.Customer;
 
 import java.util.List;
@@ -14,5 +15,6 @@ public interface CustomerService {
     public Customer getCustomer(String name);
     public void removeCustomer(int id);
     public CustomerDto getSingleCustomer(int id);
+    public List<CustomerVehicleDto> getCustomerVehicleList();
 
 }

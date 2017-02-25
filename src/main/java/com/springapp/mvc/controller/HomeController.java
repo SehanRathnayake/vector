@@ -1,5 +1,6 @@
 package com.springapp.mvc.controller;
 
+import com.springapp.mvc.dto.JobDto;
 import com.springapp.mvc.dto.SuspensionTestResults;
 import com.springapp.mvc.dto.UserDetailsForAuthentication;
 import com.springapp.mvc.model.Job;
@@ -40,8 +41,6 @@ public class HomeController {
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String printWelcome(ModelMap model) {
-
-
         return "home";
     }
 
@@ -49,10 +48,10 @@ public class HomeController {
     public String auth(ModelMap model) {
 
         UserDetailsForAuthentication user = (UserDetailsForAuthentication) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        long uid=userService.getUser(user.getUsername()).getUserId();
-        Long jobid = jobService.createNewJob(new Long(3),uid);
+        long uid = userService.getUser(user.getUsername()).getUserId();
+        Long jobid = jobService.createNewJob(new Long(3), uid);
         //  Long sub = jobService.createSubJob(jobid, "FRONT LEFT");
-       SuspensionTestResults suspensionTestResults = testResultService.getResults(154);
+        SuspensionTestResults suspensionTestResults = testResultService.getResults(154);
 
         //   List<Job> j=jobService.getJobs(3);
 
@@ -68,40 +67,5 @@ public class HomeController {
         UserDetailsForAuthentication user = (UserDetailsForAuthentication) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    /*@RequestMapping("/sparkline")
-    public ModelAndView crunchifySparklineTest() {
-        return new ModelAndView("sparkline");
-    }
-
-    @RequestMapping(value = "/sparklinetest", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    String constructJSONArray() throws JSONException {
-
-        JSONObject one = new JSONObject();
-        JSONObject two = new JSONObject();
-        JSONObject three = new JSONObject();
-        //  userService.dosomething();
-        JSONArray result = new JSONArray();
-        Random r = new Random();
-        int[] r1 = {r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100)};
-        int[] r2 = {r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100)};
-        int[] r3 = {r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100), r.nextInt(100)};
-
-        one.put("one", r1);
-        two.put("two", r2);
-        three.put("three", r3);
-
-        result.put(one);
-        result.put(two);
-        result.put(three);
-
-        JSONObject jsonObj = new JSONObject();
-        jsonObj.put("sparkData", result);
-        //System.out.println("Sendig this data to view (sparkline.jsp): " + jsonObj.toString());
-
-        return jsonObj.toString();
-    }
-*/
 
 }
