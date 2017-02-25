@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface JobService {
 
-    public Long createNewJob(Long vehicleId);
+    public Long createNewJob(Long vehicleId,Long userId);
 
     public Long createSubJob(Long jobId, String wheel);
 

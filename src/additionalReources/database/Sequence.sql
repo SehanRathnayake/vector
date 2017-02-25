@@ -25,6 +25,8 @@ MINVALUE 1
 START WITH 1
 INCREMENT BY 50;
 
+//newwww  sequnce remove privios job sequence  Drop SEQUENCE Job_Seq;
+
  CREATE SEQUENCE Result_Seq
 MINVALUE 1
 START WITH 1
