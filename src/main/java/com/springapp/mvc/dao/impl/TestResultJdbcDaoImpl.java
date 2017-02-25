@@ -1,5 +1,6 @@
 package com.springapp.mvc.dao.impl;
 
+import com.springapp.mvc.dao.TestResultJdbcDao;
 import com.springapp.mvc.dao.UserJdbcDao;
 import com.springapp.mvc.dto.Result;
 import com.springapp.mvc.dto.SuspensionTestResults;
@@ -18,9 +19,9 @@ import java.util.Map;
  */
 
 @Repository
-public class TestResultJdbcDaoImpl extends BaseJdbcDaoImpl {
+public class TestResultJdbcDaoImpl extends BaseJdbcDaoImpl implements TestResultJdbcDao {
 
-    public void saveJob(SuspensionTestResults suspensionTestResults) {
+    public void saveTestResults(SuspensionTestResults suspensionTestResults, long subJobId) {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream objOstream = null;
@@ -31,10 +32,10 @@ public class TestResultJdbcDaoImpl extends BaseJdbcDaoImpl {
 
 
             String sql = "INSERT INTO T_RESULT " +
-                    "(RESULT_ID,RESULTS) VALUES (:jobId, :result)";
+                    "(RESULT_ID,SUB_JOB_ID,RESULT) VALUES (Result_Seq.nextval,:subJobId, :result)";
 
             Map<String, Object> parameters = new HashMap<String, Object>();
-            parameters.put("jobId", 1);
+            parameters.put("subJobId", subJobId);
             parameters.put("result", bArray);
 
 
@@ -46,16 +47,16 @@ public class TestResultJdbcDaoImpl extends BaseJdbcDaoImpl {
 
     }
 
-    public SuspensionTestResults getTestResults(Long resultId) {
+    public SuspensionTestResults getTestResults(long subJob) {
         Result result = this.getJDBCTemplate().queryForObject(
-                "select ROLE_ID, ROLE_NAME from T_RESULT where ROLE_ID = ?",
-                new Object[]{resultId},
+                "select SUB_JOB_ID,RESULT from T_RESULT where SUB_JOB_ID = ?",
+                new Object[]{subJob},
                 new RowMapper<Result>() {
 
                     public Result mapRow(ResultSet rs, int rowNum) throws SQLException {
                         Result result = new Result();
-                        result.setId(rs.getInt("ROLE_ID"));
-                        Blob b = rs.getBlob("ROLE_NAME");
+                        result.setId(rs.getInt("SUB_JOB_ID"));
+                        Blob b = rs.getBlob("RESULT");
                         byte[] bdata = b.getBytes(1, (int) b.length());
                         ByteArrayInputStream in = new ByteArrayInputStream(bdata);
                         ObjectInputStream is = null;
@@ -69,22 +70,10 @@ public class TestResultJdbcDaoImpl extends BaseJdbcDaoImpl {
                             e.printStackTrace();
                         }
 
-
-                        // actor.setSuspensionTestResults(rs.getString("surname"));
                         return result;
                     }
                 });
         return result.getSuspensionTestResults();
-//
-//        List<Actor> actors = this.jdbcTemplate.query(
-//                "select first_name, last_name from t_actor",
-//                new RowMapper<Actor>() {
-//                    public Actor mapRow(ResultSet rs, int rowNum) throws SQLException {
-//                        Actor actor = new Actor();
-//                        actor.setFirstName(rs.getString("first_name"));
-//                        actor.setLastName(rs.getString("last_name"));
-//                        return actor;
-//                    }
-//                });
+
     }
 }

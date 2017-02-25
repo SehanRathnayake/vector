@@ -251,9 +251,9 @@ public class SignalProcessing {
 
     }
 
-    public static ArrayList<double[]> getResampledSignal(ArrayList<double[]> signal) {
+    public static ArrayList<double[]> getResampledSignal(ArrayList<double[]> signal, int timeGap) {
         ArrayList<double[]> resampledSignal = new ArrayList<double[]>();
-        int timeGap = 3;
+
 
         Iterator<double[]> signalIterator = signal.iterator();
 
@@ -345,7 +345,7 @@ public class SignalProcessing {
 
     }
 
-    public static int getShockStartPoint(ArrayList<double[]> signal, double minAccShockStartingPoint, int windowSize, double maxAccStability) {
+    public static double[] getShockStartPoint(ArrayList<double[]> signal, double minAccShockStartingPoint, int windowSize, double maxAccStability) {
         Iterator<double[]> iterator = signal.iterator();
         double value;
         int i = 0;
@@ -375,18 +375,21 @@ public class SignalProcessing {
 //        }
 //        return 0;
         int j;
+        double time = 0;
         double minimum = 0;
         int minIndex = i;
+        double values[];
         for (j = i; j < signal.size(); j++) {
-            value = signal.get(j)[1];
-            if (value > 0) break;
-            if (value < minimum) {
+            values = signal.get(j);
+            if (values[1] > 0) break;
+            if (values[1] < minimum) {
                 minIndex = j;
-                minimum = value;
+                minimum = values[1];
+                time = values[0];
             }
 
         }
-        return minIndex;
+        return new double[]{minIndex, time, i, signal.get(i)[0]};
 
     }
 

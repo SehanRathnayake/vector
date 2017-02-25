@@ -1,10 +1,9 @@
 package com.springapp.mvc.controller;
 
+import com.springapp.mvc.dto.SuspensionTestResults;
 import com.springapp.mvc.dto.UserDetailsForAuthentication;
-import com.springapp.mvc.service.CacheService;
-import com.springapp.mvc.service.ExcelManepulation;
-import com.springapp.mvc.service.JobService;
-import com.springapp.mvc.service.UserService;
+import com.springapp.mvc.model.Job;
+import com.springapp.mvc.service.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 
@@ -35,27 +36,35 @@ public class HomeController {
     CacheService cacheService;
 
     @Autowired
-    ExcelManepulation excelManepulation;
+    TestResultService testResultService;
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String printWelcome(ModelMap model) {
-       // String ip=userService.configureIPandPort();
-        //model.addAttribute("ip",ip);
+
+
         return "home";
     }
 
     @RequestMapping(value = "/auth", method = RequestMethod.GET)
     public String auth(ModelMap model) {
+        //  Long jobid = jobService.createNewJob(new Long(3));
+        //  Long sub = jobService.createSubJob(jobid, "FRONT LEFT");
+        //SuspensionTestResults suspensionTestResults = testResultService.getResults(sub);
+
+        //   List<Job> j=jobService.getJobs(3);
+
+        //   HashMap<String, Long> getSubJobs=jobService.getSubJobs(j.get(0).getJobId());
+        SuspensionTestResults t = testResultService.getPastResults(154);
         return "home";
 
     }
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public void someControllerMethod(HttpServletRequest request, HttpSession session) {
-       // Boolean f = request.isUserInRole("Do a Test");
+        // Boolean f = request.isUserInRole("Do a Test");
         //UserDetailsForAuthentication user = (UserDetailsForAuthentication) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //String h=jobService.getPositionDesc(4L);
-    //    String name = user.getUsername();
+        //    String name = user.getUsername();
         //  jobService.createPosition("Left Back Wheel");
         //  jobService.createDevice("BBB");
 //        User u = userService.getUser(name);
@@ -65,9 +74,9 @@ public class HomeController {
 //        devices.put(54L, 54L);
 //        jobDto.setDeviceSetup(devices);
 //        jobService.startNewJob(jobDto,name);
-     //   f = f;
-      //  cacheService.getDeviceMap();
-        excelManepulation.preprocessing();
+        //   f = f;
+        //  cacheService.getDeviceMap();
+
     }
     /*@RequestMapping("/sparkline")
     public ModelAndView crunchifySparklineTest() {

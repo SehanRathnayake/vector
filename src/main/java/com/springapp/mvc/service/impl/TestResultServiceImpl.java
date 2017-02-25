@@ -6,9 +6,16 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.springapp.mvc.dao.JobDao;
+import com.springapp.mvc.dao.SubJobDao;
+import com.springapp.mvc.dao.TestResultJdbcDao;
+import com.springapp.mvc.dao.UserDao;
 import com.springapp.mvc.dto.SuspensionTestResults;
+import com.springapp.mvc.service.TestResultService;
 import com.springapp.mvc.utility.CurveFitting;
 import com.springapp.mvc.utility.ExcelManipulations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import static com.springapp.mvc.utility.ExcelManipulations.*;
 import static com.springapp.mvc.utility.SignalProcessing.*;
@@ -16,9 +23,24 @@ import static com.springapp.mvc.utility.SignalProcessing.*;
 /**
  * Created by Sehan Rathnayake on 17/02/21.
  */
-public class TestResultServiceImpl {
+@Service
+public class TestResultServiceImpl implements TestResultService {
 
-    private static String baseUrl = "E:\\Vector Data\\";
+
+    @Autowired
+    private JobDao jobDao;
+
+
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private SubJobDao subJobDao;
+
+    @Autowired
+    private TestResultJdbcDao testResultJdbcDao;
+
+    private static String baseUrl = "D:\\Vector Data\\";
 
     private ArrayList<double[]> chassiSignalFull;
     private ArrayList<double[]> chassiSignalVertical;
@@ -31,8 +53,11 @@ public class TestResultServiceImpl {
     private ArrayList<double[]> chassiSignalClipped;
 
     private ArrayList<double[]> chassiSignalFiltered;
+    private ArrayList<double[]> axcelSignalFiltered;
 
     private ArrayList<double[]> chassiSignalForCurveFitting;
+    private ArrayList<double[]> axcelSignalForRMS;
+    private ArrayList<double[]> chassiSignalForRMS;
 
     private double chassiSampleRate;
     private double axcelSampleRate;
@@ -43,6 +68,11 @@ public class TestResultServiceImpl {
     private double chassiPeakValue;
     private double axcelPeakValue;
 
+    private double chassiRMSvalue;
+    private double axcelRMSvalue;
+
+    private double distarbanceTime;
+
     private static int clipingWindowLeft = 400;
     private static int clipingWindowRight = 800;
 
@@ -52,37 +82,25 @@ public class TestResultServiceImpl {
 
     private static double minAccShockStartingPoint = -1.0;
 
-    private boolean writeToexcel = false;
+    private boolean writeToexcel = true;
 
     private ArrayList<double[]> axcelFrequencySpectrum;
     private ArrayList<double[]> chassiFrequencySpectrum;
 
     public static void main(String[] args) {
-        // SuspensionTestResults s = new TestResultServiceImpl().getResults("sehan", "corolla", "job1", "Rear Left");
+        SuspensionTestResults s = new TestResultServiceImpl().getResults("sehan", "corolla", "job1", "Rear Left");
+
+    }
+
+    public SuspensionTestResults getResults(long subJobID) {
         String customer = "sehan";
         String vehicle = "corolla";
         String job = "job1";
         String wheel = "Rear Left";
 
-
-        String url = baseUrl + customer + "\\" + vehicle + "\\" + job + "\\" + wheel + "\\";
-        String excelFileName = customer + "-" + vehicle + "-" + job + "-" + wheel + ".xlsx";
-        String excelUrl = url + excelFileName;
-
-        insertToSpreadsheet(url, excelFileName);
-        ArrayList<double[]> chassiSignalFull = getSignal(excelUrl, "chassi");
-        ArrayList<double[]> axcelSignalFull = getSignal(excelUrl, "axcel");
-
-        String chassiData = url + "\\2-datalog.txt";
-        String axcelData = url + "\\1-datalog.txt";
-        chassiSignalFull = getSignalFromText(chassiData);
-        axcelSignalFull = getSignalFromText(axcelData);
-
-        ArrayList<double[]> axcelSignalVertical = calibrate(axcelSignalFull);
-        ArrayList<double[]> chassiSignalVertical = calibrate(chassiSignalFull);
-
-        writeToExcel(excelUrl, "without resample", axcelSignalVertical);
-        writeToExcel(excelUrl, "resample", getResampledSignal(axcelSignalVertical));
+        SuspensionTestResults suspensionTestResults = getResults(customer, vehicle, job, wheel);
+        testResultJdbcDao.saveTestResults(suspensionTestResults, subJobID);
+        return suspensionTestResults;
     }
 
     public SuspensionTestResults getResults(String customer, String vehicle, String job, String wheel) {
@@ -103,26 +121,34 @@ public class TestResultServiceImpl {
         axcelSignalVertical = calibrate(axcelSignalFull);
         chassiSignalVertical = calibrate(chassiSignalFull);
 
+        // chassiSampleRate = getSampleRate(chassiSignalVertical);
+        //axcelSignalVertical = getResampledSignal(axcelSignalVertical, chassiSignalVertical);
+
+        axcelSignalVertical = getResampledSignal(axcelSignalVertical, 3);
+        chassiSignalVertical = getResampledSignal(chassiSignalVertical, 3);
+
         chassiSampleRate = getSampleRate(chassiSignalVertical);
-        axcelSignalVertical = getResampledSignal(axcelSignalVertical, chassiSignalVertical);
 
-        axcelSignalVertical = getResampledSignal(axcelSignalVertical);
-        chassiSignalVertical = getResampledSignal(chassiSignalVertical);
+        double[] chassiShockStartPoint = getShockStartPoint(chassiSignalVertical, minAccShockStartingPoint, stabilityWindow, 2 * maxAccStability);
+        double[] axcelShockStartPoint = getShockStartPoint(axcelSignalVertical, minAccShockStartingPoint, stabilityWindow, 2 * maxAccStability);
 
-        int chassiShockStartPoint = getShockStartPoint(chassiSignalVertical, minAccShockStartingPoint, stabilityWindow, 2 * maxAccStability);
-        int axcelShockStartPoint = getShockStartPoint(axcelSignalVertical, minAccShockStartingPoint, stabilityWindow, 2 * maxAccStability);
+        int chassiShockStartPointIndex = (int) chassiShockStartPoint[0];
+        int axcelShockStartPointIndex = (int) axcelShockStartPoint[0];
+
 
 //TODO set range
-        if (chassiShockStartPoint > axcelShockStartPoint) {
-            int gap = chassiShockStartPoint - axcelShockStartPoint;
+        if (chassiShockStartPointIndex > axcelShockStartPointIndex) {
+            int gap = chassiShockStartPointIndex - axcelShockStartPointIndex;
             chassiSignalVertical = new ArrayList<double[]>(chassiSignalVertical.subList(gap, chassiSignalVertical.size()));
             double startTime = chassiSignalVertical.get(0)[0];
             chassiSignalVertical = changeStartingTime(chassiSignalVertical, startTime);
-        } else if (chassiShockStartPoint < axcelShockStartPoint) {
-            int gap = axcelShockStartPoint - chassiShockStartPoint;
+
+        } else if (chassiShockStartPointIndex < axcelShockStartPointIndex) {
+            int gap = axcelShockStartPointIndex - chassiShockStartPointIndex;
             axcelSignalVertical = new ArrayList<double[]>(axcelSignalVertical.subList(gap, axcelSignalVertical.size()));
             double startTime = axcelSignalVertical.get(0)[0];
             axcelSignalVertical = changeStartingTime(axcelSignalVertical, startTime);
+
         }
 
 
@@ -138,6 +164,7 @@ public class TestResultServiceImpl {
         axcelSignalClipped = new ArrayList<double[]>(axcelSignalVertical.subList(axcelPeakPoint - clipingWindowLeft, axcelPeakPoint + clipingWindowRight));
         chassiSignalClipped = new ArrayList<double[]>(chassiSignalVertical.subList(axcelPeakPoint - clipingWindowLeft, axcelPeakPoint + clipingWindowRight));
 
+
         differenceSignalClipped = getDifferenceSignal(axcelSignalClipped, chassiSignalClipped);
 
         chassiSignalFiltered = lowPassFilter(chassiSignalClipped, cutOffFrequency, chassiSampleRate);
@@ -145,16 +172,31 @@ public class TestResultServiceImpl {
         peakPoint = findPositivePeakPoint(chassiSignalFiltered);
         int curveFittingStartPoint = (int) peakPoint[0];
 
+
         chassiSignalForCurveFitting = new ArrayList<double[]>(chassiSignalFiltered.subList(curveFittingStartPoint, chassiSignalFiltered.size()));
         double[] stablePoint = getFirstStablePoint(chassiSignalForCurveFitting, stabilityWindow, maxAccStability);
         // chassiSignalForCurveFitting = new ArrayList<double[]>(chassiSignalForCurveFitting.subList(0, (int) stablePoint[0]));
 
-        SuspensionTestResults suspensionTestResults= new SuspensionTestResults();
-       try{
-           suspensionTestResults = CurveFitting.getDampedSineCurve(chassiSignalForCurveFitting, (int) stablePoint[0], chassiSampleRate);
-       }catch (Exception eaz){
 
-       }
+        double[] shockStartPoint = getShockStartPoint(chassiSignalClipped, minAccShockStartingPoint, stabilityWindow, 2 * maxAccStability);
+        double shockStartTime = shockStartPoint[1];
+        int shockStartIndex = (int) shockStartPoint[0];
+        axcelSignalForRMS = new ArrayList<double[]>(axcelSignalClipped.subList(shockStartIndex, (int) stablePoint[0]+curveFittingStartPoint));
+        chassiSignalForRMS = new ArrayList<double[]>(chassiSignalClipped.subList(shockStartIndex, (int) stablePoint[0]+curveFittingStartPoint));
+
+        axcelRMSvalue = getRMS(axcelSignalClipped);
+        chassiRMSvalue = getRMS(chassiSignalClipped);
+
+        distarbanceTime = stablePoint[1] - shockStartTime;
+
+        SuspensionTestResults suspensionTestResults = new SuspensionTestResults();
+        try {
+            suspensionTestResults = CurveFitting.getDampedSineCurve(chassiSignalForCurveFitting, (int) stablePoint[0], chassiSampleRate);
+        } catch (Exception eaz) {
+            System.out.println(eaz);
+        }
+
+
         chassiFrequencySpectrum = fourierTransform(chassiSignalClipped, chassiSampleRate);
 
         suspensionTestResults.setAxcelSignalClipped(axcelSignalClipped);
@@ -162,12 +204,16 @@ public class TestResultServiceImpl {
         suspensionTestResults.setDifferenceSignal(differenceSignalClipped);
         suspensionTestResults.setChassiSignalFiltered(chassiSignalFiltered);
         suspensionTestResults.setChassiFrequencySpectrum(chassiFrequencySpectrum);
-
+        suspensionTestResults.setDisturbanceTime(distarbanceTime);
+        suspensionTestResults.setAxcelRMSvalue(axcelRMSvalue);
+        suspensionTestResults.setChassiRMSvalue(chassiRMSvalue);
         suspensionTestResults.setAxcelPeakValue(axcelPeakValue);
         suspensionTestResults.setChassiPeakValue(chassiPeakValue);
 
         if (writeToexcel) {
             saveResultsToExcel(suspensionTestResults, excelUrl);
+            writeToExcel(excelUrl,"chassy rms",chassiSignalForRMS);
+            writeToExcel(excelUrl,"axcel rms",axcelSignalForRMS);
         }
 
         FileOutputStream fout = null;
@@ -193,12 +239,19 @@ public class TestResultServiceImpl {
         writeToExcel(url, "sine wave", suspensionTestResults.getSinewave());
         writeToExcel(url, "chassy frequency spectrum", suspensionTestResults.getChassiFrequencySpectrum());
 
+
+
         LinkedHashMap<String, Double> map = new LinkedHashMap<String, Double>();
         map.put("Damped Frequency", suspensionTestResults.getDampedFrequency());
         map.put("Natural Frequency", suspensionTestResults.getNaturalFrequency());
         map.put("Damping Factor", suspensionTestResults.getDampingFactor());
         map.put("Axcel Peak Acceleration", suspensionTestResults.getAxcelPeakValue());
         map.put("Chassi Peak Acceleration", suspensionTestResults.getChassiPeakValue());
+        map.put("axcel Rms",suspensionTestResults.getAxcelRMSvalue());
+        map.put("chassi Rms",suspensionTestResults.getChassiRMSvalue());
+        map.put("disturbance time",suspensionTestResults.getDisturbanceTime());
+
+
         writeToExcel(url, "result", map);
 
     }
@@ -226,5 +279,10 @@ public class TestResultServiceImpl {
         return suspensionTestResults;
     }
 
+    public SuspensionTestResults getPastResults(long subJobId) {
+
+
+        return testResultJdbcDao.getTestResults(subJobId);
+    }
 
 }

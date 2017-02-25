@@ -2,17 +2,14 @@ package com.springapp.mvc.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.List;
+import java.util.Date;
 
 /**
- * Created by Sehan Rathnayake on 16/08/10.
+ * Created by Sehan Rathnayake on 17/02/24.
  */
 @Entity
 @Table(name = "T_JOB")
 public class Job implements Serializable {
-
-    private static final long serialVersionUID = 1960820966066482615L;
 
     @SequenceGenerator(name = "Job_Gen", sequenceName = "Job_Seq")
     @Id
@@ -20,47 +17,34 @@ public class Job implements Serializable {
     @Column(name = "JOB_ID")
     private long jobId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
-    private User user;
+    @Column(name = "VEHICLE_ID")
+    private long vehicleId;
 
-    @Column(name = "START_DATE")
     @Temporal(TemporalType.DATE)
-    private java.util.Calendar startedDate;
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "job")
-    private List<DeviceMapping> devices;
-
+    @Column(name = "EXECUTED_DATE")
+    private java.util.Date executedDate;
 
     public long getJobId() {
         return jobId;
     }
 
-    public void setJobId(long jobId) {
-        this.jobId = jobId;
+    public void setJobId(long subJobId) {
+        this.jobId = subJobId;
     }
 
-    public User getUser() {
-        return user;
+    public long getVehicleId() {
+        return vehicleId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setVehicleId(long vehicleId) {
+        this.vehicleId = vehicleId;
     }
 
-    public Calendar getStartedDate() {
-        return startedDate;
+    public Date getExecutedDate() {
+        return executedDate;
     }
 
-    public void setStartedDate(Calendar date) {
-        this.startedDate = date;
-    }
-
-    public List<DeviceMapping> getDevices() {
-        return devices;
-    }
-
-    public void setDevices(List<DeviceMapping> devices) {
-        this.devices = devices;
+    public void setExecutedDate(Date executedDate) {
+        this.executedDate = executedDate;
     }
 }

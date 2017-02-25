@@ -1,20 +1,22 @@
 package com.springapp.mvc.service;
 
-import com.springapp.mvc.dto.JobDto;
-import com.springapp.mvc.model.Position;
-import com.springapp.mvc.model.User;
+
+import com.springapp.mvc.model.Job;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Sehan Rathnayake on 16/08/10.
  */
 public interface JobService {
 
-    public long startNewJob(JobDto jobDto, String username);
+    public Long createNewJob(Long vehicleId);
 
-    public void createPosition(String description);
+    public Long createSubJob(Long jobId, String wheel);
 
-    public void createDevice(String code);
+    public List<Job> getJobs(long vehicleId);
 
-    public String getPositionDesc(Long id);
+    public HashMap<String, Long> getSubJobs(long jobId);
 
 }
