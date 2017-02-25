@@ -13,8 +13,6 @@ public interface UserService {
 
     public List<String> getUserList();
 
-    public void dosomething();
-
-    public String configureIPandPort();
+     public String configureIPandPort();
 
 }

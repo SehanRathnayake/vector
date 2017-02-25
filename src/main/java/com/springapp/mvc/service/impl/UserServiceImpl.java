@@ -30,7 +30,7 @@ import java.util.List;
  * Created by Sehan Rathnayake on 16/07/29.
  */
 @Service
-public class UserServiceImpl implements UserService  {
+public class UserServiceImpl implements UserService {
 
     private Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -48,26 +48,12 @@ public class UserServiceImpl implements UserService  {
 
     @Override
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public List<String> getUserList(){
+    public List<String> getUserList() {
         return userJdbcDao.getUserList();
     }
 
-    @Override
-    @Async
-    public void dosomething(){
-        int x=5;
-        while(x<500){
-LOG.error("sdsdsdsdsds "+x);
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            x++;
-        }
-    }
     public String configureIPandPort() {
-        String ip="localhost";
+        String ip = "localhost";
         try {
             for (Enumeration en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
                 NetworkInterface intf = (NetworkInterface) en.nextElement();
@@ -76,7 +62,7 @@ LOG.error("sdsdsdsdsds "+x);
                     if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
                         String ipAddress = inetAddress.getHostAddress().toString();
                         System.out.println("IP address" + ipAddress);
-                        ip=ipAddress;
+                        ip = ipAddress;
                         return ipAddress;
                     }
                 }
