@@ -11,10 +11,15 @@ public class SuspensionTestResults implements Serializable{
     private double chassiPeakValue;
     private double axcelPeakValue;
     private double disturbanceTime;
+    private double chassiRMSvalue;
+    private double axcelRMSvalue;
+
 
     private double dampingFactor;
     private double dampedFrequency;
     private double naturalFrequency;
+
+
 
     private ArrayList<double[]> sinewave;
     private  ArrayList<double[]> axcelSignalClipped;
@@ -117,5 +122,21 @@ public class SuspensionTestResults implements Serializable{
 
     public void setDifferenceSignal(ArrayList<double[]> differenceSignal) {
         this.differenceSignal = differenceSignal;
+    }
+
+    public double getChassiRMSvalue() {
+        return chassiRMSvalue;
+    }
+
+    public void setChassiRMSvalue(double chassiRMSvalue) {
+        this.chassiRMSvalue = chassiRMSvalue;
+    }
+
+    public double getAxcelRMSvalue() {
+        return axcelRMSvalue;
+    }
+
+    public void setAxcelRMSvalue(double axcelRMSvalue) {
+        this.axcelRMSvalue = axcelRMSvalue;
     }
 }
