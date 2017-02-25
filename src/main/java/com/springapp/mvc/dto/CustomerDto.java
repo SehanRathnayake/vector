@@ -9,17 +9,17 @@ import java.io.Serializable;
  */
 public class CustomerDto implements Serializable {
     private String custName;
-    private long id;
+    private int id;
     private String custNic;
     private String custTp;
     private String custEmail;
     private String custAddress;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

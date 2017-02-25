@@ -5,15 +5,16 @@ VECTOR.namespace("module.carconfig");
 
 VECTOR.module.carconfig = function () {
     var idPrefix = "#CC_";
-    //var ip="192.168.43.150" ;
+    //var ip = "192.168.43.150";
     var customerName;
     var vehicleName;
     var jobId = 1;
     var pastJobId = 1;
     var ip = "localhost";
     var isNewCustomer = false;
+    var firstFillDevices = true;
     var wheelNames = ["Front Left", "Front Right", "Rear Left", "Rear Right"];
-    var devices = [{id: 1, value: "A001", status: "active"}, {id: 2, value: "A002", status: "inactive"}, {
+    var devices = [{id: 1, value: "A001", status: "inactive"}, {id: 2, value: "A002", status: "inactive"}, {
         id: 3,
         value: "A003",
         status: "inactive"
@@ -22,8 +23,9 @@ VECTOR.module.carconfig = function () {
         name: "Udith Rathnayake",
         vehicles: ["Toyota Vios 2007", "Hyundai Accent 2001"]
     }, {name: "Malith Fernando", vehicles: ["Suzuki Alto 2017"]},
-        {name: "Supun Prelis", vehicles: ["Suzuki Alto 2013"]
-    }, {name: "Anjana Gunasekara", vehicles: ["Honda Civic 2001"]},
+        {
+            name: "Supun Prelis", vehicles: ["Suzuki Alto 2013"]
+        }, {name: "Anjana Gunasekara", vehicles: ["Honda Civic 2001"]},
         {name: "Asiri Karunathilake", vehicles: ["Nissan SunnyFB14 2001"]}];
 
     var fillActiveDevices = function () {
@@ -38,7 +40,7 @@ VECTOR.module.carconfig = function () {
             success: function (result) {
                 activeDevices = result;
                 _.each(devices, function (item) {
-                    item.status = "active";
+                    item.status = "inactive";
                 });
                 _.each(result, function (item) {
                     var d = _.where(devices, {id: item});
@@ -50,13 +52,26 @@ VECTOR.module.carconfig = function () {
         });
 
         var containerHeight = $(".vector-settings-bar").outerHeight(true) + 10;
-        $(idPrefix + "activeDeviceInnerContainer").empty();
-        _.each(devices, function (item) {
-            var div;
-            div = '<div class="block-device ui-widget-content device-' + item.status + '" value="';
-            div += item.value + '" id="' + item.id + '" title = "A00'+item.id+'"></div>';
-            $(idPrefix + "activeDeviceInnerContainer").append(div);
-            containerHeight += $(".block-device").outerHeight(true);
+        
+        if (firstFillDevices) {
+            $(idPrefix + "activeDeviceInnerContainer").empty();
+            _.each(devices, function (item) {
+                var div;
+                div = '<div class="block-device ui-widget-content device-' + item.status + '" value="';
+                div += item.value + '" id="' + item.id + '" title = "A00' + item.id + '"></div>';
+                $(idPrefix + "activeDeviceInnerContainer").append(div);
+                containerHeight += $(".block-device").outerHeight(true);
+            });
+            firstFillDevices=false;
+        }
+        var blockDevices = $(idPrefix + "activeDeviceInnerContainer").find(".block-device");
+        _.each(blockDevices, function (block) {
+            var filtered = _.filter(devices, function (x) {
+                return x.id == parseInt($(block).attr("id"));
+            });
+            if (filtered.length > 0) {
+                $(block).attr("status", filtered[0].status);
+            }
         });
         $(idPrefix + "activeDeviceContainer").css({'height': '100%'});
         $(".device-active").draggable({
@@ -179,6 +194,15 @@ VECTOR.module.carconfig = function () {
             + '<div class="btn btn-success btn-start disabled" style="height:10%;width:100%;font-size: 1.5vw;line-height:5%;padding-top: 1vw;" > Start'
             + '</div>'
             + '</div>';
+        var progressDiv = '<div class = "vector-result-progress" id="CC_resultProgress' + wheelName.replace(/\s+/g, '') + '">'
+            + '<div class="progress">'
+            + ' <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">'
+            + '<span class="sr-only">0% Complete</span>'
+            + ' </div>'
+            + '</div>'
+            + ' </div>';
+        ele.parent().parent().append(progressDiv);
+        ele.parent().parent().find(".btn").attr("wheelName", wheelName.replace(/\s+/g, ''));
         var count = parseInt($(idPrefix + "wheelRow").attr("count"));
         if (count < 4) {
             count++;
@@ -206,7 +230,7 @@ VECTOR.module.carconfig = function () {
         ele.find(".device-area").droppable({
             accept: ".block-device",
             over: function (event, ui) {
-               // $(this).css({'background-color': "#47759A",'opacity':0.4});
+                // $(this).css({'background-color': "#47759A",'opacity':0.4});
             },
             out: function (event, ui) {
                 $(this).css({'background-color': 'transparent'});
@@ -288,12 +312,15 @@ VECTOR.module.carconfig = function () {
                     $(btn).removeClass("btn-warning").addClass("btn-warning");
                     $(btn).removeClass("disabled").addClass("disabled");
                     var timesRun = 0;
+                    $(idPrefix + "resultProgress" + $(btn).attr("wheelName")).show();
                     var interval = setInterval(function () {
                         timesRun += 1;
-
+                        $(idPrefix + "resultProgress" + $(btn).attr("wheelName")).find(".progress-bar").css({'width': 100 / 80 * parseInt(timesRun) + '%'});
+                        $(idPrefix + "resultProgress" + $(btn).attr("wheelName")).find(".progress-bar").attr("aria-valuenow", 100 / 80 * parseInt(timesRun));
                         $(btn).html("Wait " + (80 - parseInt(timesRun)) + " seconds !");
                         if (timesRun === 80) {
                             clearInterval(interval);
+                            $(idPrefix + "resultProgress" + $(btn).attr("wheelName")).hide();
                             $.ajax({
                                 url: 'http://' + ip + ':8082/vector/rest/results',
                                 dataType: "json",
@@ -508,7 +535,7 @@ VECTOR.module.carconfig = function () {
             url: 'http://' + ip + ':8082/vector/getCustomerNames',
             dataType: "json",
             cache: false,
-            data : "sa",
+            data: "sa",
             contentType: 'application/json;',
             type: 'POST',
             success: function (result) {

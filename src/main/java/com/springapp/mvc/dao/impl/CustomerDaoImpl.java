@@ -23,29 +23,37 @@ public class CustomerDaoImpl extends BaseJpaDaoImpl<Customer> implements Custome
     private JdbcTemplate jdbcTemplate;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<Customer> getCustomer(String customer_name) {
+    public Customer getCustomer(String customer_name) {
         String queryString = "SELECT c FROM Customer c WHERE c.cus_name = :customer_name";
         TypedQuery<Customer> query = this.entityManager.createQuery(queryString, Customer.class);
         query.setParameter("customer_name", customer_name);
-        return query.getResultList();
+        return query.getSingleResult();
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public List<Customer> getCustomerList() {
         String queryString = "SELECT c FROM Customer c";
         TypedQuery<Customer> query = this.entityManager.createQuery(queryString, Customer.class);
         return query.getResultList();
     }
 
-    public void removeCustomer(long id){
-        String queryString = "SELECT c FROM Customer c WHERE c.cus_id = :id";
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void removeCustomer(int id){
+        int id1 = ((int)id);
+        String queryString = "SELECT c FROM Customer c WHERE c.cus_id = :id1";
         TypedQuery<Customer> query = this.entityManager.createQuery(queryString, Customer.class);
-        query.setParameter("id", id);
+        query.setParameter("id1", id1);
         Customer customer = query.getSingleResult();
         System.out.println(customer);
         deleteEntity(customer);
     }
 
-    public Customer createJob(Customer customer){
+    public Customer createJob(CustomerDto cust){
+        Customer customer = new Customer();
+        customer.setCus_name(cust.getCustName());
+        customer.setCus_email(cust.getCustEmail());
+        customer.setCus_phone(cust.getCustTp());
+        customer.setCus_address(cust.getCustAddress());
         return saveEntity(customer);
     }
 
@@ -57,14 +65,14 @@ public class CustomerDaoImpl extends BaseJpaDaoImpl<Customer> implements Custome
         this.entityManager = entityManager;
     }
 
-    public CustomerDto getSingleCustomer(long id){
+    public CustomerDto getSingleCustomer(int id){
         Customer c = getEntity(Customer.class,id);
         CustomerDto customer = new CustomerDto();
-        customer.setId(c.getCustomerid());
-        customer.setCustName(c.getCustomerName());
-        customer.setCustAddress(c.getCustomerAddress());
-        customer.setCustTp(c.getCustomerPhone());
-        customer.setCustEmail(c.getCustomerEmail());
+        customer.setId(c.getCus_id());
+        customer.setCustName(c.getCus_name());
+        customer.setCustAddress(c.getCus_address());
+        customer.setCustTp(c.getCus_phone());
+        customer.setCustEmail(c.getCus_email());
         return customer;
     }
 }
