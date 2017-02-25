@@ -1,21 +1,17 @@
 package com.springapp.mvc.controller;
 
 import com.springapp.mvc.dto.CustomerDto;
+import com.springapp.mvc.dto.DetailDto;
 import com.springapp.mvc.dto.VehicleDto;
 import com.springapp.mvc.model.Customer;
-//import com.springapp.mvc.model.Vehicle;
 import com.springapp.mvc.service.CustomerService;
-//import com.springapp.mvc.service.VehicleService;
+import com.springapp.mvc.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import java.util.List;
 
@@ -28,12 +24,12 @@ public class CustomerController {
 
     @Autowired
     CustomerService customerService;
-    //@Autowired
-   // VehicleService vehicleService;
+    @Autowired
+    VehicleService vehicleService;
 
     @RequestMapping(value = "/customer", method = RequestMethod.GET)
     public String customer(ModelMap model){
-        return "Customer";
+        return "customer";
     }
 
     @RequestMapping(value = "/customerList", method = RequestMethod.POST)
@@ -45,14 +41,21 @@ public class CustomerController {
 
     @RequestMapping(value = "/addCustomer", method = RequestMethod.POST)
     public @ResponseBody
-    void addCustomer(@RequestBody String [] customerDetail){
-        Customer customer = new Customer();
-//        customer.setCustomerid(Long.parseLong(customerDetail[0]));
-//        customer.setCustomerName(customerDetail[1]);
-//        customer.setCustomerAddress(customerDetail[2]);
-//        customer.setCustomerPhone(customerDetail[3]);
-//        customer.setCustomerEmail(customerDetail[4]);
-//        customerService.createJob(customer);
+    int addCustomer(@RequestBody DetailDto data){
+
+        System.out.println(data);
+        DetailDto detail = data;
+        CustomerDto customer = data.getCustomer();
+        List<VehicleDto> vehicle = detail.getVehicleList();
+
+        customerService.createJob(customer);
+        ;
+        for (VehicleDto veh:vehicle) {
+            veh.setCustomer(customerService.getCustomer(customer.getCustName()).getCus_id());
+            vehicleService.createVehicle(veh);
+        }
+
+        return 1;
     }
 
     @RequestMapping(value = "/removeCustomer", method = RequestMethod.POST)
@@ -64,50 +67,28 @@ public class CustomerController {
 
     @RequestMapping(value = "/viewCustomerDetail", method = RequestMethod.POST)
     public @ResponseBody
-    List<Object> viewCustomerDetails(@RequestBody long id){
+    List<Object> viewCustomerDetails(@RequestBody int id){
         CustomerDto c = new CustomerDto();
         VehicleDto v = new VehicleDto();
         VehicleDto v1 = new VehicleDto();
         List<VehicleDto> vehicleList = new ArrayList<VehicleDto>();
-
-//        c = customerService.getSingleCustomer(((int) id));
-//        v = vehicleService.getVehicle(id);
-        c.setId(id);
-        c.setCustName("Heshani");
-        c.setCustEmail("heshanisamarasekara@gmail.com");
-        c.setCustAddress("Deshani,Kirnida");
-        c.setCustTp("0712189826");
         List<Object> list = new ArrayList<Object>();
+        c = customerService.getSingleCustomer(id);
+        vehicleList = vehicleService.getVehicle(id);
         list.add(c);
-        for (VehicleDto vehicle:vehicleList) {
-            list.add(vehicle);
-        }
-        v.setManufactDate("2001-01-01");
-        v.setCustomer(((int) id));
-        v.setNumberPlate("123456");
-        v.setOdometer(123);
-        v.setVehicleModelId(1);
-
-        v1.setManufactDate("2001-01-01");
-        v1.setCustomer(((int) id));
-        v1.setNumberPlate("123456");
-        v1.setOdometer(123);
-        v1.setVehicleModelId(1);
-
-        list.add(v);
-        list.add(v1);
+        list.addAll(vehicleList);
 
         return list;
     }
 
     @RequestMapping(value = "/editCustomerDetail", method = RequestMethod.POST)
     public @ResponseBody
-    void editCustomerDetails(@RequestBody String [] customerDetail){
-        Customer customer = new Customer();
-        customer.setCustomerid(Long.parseLong(customerDetail[0]));
+    void editCustomerDetails(@RequestBody CustomerDto customer, VehicleDto vehicle){
+//        Customer customer = new Customer();
+        /*customer.setCustomerid(Integer.parseInt(customerDetail[0]));
         customer.setCustomerName(customerDetail[1]);
         customer.setCustomerAddress(customerDetail[2]);
         customer.setCustomerPhone(customerDetail[3]);
-        customer.setCustomerEmail(customerDetail[4]);
+        customer.setCustomerEmail(customerDetail[4]);*/
     }
 }
