@@ -2,6 +2,7 @@ package com.springapp.mvc.controller;
 
 import com.springapp.mvc.dto.CustomerDto;
 import com.springapp.mvc.dto.DetailDto;
+import com.springapp.mvc.dto.ModelDto;
 import com.springapp.mvc.dto.VehicleDto;
 import com.springapp.mvc.model.Customer;
 import com.springapp.mvc.service.CustomerService;
@@ -93,5 +94,11 @@ public class CustomerController {
             vehicleService.update(veh);
         }
 
+    }
+
+    @RequestMapping(value = "/modelList", method = RequestMethod.POST)
+    @ResponseBody
+    List<ModelDto> getModelList(ModelMap model){
+        return vehicleService.getModelList();
     }
 }
