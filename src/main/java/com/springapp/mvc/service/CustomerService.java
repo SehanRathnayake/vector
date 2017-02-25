@@ -11,7 +11,7 @@ import java.util.List;
 public interface CustomerService {
     public Customer createJob(CustomerDto customer);
     public List<Customer> viewList();
-    public List<Customer> getCustomer(String name);
+    public Customer getCustomer(String name);
     public void removeCustomer(int id);
     public CustomerDto getSingleCustomer(int id);
 

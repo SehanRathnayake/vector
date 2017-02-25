@@ -9,7 +9,7 @@ import java.util.List;
  * Created by Heshani Samarasekara on 8/14/2016.
  */
 public interface CustomerDao {
-    public List<Customer> getCustomer(String customer_name);
+    public Customer getCustomer(String customer_name);
     public List<Customer> getCustomerList();
     public Customer createJob(CustomerDto customer);
     public void removeCustomer(int id);

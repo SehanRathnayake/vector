@@ -23,11 +23,11 @@ public class CustomerDaoImpl extends BaseJpaDaoImpl<Customer> implements Custome
     private JdbcTemplate jdbcTemplate;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<Customer> getCustomer(String customer_name) {
+    public Customer getCustomer(String customer_name) {
         String queryString = "SELECT c FROM Customer c WHERE c.cus_name = :customer_name";
         TypedQuery<Customer> query = this.entityManager.createQuery(queryString, Customer.class);
         query.setParameter("customer_name", customer_name);
-        return query.getResultList();
+        return query.getSingleResult();
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

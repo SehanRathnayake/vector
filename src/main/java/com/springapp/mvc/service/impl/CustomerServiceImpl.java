@@ -30,7 +30,7 @@ public class CustomerServiceImpl implements CustomerService{
         return customerDao.getCustomerList();
     }
 
-    public List<Customer> getCustomer(String name){
+    public Customer getCustomer(String name){
         return customerDao.getCustomer(name);
     }
 

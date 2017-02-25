@@ -96,8 +96,8 @@ VECTOR.module.customer = function () {
                     }
                 })
                 if (disable) {
-                    var vehicleList = {vehicles: []};
-                    var data = [];
+                    var vehicleList = [];
+                    var data;
 
                     customer = {
                         custName: "" + $("#addName").val() + "",
@@ -108,17 +108,22 @@ VECTOR.module.customer = function () {
                     }
                     data.push(customer);
 
+                    var vehicledto;
+                    
                     for(var a = 1; a<= idcount; a++){
-                        var vehicledto={
+                        vehicledto={
                             vehicleModelId: $("#addModel1" + a).val(),
                             numberPlate: ""+$("#numberPlate1" + a).val()+"",
                             manufactDate: $("#manufactDate1" + a).val(),
                             odometer: $("#addOdometer1" + a).val(),
                         }
-                        data.push(vehicledto);
+                        vehicleList.push(vehicledto);
                     }
                     
-                    
+                    data = {
+                        customer:customer,
+                        vehicleList:vehicleList
+                    }
                     
                     
                     $.ajax({
