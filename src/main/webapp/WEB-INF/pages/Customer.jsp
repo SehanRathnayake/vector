@@ -41,6 +41,7 @@
 
 <body>
 <div>
+    <button id="CUS_modelList" type="button" class="btn btn-primary" data-toggle="modal" data-target=".demo-popup">Model List</button>
     <section id="CUS_customerListContainer">
         <div class="container">
             <div class="col-lg-12">

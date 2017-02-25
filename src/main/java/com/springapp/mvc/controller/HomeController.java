@@ -35,8 +35,8 @@ public class HomeController {
     @Autowired
     CacheService cacheService;
 
-    @Autowired
-    TestResultService testResultService;
+//    @Autowired
+//    TestResultService testResultService;
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String printWelcome(ModelMap model) {
@@ -57,7 +57,7 @@ public class HomeController {
         //   List<Job> j=jobService.getJobs(3);
 
         //   HashMap<String, Long> getSubJobs=jobService.getSubJobs(j.get(0).getJobId());
-        SuspensionTestResults t = testResultService.getPastResults(154);
+//        SuspensionTestResults t = testResultService.getPastResults(154);
         return "home";
 
     }

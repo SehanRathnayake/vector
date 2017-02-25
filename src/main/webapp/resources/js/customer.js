@@ -86,9 +86,10 @@ VECTOR.module.customer = function () {
                 +'<div class="form-group"><label for="addOdometer1'+idcount+'">Odometer</label><input id="addOdometer1'+idcount+'" class="form-control col-sm-10" type="number"></div>'
             $(idPrefix + "addVehicleForm").append(row1);
         });
-            $(idPrefix + "done").click(function () {
-                $(".customer-input").prop("disabled", true);
-                $(".input").prop("disabled", true);
+        $(idPrefix + "done").click(function () {
+                /*$(".customer-input").prop("disabled", true);
+                $('input').prop("autocomplete", false);
+                $(".input").prop("disabled", true);*/
                 var disable = false;
                 $($(this)).each(function () {
                     if ($(this).val() == "") {
@@ -106,7 +107,6 @@ VECTOR.module.customer = function () {
                         custAddress: "" + $("#addAddress").val() + "",
                         custNic: ""
                     }
-                    data.push(customer);
 
                     var vehicledto;
                     
@@ -133,18 +133,18 @@ VECTOR.module.customer = function () {
                         contentType: 'application/json; charset=utf-8',
                         data: JSON.stringify(data),
                         success: function (data) {
-                            // console.log(data);
-                            customerId = data;
                         }
                     });
-                    // window.location.reload();
+                    window.location.reload();
                 } else {
                     alert("Please fill all input fields");
                 }
             });
     }
+    
     var editCustomer = function () {
         var idcount = 2;
+        var data;
         $(idPrefix+"customerListContainer").hide();
         $(idPrefix+"customerDetailContainer").show();
         $(idPrefix+"addCustomer").hide();
@@ -163,9 +163,9 @@ VECTOR.module.customer = function () {
             $("#vehicleDetail").append(row1);
             idcount++;
         });
-        var details = [];
 
-        var customer = customer = {
+
+        var customer = {
             custName : ""+$("#customerName").val()+"",
             custEmail : ""+$("#customerEmail").val()+"",
             custTp : $("#customerTelephone").val(),
@@ -173,25 +173,29 @@ VECTOR.module.customer = function () {
             custNic : ""
         }
 
-        var vehicleList = {vehicles:[]};
+        var vehicleList = [];
 
         vehicleList.forEach(function(vehicleList){
-            vehicleList.vehicles.push({
+            vehicleList.push({
                 vehicleModelId : $("#addModel"+idcount).val(),
                 numberPlate : $("#numberPlate"+idcount).val(),
                 manufactDate : $("#manufactDate"+idcount).val(),
                 odometer : $("#addOdometer"+idcount).val(),
             });
+            idcount++;
         });
-
-
+        data = {
+                customer:customer,
+                vehicleList:vehicleList
+                }
+        
         $(idPrefix+"saveChangesButton").click(function(){
             $.ajax({
                 type: 'POST',
                 url: 'http://localhost:8082/vector/editCustomerDetail',
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify({CustomerDto: customer,VehicleDto: vehicleList}),
+                data: JSON.stringify(data),
                 success: function (data) {
                 },
             });
@@ -228,6 +232,18 @@ VECTOR.module.customer = function () {
         });
         return disable;
     };
+    
+    var getModelList = function(){
+        $.ajax({
+            type: 'POST',
+            url:'http://localhost:8082/vector/modelList',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function(data){
+                alert(data);
+            }
+        });
+    }
 
     return {
         init: function () {
@@ -242,7 +258,7 @@ VECTOR.module.customer = function () {
             $(idPrefix+"backToList").off("click").on("click",function(){
                 window.location.reload();
             });
-            // $(idPrefix+"saveChangesButton").off("click").on("click",viewCustomerList);
+            $(idPrefix+"modelList").off("click").on("click",getModelList);
         }
     }
 }();

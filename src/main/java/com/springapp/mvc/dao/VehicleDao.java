@@ -1,6 +1,8 @@
 package com.springapp.mvc.dao;
 
+import com.springapp.mvc.dto.ModelDto;
 import com.springapp.mvc.dto.VehicleDto;
+import com.springapp.mvc.model.Model;
 import com.springapp.mvc.model.Vehicle;
 
 import java.util.List;
@@ -15,4 +17,6 @@ public interface VehicleDao {
     public List<VehicleDto> getVehicle(int customerId);
     public void removeVehicle(int id);
     public VehicleDto getSingleVehicle(int id);
+    public List<ModelDto> getModelList();
+    public void update(VehicleDto vehicle);
 }

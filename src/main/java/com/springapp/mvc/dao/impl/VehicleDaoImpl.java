@@ -1,7 +1,9 @@
 package com.springapp.mvc.dao.impl;
 
 import com.springapp.mvc.dao.VehicleDao;
+import com.springapp.mvc.dto.ModelDto;
 import com.springapp.mvc.dto.VehicleDto;
+import com.springapp.mvc.model.Model;
 import com.springapp.mvc.model.Vehicle;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,17 +69,36 @@ public class VehicleDaoImpl extends BaseJpaDaoImpl<Vehicle> implements VehicleDa
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public VehicleDto getSingleVehicle(int id) {
-//        Customer c = getEntity(Customer.class,id);
         String queryString = "SELECT v FROM Vehicle v WHERE v.customer = :id";
         TypedQuery<Vehicle> query = this.entityManager.createQuery(queryString, Vehicle.class);
         query.setParameter("id", id);
         List<Vehicle> vehicle = query.getResultList();
-//        List<Vehicle>
         VehicleDto vehicledto = new VehicleDto();
         /*vehicledto.setNumberPlate(vehicle.getNumberPlate());
         vehicledto.setVehicleModelId(vehicle.getVehicleModelId());
         vehicledto.setOdometer(vehicle.getOdometer());
         vehicledto.setManufactDate(vehicle.getManufactDate().toString());*/
         return vehicledto;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<ModelDto> getModelList(){
+        String queryString = "SELECT m FROM Model m";
+        TypedQuery<Model> query = this.entityManager.createQuery(queryString,Model.class);
+        List<Model> modelList = query.getResultList();
+        List<ModelDto> models = new ArrayList<ModelDto>();
+        for (Model model:modelList) {
+            ModelDto dto = new ModelDto();
+            dto.setModelId(model.getVehicleModelId());
+            dto.setModelName(model.getVehicleType());
+            models.add(dto);
+        }
+        return models;
+    }
+
+    @Override
+    public void update(VehicleDto vehicle){
+        this.entityManager.refresh(vehicle);
     }
 }
