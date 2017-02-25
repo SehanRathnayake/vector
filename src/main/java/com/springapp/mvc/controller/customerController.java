@@ -53,10 +53,10 @@ public class CustomerController {
         CustomerDto customer = data.getCustomer();
         List<VehicleDto> vehicle = data.getVehicleList();
 
-        customerService.createJob(customer);
+        Customer newCust = customerService.createJob(customer);
 
         for (VehicleDto veh:vehicle) {
-            veh.setCustomer(customerService.getCustomer(customer.getCustName()).getCus_id());
+            veh.setCustomer(newCust.getCus_id());
             vehicleService.createVehicle(veh);
         }
     }
@@ -70,7 +70,7 @@ public class CustomerController {
 
     @RequestMapping(value = "/viewCustomerDetail", method = RequestMethod.POST)
     public @ResponseBody
-    List<Object> viewCustomerDetails(@RequestBody int id){
+    DetailDto viewCustomerDetails(@RequestBody int id){
         CustomerDto c = new CustomerDto();
         VehicleDto v = new VehicleDto();
         VehicleDto v1 = new VehicleDto();
@@ -78,10 +78,10 @@ public class CustomerController {
         List<Object> list = new ArrayList<Object>();
         c = customerService.getSingleCustomer(id);
         vehicleList = vehicleService.getVehicle(id);
-        list.add(c);
-        list.addAll(vehicleList);
-
-        return list;
+        DetailDto detail = new DetailDto();
+        detail.setCustomer(c);
+        detail.setVehicleList(vehicleList);
+        return detail;
     }
 
     @RequestMapping(value = "/editCustomerDetail", method = RequestMethod.POST)

@@ -7,7 +7,7 @@ VECTOR.module.customer = function () {
     var idPrefix = "#CUS_";
 
     var viewCustomerList = function () {
-        var vehicle;
+        var vehicle=[];
         var customer;
         var cid;
         $(idPrefix+"editButton").prop("disabled",false);
@@ -40,26 +40,23 @@ VECTOR.module.customer = function () {
                         contentType: 'application/json; charset=utf-8',
                         data: id,
                         success: function (data) {
-                            customer = data[0];
-                            vehicle = data[1];
+                            customer = data.customer;
+                            vehicle = data.vehicleList;
                             $("#customerId").val(customer.id);
                             $("#customerName").val(customer.custName);
                             $("#customerAddress").val(customer.custAddress);
                             $("#customerTelephone").val(customer.custTp);
                             $("#customerEmail").val(customer.custEmail);
                             $("#vehicleDetail").empty();
-                            var i = 0;
-                            _.each(data, function (item) {
-                                if(i!=0) {
-                                    var row = '<div type="input">Vehicle model:<input id="vehicleModel" class="form-control vehicle-input" value ="' + item.vehicleModelId + '"></div>'
-                                        + '<div type="input">Manufacture Date: <input id="vehicleManufact" class="form-control vehicle-input" value ="' + item.manufactDate + '"></div>'
-                                        + '<div type="input">Number plate: <input id="vehicleNumber" class="form-control vehicle-input" value="'+item.numberPlate+'"></div>'
-                                        + '<div type="input">Odometer: <input id="vehicleOdo" class="form-control vehicle-input" value="' + item.odometer + '"></div>'
-                                        + '<div type="input">Model: <input id="vehicleModel" class="form-control vehicle-input" value="' + item.model + '"></div>';
+                            for(var a = 1; a<=vehicle.length;a++){
+                                var item = vehicle[a-1];
+                                    var row = '<div type="input">Vehicle model:<input id="vehicleModel'+a+'" class="form-control vehicle-input" value ="' + item.vehicleModelId + '"></div>'
+                                        + '<div type="input">Manufacture Date: <input id="vehicleManufact'+a+'" class="form-control vehicle-input" value ="' + item.manufactDate + '"></div>'
+                                        + '<div type="input">Number plate: <input id="vehicleNumber'+a+'" class="form-control vehicle-input" value="'+item.numberPlate+'"></div>'
+                                        + '<div type="input">Odometer: <input id="vehicleOdo'+a+'" class="form-control vehicle-input" value="' + item.odometer + '"></div>'
+                                        + '<div type="input">Model: <input id="vehicleModel'+a+'" class="form-control vehicle-input" value="' + item.model + '"></div>';
                                     $("#vehicleDetail").append(row);
-                                }
-                                i++;
-                            });
+                            }
 
                         }
                     });
@@ -72,12 +69,13 @@ VECTOR.module.customer = function () {
         $(idPrefix + "customerListContainer").hide();
         $(idPrefix + "customerDetailContainer").hide();
         $(idPrefix + "addCustomer").show();
-        var idcount = 1;
+        var idcount = 2;
         var customerId;
         var vehicle = [];
         var customer;
         var vehicleCount = 0;
         $(".vehicle-input").prop("disabled", true);
+        $(".customer-input").prop("disabled", true);
         $(idPrefix + "addMore").click(function () {
             var row1 = '<div class="form-group"><label>Add Vehicle</label></div>'
                 +'<div class="form-group"><label for="numberPlate1'+idcount+'">Number plate</label><input id="numberPlate1'+idcount+'" class="form-control col-sm-10" type="text"></div>'
@@ -85,6 +83,7 @@ VECTOR.module.customer = function () {
                 +'<div class="form-group"><label for="addModel1'+idcount+'">Model</label><form id="addModel1'+idcount+'"><select name="item" class="form-control"><option value="abc">abc</option><option value="abcd">abcd</option><option value="abcde">abcde</option></select></div>'
                 +'<div class="form-group"><label for="addOdometer1'+idcount+'">Odometer</label><input id="addOdometer1'+idcount+'" class="form-control col-sm-10" type="number"></div>'
             $(idPrefix + "addVehicleForm").append(row1);
+            idcount++;
         });
         $(idPrefix + "done").click(function () {
                 /*$(".customer-input").prop("disabled", true);
@@ -110,7 +109,7 @@ VECTOR.module.customer = function () {
 
                     var vehicledto;
                     
-                    for(var a = 1; a<= idcount; a++){
+                    for(var a = 1; a< idcount; a++){
                         vehicledto={
                             vehicleModelId: $("#addModel1" + a).val(),
                             numberPlate: ""+$("#numberPlate1" + a).val()+"",
@@ -143,7 +142,7 @@ VECTOR.module.customer = function () {
     }
     
     var editCustomer = function () {
-        var idcount = 2;
+        var idcount = 1;
         var data;
         $(idPrefix+"customerListContainer").hide();
         $(idPrefix+"customerDetailContainer").show();
@@ -163,33 +162,32 @@ VECTOR.module.customer = function () {
             $("#vehicleDetail").append(row1);
             idcount++;
         });
-
-
-        var customer = {
-            custName : ""+$("#customerName").val()+"",
-            custEmail : ""+$("#customerEmail").val()+"",
-            custTp : $("#customerTelephone").val(),
-            custAddress : ""+$("#customerAddress").val()+"",
-            custNic : ""
-        }
-
-        var vehicleList = [];
-
-        vehicleList.forEach(function(vehicleList){
-            vehicleList.push({
-                vehicleModelId : $("#addModel"+idcount).val(),
-                numberPlate : $("#numberPlate"+idcount).val(),
-                manufactDate : $("#manufactDate"+idcount).val(),
-                odometer : $("#addOdometer"+idcount).val(),
-            });
-            idcount++;
-        });
-        data = {
-                customer:customer,
-                vehicleList:vehicleList
-                }
         
         $(idPrefix+"saveChangesButton").click(function(){
+            var customer = {
+                id: $("#customerId").val(),
+                custName : ""+$("#customerName").val()+"",
+                custEmail : ""+$("#customerEmail").val()+"",
+                custTp : $("#customerTelephone").val(),
+                custAddress : ""+$("#customerAddress").val()+"",
+                custNic : ""
+            }
+
+            var vehicleList = [];
+
+            for(var a = 1; a<= idcount; a++){
+                vehicleList.push({
+                    vehicleModelId : $("#vehicleModel"+a).val(),
+                    numberPlate : $("#vehicleNumber"+a).val(),
+                    manufactDate : $("#vehicleManufact"+a).val(),
+                    odometer : $("#vehicleOdo"+idcount).val(),
+                });
+            }
+            data = {
+                customer:customer,
+                vehicleList:vehicleList
+            }
+
             $.ajax({
                 type: 'POST',
                 url: 'http://localhost:8082/vector/editCustomerDetail',
@@ -200,8 +198,7 @@ VECTOR.module.customer = function () {
                 },
             });
         });
-
-
+        window.location.reload();
     };
 
     var removeCustomer = function () {

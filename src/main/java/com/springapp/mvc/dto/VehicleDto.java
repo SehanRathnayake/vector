@@ -44,7 +44,7 @@ public class VehicleDto implements Serializable {
         return manufactDate;
     }
 
-    public void setManufactDate(String manufactDate) {
+    public void setManufactDate(Date manufactDate) {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
         try {

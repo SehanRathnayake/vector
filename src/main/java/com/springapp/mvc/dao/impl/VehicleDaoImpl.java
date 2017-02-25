@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -41,12 +42,12 @@ public class VehicleDaoImpl extends BaseJpaDaoImpl<Vehicle> implements VehicleDa
 
         String queryString = "SELECT v FROM Vehicle v  WHERE v.customer= :id";
         TypedQuery<Vehicle> query = this.entityManager.createQuery(queryString, Vehicle.class);
-        query.setParameter("id", ((int) customerId));
+        query.setParameter("id", customerId);
         List<Vehicle> vehicle = query.getResultList();
         List<VehicleDto> vehicleDto = new ArrayList<VehicleDto>();
         for (Vehicle veh:vehicle) {
             VehicleDto dto = new VehicleDto();
-            dto.setManufactDate(veh.getManufactDate().toString());
+            dto.setManufactDate(veh.getManufactDate());
             dto.setNumberPlate(veh.getNumberPlate());
             dto.setVehicleModelId(veh.getVehicleModelId());
             dto.setOdometer(veh.getOdometer());
@@ -100,7 +101,14 @@ public class VehicleDaoImpl extends BaseJpaDaoImpl<Vehicle> implements VehicleDa
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void update(VehicleDto vehicle){
-        this.entityManager.refresh(vehicle);
+        Vehicle vehi = new Vehicle();
+        vehi.setVehicleModelId(vehicle.getVehicleModelId());
+        vehi.setOdometer(vehicle.getOdometer());
+        vehi.setManufactDate(vehicle.getManufactDate());
+        vehi.setNumberPlate(vehicle.getNumberPlate());
+        vehi.setCustomer(vehicle.getCustomer());
+//        this.entityManager.refresh(vehi);
     }
 }

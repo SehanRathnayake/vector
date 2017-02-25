@@ -77,7 +77,15 @@ public class CustomerDaoImpl extends BaseJpaDaoImpl<Customer> implements Custome
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void update(CustomerDto customer){
-        this.entityManager.refresh(customer);
+        Customer cust = new Customer();
+        cust.setCus_id(customer.getId());
+        cust.setCus_name(customer.getCustName());
+        cust.setCus_address(customer.getCustAddress());
+        cust.setCus_phone(customer.getCustTp());
+        cust.setCus_email(customer.getCustEmail());
+        Customer managed = this.entityManager.find(Customer.class,cust.getCus_id());
+//        this.entityManager.refresh(cust);
     }
 }

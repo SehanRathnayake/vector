@@ -13,10 +13,11 @@ import java.util.Date;
 @Table(name = "T_VEHICLE")
 public class Vehicle implements Serializable{
 
-    @SequenceGenerator(name = "Vehicle_Gen", sequenceName = "Vehicle_Seq")
-    @GeneratedValue(generator = "Vehicle_Gen")
+    @SequenceGenerator(name = "VEHICLE_GEN", sequenceName = "VEHICLEID_SEQ")
+
 
     @Id
+    @GeneratedValue(generator = "VEHICLE_GEN")
 //    @ManyToOne(fetch = FetchType.LAZY)
     @Column(name = "VEHICLE_ID", nullable = false)
     private int vehicleId;
