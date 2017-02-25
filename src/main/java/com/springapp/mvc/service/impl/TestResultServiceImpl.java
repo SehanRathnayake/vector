@@ -82,7 +82,7 @@ public class TestResultServiceImpl implements TestResultService {
 
     private static double minAccShockStartingPoint = -1.0;
 
-    private boolean writeToexcel = true;
+    private boolean writeToexcel = false;
 
     private ArrayList<double[]> axcelFrequencySpectrum;
     private ArrayList<double[]> chassiFrequencySpectrum;
@@ -181,8 +181,8 @@ public class TestResultServiceImpl implements TestResultService {
         double[] shockStartPoint = getShockStartPoint(chassiSignalClipped, minAccShockStartingPoint, stabilityWindow, 2 * maxAccStability);
         double shockStartTime = shockStartPoint[1];
         int shockStartIndex = (int) shockStartPoint[0];
-        axcelSignalForRMS = new ArrayList<double[]>(axcelSignalClipped.subList(shockStartIndex, (int) stablePoint[0]+curveFittingStartPoint));
-        chassiSignalForRMS = new ArrayList<double[]>(chassiSignalClipped.subList(shockStartIndex, (int) stablePoint[0]+curveFittingStartPoint));
+        axcelSignalForRMS = new ArrayList<double[]>(axcelSignalClipped.subList(shockStartIndex, (int) stablePoint[0] + curveFittingStartPoint));
+        chassiSignalForRMS = new ArrayList<double[]>(chassiSignalClipped.subList(shockStartIndex, (int) stablePoint[0] + curveFittingStartPoint));
 
         axcelRMSvalue = getRMS(axcelSignalClipped);
         chassiRMSvalue = getRMS(chassiSignalClipped);
@@ -212,8 +212,8 @@ public class TestResultServiceImpl implements TestResultService {
 
         if (writeToexcel) {
             saveResultsToExcel(suspensionTestResults, excelUrl);
-            writeToExcel(excelUrl,"chassy rms",chassiSignalForRMS);
-            writeToExcel(excelUrl,"axcel rms",axcelSignalForRMS);
+            writeToExcel(excelUrl, "chassy rms", chassiSignalForRMS);
+            writeToExcel(excelUrl, "axcel rms", axcelSignalForRMS);
         }
 
         FileOutputStream fout = null;
@@ -240,16 +240,15 @@ public class TestResultServiceImpl implements TestResultService {
         writeToExcel(url, "chassy frequency spectrum", suspensionTestResults.getChassiFrequencySpectrum());
 
 
-
         LinkedHashMap<String, Double> map = new LinkedHashMap<String, Double>();
         map.put("Damped Frequency", suspensionTestResults.getDampedFrequency());
         map.put("Natural Frequency", suspensionTestResults.getNaturalFrequency());
         map.put("Damping Factor", suspensionTestResults.getDampingFactor());
         map.put("Axcel Peak Acceleration", suspensionTestResults.getAxcelPeakValue());
         map.put("Chassi Peak Acceleration", suspensionTestResults.getChassiPeakValue());
-        map.put("axcel Rms",suspensionTestResults.getAxcelRMSvalue());
-        map.put("chassi Rms",suspensionTestResults.getChassiRMSvalue());
-        map.put("disturbance time",suspensionTestResults.getDisturbanceTime());
+        map.put("axcel Rms", suspensionTestResults.getAxcelRMSvalue());
+        map.put("chassi Rms", suspensionTestResults.getChassiRMSvalue());
+        map.put("disturbance time", suspensionTestResults.getDisturbanceTime());
 
 
         writeToExcel(url, "result", map);

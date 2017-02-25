@@ -28,12 +28,13 @@ public class JobServiceImpl implements JobService {
     private SubJobDao subJobDao;
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Long createNewJob(Long vehicleId) {
+    public Long createNewJob(Long vehicleId,Long userId) {
 
         Job job = new Job();
         Date utilDate = new Date(Calendar.getInstance().getTimeInMillis());
         job.setExecutedDate(utilDate);
         job.setVehicleId(vehicleId);
+        job.setUserId(userId);
         job = jobDao.createJob(job);
         return job.getJobId();
     }

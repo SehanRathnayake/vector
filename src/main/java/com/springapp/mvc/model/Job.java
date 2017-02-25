@@ -20,6 +20,9 @@ public class Job implements Serializable {
     @Column(name = "VEHICLE_ID")
     private long vehicleId;
 
+    @Column(name = "USER_ID")
+    private long userId;
+
     @Temporal(TemporalType.DATE)
     @Column(name = "EXECUTED_DATE")
     private java.util.Date executedDate;
@@ -46,5 +49,13 @@ public class Job implements Serializable {
 
     public void setExecutedDate(Date executedDate) {
         this.executedDate = executedDate;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 }

@@ -47,9 +47,12 @@ public class HomeController {
 
     @RequestMapping(value = "/auth", method = RequestMethod.GET)
     public String auth(ModelMap model) {
-        //  Long jobid = jobService.createNewJob(new Long(3));
+
+        UserDetailsForAuthentication user = (UserDetailsForAuthentication) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        long uid=userService.getUser(user.getUsername()).getUserId();
+        Long jobid = jobService.createNewJob(new Long(3),uid);
         //  Long sub = jobService.createSubJob(jobid, "FRONT LEFT");
-        //SuspensionTestResults suspensionTestResults = testResultService.getResults(sub);
+       SuspensionTestResults suspensionTestResults = testResultService.getResults(154);
 
         //   List<Job> j=jobService.getJobs(3);
 
@@ -62,26 +65,13 @@ public class HomeController {
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public void someControllerMethod(HttpServletRequest request, HttpSession session) {
         // Boolean f = request.isUserInRole("Do a Test");
-        //UserDetailsForAuthentication user = (UserDetailsForAuthentication) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//String h=jobService.getPositionDesc(4L);
-        //    String name = user.getUsername();
-        //  jobService.createPosition("Left Back Wheel");
-        //  jobService.createDevice("BBB");
-//        User u = userService.getUser(name);
-//        JobDto jobDto = new JobDto();
-//        HashMap<Long, Long> devices = new HashMap<Long, Long>();
-//        devices.put(1L, 52L);
-//        devices.put(54L, 54L);
-//        jobDto.setDeviceSetup(devices);
-//        jobService.startNewJob(jobDto,name);
-        //   f = f;
-        //  cacheService.getDeviceMap();
-
+        UserDetailsForAuthentication user = (UserDetailsForAuthentication) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
+
     /*@RequestMapping("/sparkline")
     public ModelAndView crunchifySparklineTest() {
         return new ModelAndView("sparkline");
-    }*/
+    }
 
     @RequestMapping(value = "/sparklinetest", method = RequestMethod.GET)
     public
@@ -112,20 +102,6 @@ public class HomeController {
 
         return jsonObj.toString();
     }
-
-
-//	@RequestMapping(value = "/data", method = RequestMethod.GET)
-//	public String printHello(@RequestParam("value") String value) {
-//
-//		return "home";
-//	}
-//
-//
-//	@RequestMapping(value = "vibrationdata/{id}/{value}", method = RequestMethod.PUT)
-//	@ResponseStatus(HttpStatus.NO_CONTENT)
-//	public String saveValue(@PathVariable("id") long id, @PathVariable("value") long value){
-//
-//		return "home";
-//	}
+*/
 
 }
