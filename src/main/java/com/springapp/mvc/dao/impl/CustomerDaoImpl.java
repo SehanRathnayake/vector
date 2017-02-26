@@ -86,6 +86,6 @@ public class CustomerDaoImpl extends BaseJpaDaoImpl<Customer> implements Custome
         managed.setCus_address(customer.getCustAddress());
         managed.setCus_phone(customer.getCustTp());
         managed.setCus_email(customer.getCustEmail());
-//        this.entityManager.refresh(managed);
+        this.entityManager.refresh(managed);
     }
 }

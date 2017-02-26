@@ -114,6 +114,6 @@ public class VehicleDaoImpl extends BaseJpaDaoImpl<Vehicle> implements VehicleDa
         vehi.setManufactDate(vehicle.getManufactDate());
         vehi.setNumberPlate(vehicle.getNumberPlate());
         vehi.setCustomer(vehicle.getCustomer());
-//        this.entityManager.refresh(vehi);
+        this.entityManager.refresh(vehi);
     }
 }
