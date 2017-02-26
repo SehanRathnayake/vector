@@ -12,7 +12,7 @@ public class VehicleDto implements Serializable {
     private int vehicleId;
     private int vehicleModelId;
     private String numberPlate;
-    private Date manufactDate;
+    private int manufactDate;
     private int odometer;
     private int customer;
 
@@ -40,19 +40,12 @@ public class VehicleDto implements Serializable {
         this.numberPlate = numberPlate;
     }
 
-    public Date getManufactDate() {
+    public int getManufactDate() {
         return manufactDate;
     }
 
-    public void setManufactDate(Date manufactDate) {
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        try {
-            date = fmt.parse("2001-01-01");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        this.manufactDate = date;
+    public void setManufactDate(int manufactDate) {
+        this.manufactDate = manufactDate;
     }
 
     public int getOdometer() {

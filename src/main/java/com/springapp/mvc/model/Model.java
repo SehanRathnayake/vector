@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "T_MODEL")
 public class Model implements Serializable{
-    @SequenceGenerator(name = "Model_Gen", sequenceName = "Model")
+    @SequenceGenerator(name = "Model_Gen", sequenceName = "Model_seq")
     @GeneratedValue(generator = "Model_Gen")
 
     @Id

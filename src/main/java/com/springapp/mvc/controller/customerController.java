@@ -32,7 +32,7 @@ public class CustomerController {
     @RequestMapping(value = "/customer", method = RequestMethod.GET)
     public String customer(ModelMap model){
 
-        List<CustomerVehicleDto> list=customerService.getCustomerVehicleList();
+     //   List<CustomerVehicleDto> list=customerService.getCustomerVehicleList();
 
         return "customer";
     }

@@ -42,7 +42,7 @@ public class HomeController {
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String printWelcome(ModelMap model) {
 
-        List<JobDto> g = jobService.getJobs(1);
+//        List<JobDto> g = jobService.getJobs(1);
         return "home";
     }
 

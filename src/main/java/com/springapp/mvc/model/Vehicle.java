@@ -29,7 +29,7 @@ public class Vehicle implements Serializable{
     private String numberPlate;
 
     @Column (name = "MANUFACT_DATE")
-    private Date manufactDate;
+    private int manufactDate;
 
     @Column (name = "ODOMETER")
     private int odometer;
@@ -61,11 +61,11 @@ public class Vehicle implements Serializable{
         this.numberPlate = numberPlate;
     }
 
-    public Date getManufactDate() {
+    public int getManufactDate() {
         return manufactDate;
     }
 
-    public void setManufactDate(Date manufactDate) {
+    public void setManufactDate(int manufactDate) {
         this.manufactDate = manufactDate;
     }
 

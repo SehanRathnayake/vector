@@ -25,6 +25,7 @@ public class VehicleDaoImpl extends BaseJpaDaoImpl<Vehicle> implements VehicleDa
         veh.setOdometer(vehicle.getOdometer());
         veh.setNumberPlate(vehicle.getNumberPlate());
         veh.setVehicleModelId(vehicle.getVehicleModelId());
+        veh.setManufactDate(vehicle.getManufactDate());
         return saveEntity(veh);
     }
 
@@ -95,6 +96,10 @@ public class VehicleDaoImpl extends BaseJpaDaoImpl<Vehicle> implements VehicleDa
             ModelDto dto = new ModelDto();
             dto.setModelId(model.getVehicleModelId());
             dto.setModelName(model.getVehicleType());
+//            dto.setEngineSize(model.getEngineSize());
+            dto.setFuelType(model.getFuelType());
+            dto.setManufacturer(model.getManufacturer());
+            dto.setVehicleType(model.getVehicleType());
             models.add(dto);
         }
         return models;

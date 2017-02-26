@@ -80,8 +80,8 @@
                             <input id="numberPlate1" class="form-control col-sm-10" type="text">
                         </div>
                         <div class="form-group">
-                            <label for="manufactDate1">Number plate</label>
-                            <input id="manufactDate1" class="form-control col-sm-10" type="date">
+                            <label for="manufactDate1">Manufact Date</label>
+                            <input id="manufactDate1" class="form-control col-sm-10" type="number" min="1980" max="2017">
                         </div>
                         <div class="form-group">
                             <label for="addModel1">Model</label>
@@ -92,10 +92,6 @@
                                 <option value="abcde">abcde</option>
                                 </select>
                             </form>
-                        <div class="form-group">
-                            <label for="addOdometer1">Odometer</label>
-                            <input id="addOdometer1" class="form-control col-sm-10" type="number">
-                        </div>
                         <div class="form-group">
                             <button id="saveVehicle" class="btn btn-default" type="submit">Save</button>
                         </div>
@@ -131,9 +127,8 @@
                 <form role="form" id="CUS_addVehicleForm" onsubmit="return false;">
                     <div class="form-group"><label>Add Vehicle</label></div>
                     <div class="form-group"><label for="numberPlate11">Number plate</label><input id="numberPlate11" class="form-control col-sm-10" type="text"></div>
-                    <div class="form-group"><label for="manufactDate11">Number plate</label><input id="manufactDate11" class="form-control col-sm-10" type="date"></div>
+                    <div class="form-group"><label for="manufactDate11">Manufact year</label><input id="manufactDate11" class="form-control col-sm-10" type="number" min="1980" max="2017"></div>
                     <div class="form-group"><label for="addModel11">Model</label><form id="addModel11"><select name="item" class="form-control"><option value="abc">abc</option><option value="abcd">abcd</option><option value="abcde">abcde</option></select></div>
-                    <div class="form-group"><label for="addOdometer11">Odometer</label><input id="addOdometer11" class="form-control col-sm-10" type="number"></div>
                 </form>
                 <div>
                     <button id="CUS_addMore" class="btn btn-default" type="submit">Add Vehicle</button>'
