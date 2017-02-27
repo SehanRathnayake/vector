@@ -27,28 +27,64 @@ VECTOR.module.dashboard = function () {
         });
 
     };
-    var setup = function(){
+    var dash = function () {
+        $("#dash_animation").addClass('animated ').addClass('bounceInLeft');
+    }
+    var slideIndex = 0;
+    var slideshow = function showSlides() {
+        var i;
+        var slides = document.getElementsByClassName("mySlides");
+        var dots = document.getElementsByClassName("dot");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {
+            slideIndex = 1
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " active";
+        setTimeout(showSlides, 2000); // Change image every 2 seconds
+    }
+
+    var setup = function () {
+
         $(".block-graph").draggable({
-            revert:true
+            revert: true
         });
         $(".block-device").draggable({
-            revert:true
+            revert: true
         });
+
+
         $(".block-graph").append('<div class="highchart-plaster"></div>');
     };
 
+    var slideIndex = 1;
+
+
+
+
     var setupCharts = function () {
-        $("#DB_container_A001").vectorDashboardGraph("J-02","001");
-        $("#DB_container_A002").vectorDashboardGraph("J-02","002");
-        $("#DB_container_A003").vectorDashboardGraph("J-02","003");
-        $("#DB_container_A004").vectorDashboardGraph("J-02","004");
-        $("#DB_container_A005").vectorDashboardGraph("J-02","005");
+        $("#DB_container_A001").vectorDashboardGraph("J-02", "001");
+        $("#DB_container_A002").vectorDashboardGraph("J-02", "002");
+        $("#DB_container_A003").vectorDashboardGraph("J-02", "003");
+        $("#DB_container_A004").vectorDashboardGraph("J-02", "004");
+        $("#DB_container_A005").vectorDashboardGraph("J-02", "005");
     };
     return {
         init: function () {
             loadScript(null);
+            dash();
+            slideshow();
             setup();
-            setupCharts()
+
+
+            setupCharts();
+
         }
     }
 }();

@@ -1,9 +1,16 @@
-<div class="container vector-header">
+<!--<div class="container vector-header">
     <h1>
 
     </h1>
 </div>
+-->
+
+<div id="dash_animation" class=" container dash-background animated bounceInLeft " style="
+    height:20%; position: relative;width: 90%" >
+</div>
 <div class="row">
+
+
     <div class="col-lg-4"></div>
     <div class="col-lg-4" style="
     margin-top: 50px;

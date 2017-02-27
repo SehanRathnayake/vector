@@ -5,6 +5,7 @@
 <head>
     <script src="<c:url value="/resources/js/jquery/jquery-3.0.0.min.js"/>"></script>
     <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap.min.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/animate.css" />">
 
     <!-- Optional theme -->
     <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap-theme.min.css" />">
@@ -14,6 +15,7 @@
     <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap-touchspin.css" />">
     <%-- common --%>
     <link rel="stylesheet" href="<c:url value="/resources/css/main.css" />">
+    <link rel="stylesheet" href="<c:url value="/resources/css/dash.css" />">
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="<c:url value="/resources/js/jquery/jquery-3.0.0.min.js" />"></script>
