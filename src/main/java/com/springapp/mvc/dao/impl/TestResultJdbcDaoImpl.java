@@ -49,7 +49,7 @@ public class TestResultJdbcDaoImpl extends BaseJdbcDaoImpl implements TestResult
 
     public SuspensionTestResults getTestResults(long subJob) {
         Result result = this.getJDBCTemplate().queryForObject(
-                "select SUB_JOB_ID,RESULT from T_RESULT where SUB_JOB_ID = ?",
+                "select SUB_JOB_ID,RESULT from T_RESULT where SUB_JOB_ID = ? and ROWNUM <=1",
                 new Object[]{subJob},
                 new RowMapper<Result>() {
 

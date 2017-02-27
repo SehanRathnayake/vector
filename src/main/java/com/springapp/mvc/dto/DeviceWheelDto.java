@@ -15,6 +15,15 @@ public class DeviceWheelDto implements Serializable{
     private String customerName;
     private String vehicleName;
     private int jobId;
+    private String subJob;
+
+    public String getSubJob() {
+        return subJob;
+    }
+
+    public void setSubJob(String subJob) {
+        this.subJob = subJob;
+    }
 
     public int getJobId() {
         return jobId;

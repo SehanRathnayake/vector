@@ -1,19 +1,21 @@
 package com.springapp.mvc.controller;
 
-import com.springapp.mvc.dto.CustVehicleTempDto;
-import com.springapp.mvc.dto.DeviceWheelDto;
-import com.springapp.mvc.dto.RawDataDto;
-import com.springapp.mvc.dto.SuspensionTestResults;
+import com.springapp.mvc.dto.*;
 import com.springapp.mvc.service.CacheService;
+import com.springapp.mvc.service.JobService;
+import com.springapp.mvc.service.TestResultService;
+import com.springapp.mvc.service.UserService;
 import com.springapp.mvc.service.impl.TestResultServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.object.RdbmsOperation;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,15 @@ public class JobController {
     @Autowired
     CacheService cacheService;
 
+    @Autowired
+    JobService jobService;
+
+    @Autowired
+    TestResultService testResultService;
+
+    @Autowired
+    UserService userService;
+
     @RequestMapping(value = "/newJob", method = RequestMethod.GET)
     public String newJob(ModelMap model) {
         return "carconfig";
@@ -36,7 +47,15 @@ public class JobController {
     public
     @ResponseBody
     SuspensionTestResults add(@RequestBody DeviceWheelDto[] devices) {
-        SuspensionTestResults s = new TestResultServiceImpl().getResults(devices[0].getCustomerName(), devices[0].getVehicleName(), devices[0].getJobId() + "", devices[0].getWheelName());
+        SuspensionTestResults s = testResultService.getResults(devices[0].getCustomerName(), devices[0].getVehicleName(), devices[0].getJobId() + "", devices[0].getWheelName(),Long.parseLong(devices[0].getSubJob()));
+        return s;
+    }
+
+    @RequestMapping(value = "/getPastChartData", method = RequestMethod.POST, headers = "content-type=application/json")
+    public
+    @ResponseBody
+    SuspensionTestResults getPastChartData(@RequestBody String deviceId) {
+        SuspensionTestResults s = testResultService.getPastResults(Long.parseLong(deviceId));
         return s;
     }
 
@@ -114,6 +133,44 @@ public class JobController {
             }
         }
         return jobs.size() + 1;
+    }
+    @RequestMapping(value = "/getJobIdList", method = RequestMethod.POST, headers = "content-type=application/json")
+    public
+    @ResponseBody
+    List<JobDto> getJobIdList(@RequestBody String vehicleId) {
+        List<JobDto> jobList = jobService.getJobs(Long.parseLong(vehicleId));
+        return jobList;
+    }
+    @RequestMapping(value = "/getSubJobIdList", method = RequestMethod.POST, headers = "content-type=application/json")
+    public
+    @ResponseBody
+    HashMap<String, Long> getSubJobIdList(@RequestBody String jobId) {
+        HashMap<String, Long> jobList = jobService.getSubJobs(Long.parseLong(jobId));
+        return jobList;
+    }
+    @RequestMapping(value = "/getPastResults", method = RequestMethod.POST, headers = "content-type=application/json")
+    public
+    @ResponseBody
+    SuspensionTestResults getPastResults(@RequestBody DeviceWheelDto[] devices) {
+        SuspensionTestResults s = testResultService.getPastResults(Long.parseLong(devices[0].getSubJob()));
+        return s;
+    }
+    @RequestMapping(value = "/createNewJob", method = RequestMethod.POST, headers = "content-type=application/json")
+    public
+    @ResponseBody
+    Long createNewJob(@RequestBody String str) {
+        UserDetailsForAuthentication user = (UserDetailsForAuthentication) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        long userId=userService.getUser(user.getUsername()).getUserId();
+        long jobId= jobService.createNewJob(Long.parseLong(str),userId);
+        return jobId;
+    }
+    @RequestMapping(value = "/createSubJob", method = RequestMethod.POST, headers = "content-type=application/json")
+    public
+    @ResponseBody
+    Long createSubJob(@RequestBody String str) {
+        String[] split = str.split("_");
+        long jobId= jobService.createSubJob(Long.parseLong(split[0]),split[1].toUpperCase());
+        return jobId;
     }
 
 }

@@ -15,11 +15,20 @@ VECTOR.module.wheelresults = function () {
     var frequencySpectrum;
     var sineWave = [];
 
-    var setSeriesLists = function (deviceId) {
+    var setSeriesLists = function (deviceId,predicate) {
+        var method ;
+        var data;
+        if(predicate){
+            method="getChartData";
+            data = JSON.stringify(deviceId);
+        }else{
+            method = "getPastChartData";
+            data=deviceId[0].subJob
+        }
         $.ajax({
-            url: 'http://' + ip + ':8082/vector/getChartData',
+            url: 'http://' + ip + ':8082/vector/'+method,
             dataType: "json",
-            data: JSON.stringify(deviceId),
+            data: data,
             cache: false,
             contentType: 'application/json;',
             async: false,
@@ -56,6 +65,20 @@ VECTOR.module.wheelresults = function () {
                 $(idPrefix+"dampingFactor").html("DampingFactor : "+result.dampingFactor);
                 $(idPrefix+"dampedFrequency").html("DampedFrequency : "+result.dampedFrequency);
                 $(idPrefix+"naturalFrequency").html("NaturalFrequency : "+result.naturalFrequency);
+                $(idPrefix+"dampingProgress").css({width:parseFloat(result.dampingFactor)*100+'%','background-color':'gray'});
+                /*$(idPrefix+"dampingProgress").removeClass("progress-bar-danger");
+                $(idPrefix+"dampingProgress").removeClass("progress-bar-info");
+                $(idPrefix+"dampingProgress").removeClass("progress-bar-warning");
+                $(idPrefix+"dampingProgress").removeClass("progress-bar-success");
+                if(parseFloat(result.dampingFactor)*100<10){
+                    $(idPrefix+"dampingProgress").addClass("progress-bar-danger");
+                }else if(parseFloat(result.dampingFactor)*100<25){
+                    $(idPrefix+"dampingProgress").addClass("progress-bar-warning");
+                }else if(parseFloat(result.dampingFactor)*100<50){
+                    $(idPrefix+"dampingProgress").addClass("progress-bar-info");
+                }else{
+                    $(idPrefix+"dampingProgress").addClass("progress-bar-success");
+                }*/
             }
         });
     };
@@ -356,8 +379,8 @@ VECTOR.module.wheelresults = function () {
     return {
         init: function () {
         },
-        getCharts: function (devices) {
-            setSeriesLists(devices);
+        getCharts: function (devices,predicate) {
+            setSeriesLists(devices,predicate);
             var chartOptions = setBasicChart(devices, $(idPrefix + "resultSec").width(), $(idPrefix + "resultSec").height());
             $(idPrefix + "basicResultChart").highcharts(chartOptions);
             var dChartOptions = setDampChart(1, $(idPrefix + "resultSec").width(), $(idPrefix + "resultSec").height());

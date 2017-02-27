@@ -9,5 +9,6 @@ public interface TestResultService {
     public SuspensionTestResults getResults(long subJobID);
 
     public SuspensionTestResults getPastResults(long subJobId);
+    public SuspensionTestResults getResults(String customer, String vehicle, String job, String wheel,long subjobId);
 
 }

@@ -8,6 +8,8 @@ import java.util.List;
 public class CustomerVehicleDto {
     CustomerDto customer;
     List<VehicleLazyDto> vehicles;
+    String customerName;
+    int custId;
 
     public CustomerDto getCustomer() {
         return customer;
@@ -15,6 +17,8 @@ public class CustomerVehicleDto {
 
     public void setCustomer(CustomerDto customer) {
         this.customer = customer;
+        this.customerName = customer.getCustName();
+        this.custId = customer.getId();
     }
 
     public List<VehicleLazyDto> getVehicles() {
@@ -23,5 +27,21 @@ public class CustomerVehicleDto {
 
     public void setVehicles(List<VehicleLazyDto> vehicles) {
         this.vehicles = vehicles;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public int getCustId() {
+        return custId;
+    }
+
+    public void setCustId(int custId) {
+        this.custId = custId;
     }
 }

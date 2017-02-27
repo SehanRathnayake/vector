@@ -40,7 +40,7 @@ public class TestResultServiceImpl implements TestResultService {
     @Autowired
     private TestResultJdbcDao testResultJdbcDao;
 
-    private static String baseUrl = "D:\\Vector Data\\";
+    private static String baseUrl = "E:\\Vector Data\\";
 
     private ArrayList<double[]> chassiSignalFull;
     private ArrayList<double[]> chassiSignalVertical;
@@ -88,22 +88,23 @@ public class TestResultServiceImpl implements TestResultService {
     private ArrayList<double[]> chassiFrequencySpectrum;
 
     public static void main(String[] args) {
-        SuspensionTestResults s = new TestResultServiceImpl().getResults("sehan", "corolla", "job1", "Rear Left");
+      //  SuspensionTestResults s = new TestResultServiceImpl().getResults("sehan", "corolla", "job1", "Rear Left");
+        SuspensionTestResults s = new TestResultServiceImpl().getResults(1);
 
     }
 
     public SuspensionTestResults getResults(long subJobID) {
-        String customer = "sehan";
-        String vehicle = "corolla";
-        String job = "job1";
-        String wheel = "Rear Left";
+        String customer = "Sehan";
+        String vehicle = "Toyota Corolla";
+        String job = "1";
+        String wheel = "Front Left";
 
-        SuspensionTestResults suspensionTestResults = getResults(customer, vehicle, job, wheel);
+        SuspensionTestResults suspensionTestResults = getResults(customer, vehicle, job, wheel,subJobID);
         testResultJdbcDao.saveTestResults(suspensionTestResults, subJobID);
         return suspensionTestResults;
     }
 
-    public SuspensionTestResults getResults(String customer, String vehicle, String job, String wheel) {
+    public SuspensionTestResults getResults(String customer, String vehicle, String job, String wheel,long subjobId) {
         String url = baseUrl + customer + "\\" + vehicle + "\\" + job + "\\" + wheel + "\\";
         String excelFileName = customer + "-" + vehicle + "-" + job + "-" + wheel + ".xlsx";
         String excelUrl = url + excelFileName;
@@ -227,6 +228,9 @@ public class TestResultServiceImpl implements TestResultService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        testResultJdbcDao.saveTestResults(suspensionTestResults, subjobId);
+
 
         return suspensionTestResults;
     }

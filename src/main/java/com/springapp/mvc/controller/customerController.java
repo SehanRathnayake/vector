@@ -32,15 +32,22 @@ public class CustomerController {
     @RequestMapping(value = "/customer", method = RequestMethod.GET)
     public String customer(ModelMap model){
 
-     //   List<CustomerVehicleDto> list=customerService.getCustomerVehicleList();
 
-        return "customer";
+
+        return "Customer";
     }
 
     @RequestMapping(value = "/customerList", method = RequestMethod.POST)
     public @ResponseBody
     List<Customer> viewCustomers(ModelMap model){
         List<Customer> list = customerService.viewList();
+        return list;
+    }
+
+    @RequestMapping(value = "/customerVehicleList", method = RequestMethod.POST)
+    public @ResponseBody
+    List<CustomerVehicleDto> getCustomerVehicleList(ModelMap model){
+        List<CustomerVehicleDto> list=customerService.getCustomerVehicleList();
         return list;
     }
 

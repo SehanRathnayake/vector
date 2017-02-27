@@ -8,7 +8,11 @@ VECTOR.module.carconfig = function () {
     //var ip = "192.168.43.150";
     var customerName;
     var vehicleName;
+    var vehicleId;
+    var wheelNameG;
     var jobId = 1;
+    var dbJobId = -1;
+    var subJobId;
     var pastJobId = 1;
     var ip = "localhost";
     var isNewCustomer = false;
@@ -71,6 +75,9 @@ VECTOR.module.carconfig = function () {
             });
             if (filtered.length > 0) {
                 $(block).attr("status", filtered[0].status);
+                $(block).removeClass("device-active");
+                $(block).removeClass("device-inactive");
+                $(block).addClass("device-"+filtered[0].status);
             }
         });
         $(idPrefix + "activeDeviceContainer").css({'height': '100%'});
@@ -138,7 +145,7 @@ VECTOR.module.carconfig = function () {
         ele.parent().removeClass('container-not-filled').addClass('container-not-filled');
         ele.parent().removeClass('device-active');
         ele.parent().removeClass('device-inactive');
-        $(idPrefix + "activeDeviceInnerContainer").append('<div class="block-device ui-widget-content" value="' + ele.parent().attr("value") + '">' + ele.parent().attr("value") + '</div>');
+        $(idPrefix + "activeDeviceInnerContainer").append('<div class="block-device ui-widget-content device-active" status="active" id="'+parseInt(ele.parent().attr("id"))+'" title='+ele.parent().attr("value")+' value="' + ele.parent().attr("value") + '"></div>');
         $(".device-active").draggable({
             revert: true
         });
@@ -280,12 +287,18 @@ VECTOR.module.carconfig = function () {
             addWheelConfig($(this).parent().parent().parent().find(".wheel-device-container"), $(this).attr("value"));
             $(".wheel-select-popup").hide();
             $(this).parent().parent().parent().parent().find(".wheel-device-name").html($(this).attr("value"));
+            wheelNameG = $(this).attr("value");
             $(".device-clear").off("click").on("click", function (e) {
                 e.stopPropagation();
                 clearClick($(this));
             });
         });
         $('.btn-start').off("click").on("click", function () {
+
+            if(dbJobId==-1){
+                setDbJobId();
+            }
+            setSubJobId();
             var devices = $(this).parent().find('.device-container');
             var btn = this;
             var deviceIds = [];
@@ -295,7 +308,7 @@ VECTOR.module.carconfig = function () {
                 deviceWheel.wheelName = wheelName;
                 deviceWheel.customerName = customerName;
                 deviceWheel.vehicleName = vehicleName;
-                deviceWheel.jobId = jobId;
+                deviceWheel.jobId = dbJobId;
                 deviceIds.push(deviceWheel);
                 $(item).attr("started", true);
             });
@@ -342,7 +355,9 @@ VECTOR.module.carconfig = function () {
                                         });
                                         $('.btn-results').off("click").on("click", function () {
                                             $("#RS_resultSec").show();
-                                            VECTOR.module.wheelresults.getCharts(deviceIds);
+                                            deviceIds[0].subJob = subJobId;
+                                            deviceIds[1].subJob = subJobId;
+                                            VECTOR.module.wheelresults.getCharts(deviceIds,true);
                                         });
                                     } else {
                                         $(btn).html("Something went\nwrong");
@@ -368,13 +383,13 @@ VECTOR.module.carconfig = function () {
         if (!isNewCustomer) {
             var str = $(idPrefix + "customerName").val();
             var filteredList = _.filter(customerList, function (num) {
-                return num.name.indexOf(str) >= 0;
+                return num.customer.custName.indexOf(str) >= 0;
             });
             $(idPrefix + "customerSearchList").empty();
             _.each(filteredList, function (item) {
                 //var div='<div class="customer-search-item" style="padding-left: 5px;">'+item+'</div>';
                 var div = '<li class="customer-search-item" role="presentation"><a role="menuitem" tabindex="-1"'
-                    + 'href="#">' + item.name + '</a>'
+                    + 'href="#">' + item.customer.custName + '</a>'
                     + '</li>';
                 $(idPrefix + "customerSearchList").append(div);
             });
@@ -393,23 +408,23 @@ VECTOR.module.carconfig = function () {
                 $(idPrefix + "vehicleBrand").hide();
                 customerName = $(idPrefix + "customerName").val();
                 $(idPrefix + "vehicleBrand").removeClass("vector-hidden").addClass("vector-hidden");
-                var vehicleList = _.where(customerList, {name: $(idPrefix + "customerName").val()});
+                var vehicleList = _.where(customerList, {customerName: $(idPrefix + "customerName").val()});
                 _.each(vehicleList[0].vehicles, function (item) {
                     //var div='<div class="customer-search-item" style="padding-left: 5px;">'+item+'</div>';
-                    var vehicleDetails = item.split(" ");
-                    var div1 = '<li class="vehicle-brand-item" role="presentation"><a role="menuitem" tabindex="-1"'
-                        + 'href="#">' + vehicleDetails[0] + " " + vehicleDetails[1] + '</a>'
+                    var div1 = '<li class="vehicle-brand-item" role="presentation" id = "'+item.vehicleId+'"><a role="menuitem" tabindex="-1"'
+                        + 'href="#">' + item.manufacturer + " " + item.type + '</a>'
                         + '</li>';
                     $(idPrefix + "vehicleBrandList").append(div1);
                 });
                 $(".vehicle-brand-item").off("click").on("click", function () {
+                    vehicleId = $(this).attr("id");
                     $(idPrefix + "vehicleBrandCombo").html($(this).find('a').html());
                     vehicleName = $(idPrefix + "vehicleBrandCombo").html();
                     $(idPrefix + "jobIdCombo").html("Job Id");
                     disablePastResults();
                     $(idPrefix + "nextBtn").removeClass("disabled");
                     getJobId();
-                    setPastJobs();
+                    setPastJobs(parseInt($(this).attr("id")));
                 });
             });
         }
@@ -459,43 +474,66 @@ VECTOR.module.carconfig = function () {
             }
         });
     };
-    var setPastJobs = function () {
+    var setPastJobs = function (id) {
+        var jobIds;
+        $.ajax({
+            url: 'http://' + ip + ':8082/vector/getJobIdList',
+            dataType: "json",
+            data: JSON.stringify(id),
+            cache: false,
+            contentType: 'application/json;',
+            type: 'POST',
+            async: false,
+            success: function (result) {
+                jobIds = result;
+            }
+        });
         $(idPrefix + "jobIdUl").empty();
-        if (jobId > 1) {
+        if (jobIds.length > 0) {
             $(idPrefix + "jobIdCombo").removeClass("disabled");
         }
-        for (var i = 0; i < jobId - 1; i++) {
+        _.each(jobIds,function (item) {
+            var div = '<li class="job-item" role="presentation" id="'+item.jobId+'"><a role="menuitem" tabindex="-1"'
+                + 'href="#">' + "Job " +item.jobId+ '</a>'
+                + '</li>';
+            $(idPrefix + "jobIdUl").append(div);
+        });
+        /*for (var i = 0; i < jobId - 1; i++) {
             var div = '<li class="job-item" role="presentation"><a role="menuitem" tabindex="-1"'
                 + 'href="#">' + "Job " + (i + 1) + '</a>'
                 + '</li>';
             $(idPrefix + "jobIdUl").append(div);
-        }
+        }*/
         $(".job-item").off("click").on("click", function () {
             $(idPrefix + "jobIdCombo").html($(this).find('a').html());
             var jI = $(this).find('a').html().split(" ");
             pastJobId = jI[1];
             disablePastResults();
             $.ajax({
-                url: 'http://' + ip + ':8082/vector/getWheelNames',
+                url: 'http://' + ip + ':8082/vector/getSubJobIdList',
                 dataType: "json",
-                data: customerName + "_" + vehicleName + "_" + jI[1],
+                data: $(this).attr("id"),
                 cache: false,
                 contentType: 'application/json;',
                 type: 'POST',
                 success: function (result) {
-                    _.each(result, function (item) {
-                        switch (item) {
-                            case "Front Left":
+                    _.each(result, function (item,key) {
+                        switch (key) {
+                            case "FRONT LEFT":
                                 $(idPrefix + "frontLeftBtn").removeClass("disabled");
+                                $(idPrefix + "frontLeftBtn").attr("subJobId",item);
                                 break;
-                            case "Front Right":
+                            case "FRONT RIGHT":
                                 $(idPrefix + "frontRightBtn").removeClass("disabled");
+                                $(idPrefix + "frontRightBtn").attr("subJobId",item);
                                 break;
-                            case "Rear Left":
+                            case "REAR LEFT":
                                 $(idPrefix + "rearLeftBtn").removeClass("disabled");
+                                $(idPrefix + "rearLeftBtn").attr("subJobId",item);
                                 break;
-                            case "Rear Right":
+                            case "REAR RIGHT":
                                 $(idPrefix + "rearRightBtn").removeClass("disabled");
+                                $(idPrefix + "rearRightBtn").attr("subJobId",item);
                                 break;
                         }
                     })
@@ -503,7 +541,7 @@ VECTOR.module.carconfig = function () {
             });
         });
     };
-    var getPastResults = function (wheelName) {
+    var getPastResults = function (wheelName,subId) {
         var devices = [1, 2];
         var deviceIds = [];
         _.each(devices, function (item) {
@@ -513,10 +551,11 @@ VECTOR.module.carconfig = function () {
             deviceWheel.customerName = customerName;
             deviceWheel.vehicleName = vehicleName;
             deviceWheel.jobId = pastJobId;
+            deviceWheel.subJob = subId;
             deviceIds.push(deviceWheel);
         });
         $("#RS_resultSec").show();
-        VECTOR.module.wheelresults.getCharts(deviceIds);
+        VECTOR.module.wheelresults.getCharts(deviceIds,false);
     };
     var refreshPage = function () {
         $.ajax({
@@ -530,9 +569,38 @@ VECTOR.module.carconfig = function () {
             }
         });
     };
+    var setDbJobId = function () {
+        $.ajax({
+            url: 'http://' + ip + ':8082/vector/createNewJob',
+            dataType: "json",
+            data:vehicleId,
+            cache: false,
+            contentType: 'application/json;',
+            type: 'POST',
+            async: false,
+            success: function (result) {
+                dbJobId=result
+            }
+        });
+    };
+    var setSubJobId = function () {
+        var data = dbJobId+"_"+wheelNameG;
+        $.ajax({
+            url: 'http://' + ip + ':8082/vector/createSubJob',
+            dataType: "json",
+            cache: false,
+            data:data,
+            contentType: 'application/json;',
+            type: 'POST',
+            async: false,
+            success: function (result) {
+                subJobId= result;
+            }
+        });
+    };
     var getCustomerList = function () {
         $.ajax({
-            url: 'http://' + ip + ':8082/vector/getCustomerNames',
+            url: 'http://' + ip + ':8082/vector/customerVehicleList',
             dataType: "json",
             cache: false,
             data: "sa",
@@ -574,6 +642,7 @@ VECTOR.module.carconfig = function () {
                 $(this).parent().parent().parent().addClass("device-main-container");
                 addWheelConfig($(this).parent().parent().parent().find(".wheel-device-container"), $(this).attr("value"));
                 $(".wheel-select-popup").hide();
+                wheelNameG = $(this).attr("value");
                 $(this).parent().parent().parent().parent().find(".wheel-device-name").html($(this).attr("value"));
                 $(".device-clear").off("click").on("click", function (e) {
                     e.stopPropagation();
@@ -584,7 +653,7 @@ VECTOR.module.carconfig = function () {
                 $(idPrefix + "jobTypeMenu").html($(this).find('a').html());
             });
             $(".past-result-btn").off("click").on("click", function () {
-                getPastResults($(this).html());
+                getPastResults($(this).html(),$(this).attr("subJobId"));
             });
             window.setInterval(function () {
                 fillActiveDevices();

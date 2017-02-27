@@ -296,6 +296,11 @@
         </div>
         <div class="col-lg-6 col-sm-6">
             <div id="RS_dampingFactor" class = "result-divs"></div>
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped active" role="progressbar" id="RS_dampingProgress"
+                     aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
+                </div>
+            </div>
             <div id="RS_dampedFrequency" class = "result-divs"></div>
             <div id="RS_naturalFrequency" class = "result-divs"></div>
             <div id="RS_disturbanceTime" class = "result-divs"></div>
