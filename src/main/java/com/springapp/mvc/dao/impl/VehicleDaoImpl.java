@@ -61,10 +61,11 @@ public class VehicleDaoImpl extends BaseJpaDaoImpl<Vehicle> implements VehicleDa
     }
 
     @Override
-    public void removeVehicle(int customerId) {
-        String queryString = "SELECT v FROM Vehicle v WHERE v.customer = :id";
+    public void removeVehicle(int customerId,int number) {
+        String queryString = "SELECT v FROM Vehicle v WHERE v.customer = :id AND v.numberPlate = :number";
         TypedQuery<Vehicle> query = this.entityManager.createQuery(queryString, Vehicle.class);
         query.setParameter("id", customerId);
+        query.setParameter("number", number);
         Vehicle vehicle = query.getSingleResult();
         System.out.println(vehicle);
         deleteEntity(vehicle);
@@ -108,12 +109,12 @@ public class VehicleDaoImpl extends BaseJpaDaoImpl<Vehicle> implements VehicleDa
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void update(VehicleDto vehicle){
-        Vehicle vehi = new Vehicle();
-        vehi.setVehicleModelId(vehicle.getVehicleModelId());
-        vehi.setOdometer(vehicle.getOdometer());
-        vehi.setManufactDate(vehicle.getManufactDate());
-        vehi.setNumberPlate(vehicle.getNumberPlate());
-        vehi.setCustomer(vehicle.getCustomer());
-        this.entityManager.refresh(vehi);
+        Vehicle managed = this.entityManager.find(Vehicle.class,vehicle.getVehicleId());
+        managed.setVehicleModelId(vehicle.getVehicleModelId());
+        managed.setOdometer(vehicle.getOdometer());
+        managed.setManufactDate(vehicle.getManufactDate());
+        managed.setNumberPlate(vehicle.getNumberPlate());
+        managed.setCustomer(vehicle.getCustomer());
+        this.entityManager.refresh(managed);
     }
 }

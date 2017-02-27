@@ -1,7 +1,6 @@
 package com.springapp.mvc.controller;
 
 import com.springapp.mvc.dto.CustomerDto;
-import com.springapp.mvc.dto.CustomerVehicleDto;
 import com.springapp.mvc.dto.DetailDto;
 import com.springapp.mvc.dto.ModelDto;
 import com.springapp.mvc.dto.VehicleDto;
@@ -95,14 +94,30 @@ public class CustomerController {
     public @ResponseBody
     void editCustomerDetails(@RequestBody DetailDto data){
         DetailDto detail = data;
+        int id;
         CustomerDto customer = data.getCustomer();
         List<VehicleDto> vehicle = data.getVehicleList();
-
+        id = customer.getId();
         customerService.update(customer);
+        List<VehicleDto> vehicleDtoList = vehicleService.getVehicle(id);
+        if((vehicle.size()-vehicleDtoList.size())!=0) {
+            try {
+                if (vehicle.size() > vehicleDtoList.size()) {
+                    int diff = vehicle.size() - vehicleDtoList.size();
+                    for (int i = 0; i < diff; i++) {
+                        vehicle.get(vehicleDtoList.size() + i).setCustomer(id);
+                        vehicleService.createVehicle(vehicle.get(vehicleDtoList.size() + i));
+                    }
+                } else {
+                    int diff = vehicleDtoList.size() - vehicle.size();
+                    for (int i = 0; i < diff; i++) {
+                        vehicle.get(vehicle.size() + i);
+//                    vehicleService.removeVehicle(id);
+                    }
+                }
+            }catch(Exception e){
 
-        for (VehicleDto veh:vehicle) {
-            veh.setCustomer(customerService.getCustomer(customer.getCustName()).getCus_id());
-            vehicleService.update(veh);
+            }
         }
 
     }

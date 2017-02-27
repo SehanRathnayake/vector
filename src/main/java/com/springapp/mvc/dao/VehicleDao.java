@@ -15,7 +15,7 @@ public interface VehicleDao {
     public Vehicle createVehicle(VehicleDto vehicle);
     public List<Vehicle> viewList();
     public List<VehicleDto> getVehicle(int customerId);
-    public void removeVehicle(int id);
+    public void removeVehicle(int id,int number);
     public VehicleDto getSingleVehicle(int id);
     public List<ModelDto> getModelList();
     public void update(VehicleDto vehicle);
