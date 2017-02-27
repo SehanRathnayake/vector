@@ -7,6 +7,7 @@ VECTOR.module.customer = function () {
     var idPrefix = "#CUS_";
     var modelList;
     var select;
+    var a;
 
     var viewCustomerList = function () {
         var vehicle=[];
@@ -16,7 +17,6 @@ VECTOR.module.customer = function () {
         $.ajax({
             type: 'POST',
             url: 'http://localhost:8082/vector/customerList',
-            dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
                 $("#customers").empty();
@@ -50,12 +50,12 @@ VECTOR.module.customer = function () {
                             $("#customerTelephone").val(customer.custTp);
                             $("#customerEmail").val(customer.custEmail);
                             $("#vehicleDetail").empty();
-                            for(var a = 1; a<=vehicle.length;a++){
+                            for(a = 1; a<=vehicle.length;a++){
                                 var item = vehicle[a-1];
-                                    var row = '<div type="input">Vehicle model:<input id="vehicleModel'+a+'" class="form-control vehicle-input" value ="' + item.vehicleModelId + '"></div>'
-                                        + '<div type="input">Manufacture Date: <input id="vehicleManufact'+a+'" class="form-control vehicle-input" value ="' + item.manufactDate + '" type="number" min="1980" max="2017"></div>'
-                                        + '<div type="input">Number plate: <input id="vehicleNumber'+a+'" class="form-control vehicle-input" value="'+item.numberPlate+'"></div>'
-                                        + '<div type="input">Model: <input id="vehicleModel'+a+'" class="form-control vehicle-input" value="' + item.model + '"></div>';
+                                    var row = '<div class="container well vehicle-input-well">'
+                                        + '<div class="container well"><div class="row vector-row"><div class="col-lg-3 col-sm-3">Manufacture Date</div><input id="vehicleManufact'+a+'" class="col-lg-3 col-sm-3 vehicle-input" value ="' + item.manufactDate + '" type="number" min="1980" max="2017" disabled></div></div>'
+                                        + '<div class="container well"><div class="row vector-row"><div class="col-lg-3 col-sm-3">Number plate</div><input id="vehicleNumber'+a+'" class="col-lg-3 col-sm-3 vehicle-input" value="'+item.numberPlate+'" disabled></div></div>'
+                                        + '<div class="container well"><div class="row vector-row"><div class="col-lg-3 col-sm-3">Model</div><input id="vehicleModel'+a+'" class="col-lg-3 col-sm-3 vehicle-input" value="' + item.model + '" disabled></div></div></div>';
                                     $("#vehicleDetail").append(row);
                             }
 
@@ -78,14 +78,14 @@ VECTOR.module.customer = function () {
         var modelList = getModelList();
         $(".vehicle-input").prop("disabled", true);
         $(".customer-input").prop("disabled", true);
-        $(idPrefix+"addCustomerForm").append(select[0].innerHTML);
+        // $(idPrefix+"addCustomerForm").append(select[0].innerHTML);
         
         $(idPrefix + "addMore").click(function () {
             var row1 = '<div class="form-group"><label>Add Vehicle</label></div>'
-                +'<div class="form-group"><label for="numberPlate1'+idcount+'">Number plate</label><input id="numberPlate1'+idcount+'" class="form-control col-sm-10" type="text"></div>'
-                +'<div class="form-group"><label for="manufactDate1'+idcount+'">Manufact date</label><input id="manufactDate1'+idcount+'" class="form-control col-sm-10" type="number" min="1980" max="2017"></div>'
-                + select;
-                +'<div class="form-group"><label for="addModel1'+idcount+'">Model</label><form id="addModel1'+idcount+'"><select name="item" class="form-control"><option value=>abc</option><option value="abcd">abcd</option><option value="abcde">abcde</option></select></div>';
+                +'<div class="container well"><div class="row vector-row"><label class="col-lg-3 col-sm-3" for="numberPlate1'+idcount+'">Number plate</label><input id="numberPlate1'+idcount+'" class="col-lg-3 col-sm-3" type="text" required></div></div>'
+                +'<div class="container well"><div class="row vector-row"><label class="col-lg-3 col-sm-3" for="manufactDate1'+idcount+'">Manufact date</label><input id="manufactDate1'+idcount+'" class="col-lg-3 col-sm-3" type="number" min="1980" max="2017" required></div></div>'
+                + select
+                +'<div class="container well"><div class="row vector-row"><label class="col-lg-3 col-sm-3" for="addModel1'+idcount+'">Model</label><form class="col-lg-3 col-sm-3" id="addModel1'+idcount+'"><select name="item" class="col-lg-3 col-sm-3"><option value=>abc</option><option value="abcd">abcd</option><option value="abcde">abcde</option></select></form></div></div>';
             $(idPrefix + "addVehicleForm").append(row1);
             idcount++;
         });
@@ -113,11 +113,11 @@ VECTOR.module.customer = function () {
 
                     var vehicledto;
                     
-                    for(var a = 1; a< idcount; a++){
+                    for(var c = 1; c< idcount; c++){
                         vehicledto={
-                            vehicleModelId: $("#addModel1" + a).val(),
-                            numberPlate: ""+$("#numberPlate1" + a).val()+"",
-                            manufactDate: $("#manufactDate1" + a).val(),
+                            vehicleModelId: $("#addModel1" + c).val(),
+                            numberPlate: ""+$("#numberPlate1" + c).val()+"",
+                            manufactDate: $("#manufactDate1" + c).val(),
                         }
                         vehicleList.push(vehicledto);
                     }
@@ -152,19 +152,21 @@ VECTOR.module.customer = function () {
         $(idPrefix+"customerDetailContainer").show();
         $(idPrefix+"addCustomer").hide();
         $(".customer-input").prop("disabled", false);
-        $(".vehicle-input").prop("disabled", false);
         $(idPrefix+"editButton").prop("disabled",true);
         $(idPrefix+"customerDetaiPanel").append(select[0].innerHTML);
         $(idPrefix+"customerDetailPanel").append('<button id="CUS_saveChangesButton" type="button" class="btn btn-primary btn-sm pull-right">Save Changes</button>');
-        $("#vehicleDetail").append('<button id="CUS_addMoreInEdit" type="button" class="btn btn-primary btn-sm pull-right">+</button>');
+        $("#vehicleDiv").append('<button id="CUS_addMoreInEdit" type="button" class="btn btn-primary btn-sm">Add more vehicles</button>');
+        $(".vehicle-input-well").append('<button type="button" class="btn btn-primary btn-sm close">Remove this vehicle</button>');
         $(idPrefix+"addMoreInEdit").click(function () {
-            var row1 = '<div class="form-group"><label>Add Vehicle</label></div>'
-                +'<div class="form-group"><label for="numberPlate'+idcount+'">Number plate</label><input id="numberPlate'+idcount+'" class="form-control col-sm-10" type="text"></div>'
-                +'<div class="form-group"><label for="manufactDate'+idcount+'">Manufact year</label><input id="manufactDate'+idcount+'" class="form-control col-sm-10" type="number" min="1980" max="2017"></div>'
-                +select
-                +'<div class="form-group"><button id="saveVehicle" class="btn btn-default" type="submit">Save</button></div>';
+            var row1 = '<div class="vehicle-input-well"><label>Add Vehicle</label></div>'
+                +'<div class="container well"><div class="row vector-row"><div class="col-lg-3 col-sm-3" for="vehicleNumber'+a+'">Number plate</div><input id="vehicleNumber'+a+'" class="col-lg-3 col-sm-3" type="text" required></div></div>'
+                +'<div class="container well"><div class="row vector-row"><div class="col-lg-3 col-sm-3" for="vehicleManufact'+a+'">Manufact year</div><input id="vehicleManufact'+a+'" class="col-lg-3 col-sm-3" type="number" min="1980" max="2017" required></div></div>'
+                +'<div class="container well"><div class="row vector-row"><div class="col-lg-3 col-sm-3" for="vehicleModel'+a+'">Model</div><input id="vehicleModel'+a+'" class="col-lg-3 col-sm-3" type="number" min="1980" max="2017" required></div></div>' +
+                // +'<button type="button" class="btn btn-primary btn-sm close">Remove this vehicle</button>'
+                +'</div>'
+                // +select
             $("#vehicleDetail").append(row1);
-            idcount++;
+            a++;
         });
         
         $(idPrefix+"saveChangesButton").click(function(){
@@ -179,18 +181,17 @@ VECTOR.module.customer = function () {
 
             var vehicleList = [];
 
-            for(var a = 1; a<= idcount; a++){
+            for(var b = 1; b<= idcount; b++){
                 vehicleList.push({
-                    vehicleModelId : $("#vehicleModel"+a).val(),
-                    numberPlate : $("#vehicleNumber"+a).val(),
-                    manufactDate : $("#vehicleManufact"+a).val()
+                    vehicleModelId : $("#vehicleModel"+b).val(),
+                    numberPlate : $("#vehicleNumber"+b).val(),
+                    manufactDate : $("#vehicleManufact"+b).val()
                 });
             }
             data = {
                 customer:customer,
                 vehicleList:vehicleList
             }
-
             $.ajax({
                 type: 'POST',
                 url: 'http://localhost:8082/vector/editCustomerDetail',
@@ -200,8 +201,9 @@ VECTOR.module.customer = function () {
                 success: function (data) {
                 },
             });
+            window.location.reload();
         });
-        // window.location.reload();
+        
     };
 
     var removeCustomer = function () {
@@ -213,8 +215,11 @@ VECTOR.module.customer = function () {
             contentType: 'application/json; charset=utf-8',
             data : removeId,
             success: function (data) {
+                alert("The customer successfully removed");
+                window.location.reload();
             }
         });
+
     };
 
     var saveChanges = function(){
@@ -248,8 +253,8 @@ VECTOR.module.customer = function () {
                 var option;
                 var list = $(" ");
 
-                for (var a = 0; a<modelList.length;a++) {
-                    var val = modelList[a];
+                for (var b = 0; b<modelList.length;b++) {
+                    var val = modelList[b];
                     option = $('<option value="' + val.modelName + '">' + val.modelName+" "+val.manufacturer + '</option>');
                     list.append(option[0].outerHTML);
                 }

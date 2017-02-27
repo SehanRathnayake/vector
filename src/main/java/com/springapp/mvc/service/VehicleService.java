@@ -14,7 +14,7 @@ public interface VehicleService {
     public Vehicle createVehicle(VehicleDto vehicle);
     public List<Vehicle> viewList();
     public List<VehicleDto> getVehicle(int custoemrId);
-    public void removeVehicle(int id);
+    public void removeVehicle(int id,int number);
     public VehicleDto getSingleVehicle(int id);
     public void update(VehicleDto vehicle);
     public List<ModelDto> getModelList();

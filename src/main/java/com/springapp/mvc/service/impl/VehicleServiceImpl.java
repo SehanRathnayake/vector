@@ -40,8 +40,8 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public void removeVehicle(int id) {
-        vehicleDao.removeVehicle(id);
+    public void removeVehicle(int id,int number) {
+        vehicleDao.removeVehicle(id,number);
     }
 
     @Override
