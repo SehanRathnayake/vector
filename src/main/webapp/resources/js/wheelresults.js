@@ -8,8 +8,8 @@ VECTOR.module.wheelresults = function () {
     var customerName;
     var vehicleName;
     var wheel;
-    var ip = "localhost";
-   // var ip = "192.168.43.150";
+   // var ip = "localhost";
+   var ip = "192.168.43.150";
     var allResults;
     var basicSeriesList = [];
     var frequencySpectrum;

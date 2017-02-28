@@ -632,7 +632,7 @@ VECTOR.module.carconfig = function () {
             //getCustomerList();
             $(idPrefix + "nextBtn").off("click").on("click", nextSection);
             //$(idPrefix + "refreshBtn").off("click").on("click", refreshPage);
-            $(idPrefix + "newCustomer").off("click").on("click", showNewDetails);
+            //$(idPrefix + "newCustomer").off("click").on("click", showNewDetails);
             $(idPrefix + "prevBtn").off("click").on("click", previousSection);
             $('body').off("click").on("click", '.well-inactive', function () {
                 $(this).find(".wheel-select-popup").css({"display": "block"});

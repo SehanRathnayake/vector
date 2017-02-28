@@ -15,37 +15,28 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
 <script src="<c:url value="/resources/js/jquery/jquery.ui.touch-punch.min.js" />"></script>
 <script src="<c:url value="/resources/js/util/processing.min.js" />"></script>
-<div class="vector-header" style="
-    font-size: 30px;
-    font-family: inherit;
-    line-height: 2;
-    padding: 8px;
-    color: white;
-">
-    Hi, <security:authentication property="principal.fullname"/>.
-    <a href="${logoutUrl}" style="
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3.css">
+<div>
+    <nav class="navbar navbar-fixed-top">
+        <div class="container-fluid" style="
+     background-color: #47759a;
+    ">
+            <ul class="nav navbar-nav" style="color:whitesmoke" >
+                <li><a id="dash-animation" class="dash-background animated shake ">
+                    <font style="opacity: 0;">ssadsfs</font> </a></li>
+                <li><a href="home" class="color-me" style=" margin-left: 10px">Dashboard</a></li>
+                <li><a href="customer" >Customer</a></li>
+                <li><a href="newJob">Create New Job</a></li>
+            </ul>
+            <a href="${logoutUrl}" style="
     float: right;
-        font-size: 15px;
+    font-size: 15px;
     margin-right: 10px;
     color: whitesmoke;
-">Log out</a>
-</div>
-<div>
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-            </div>
-            <ul class="nav navbar-nav">
-                <li><a href="home">Dashboard</a></li>
-                <li><a href="customer">Customer</a></li>
-                <li><a href="vehicle">Vehicle</a></li>
-                <li style="
-    float: right;
-    background-color: '#47759a';
-">
-                    <a href="newJob">Create new job</a>
-                </li>
-            </ul>
+    margin-top: 15px;
+    background-position: center;
+            ">Log out</a>
         </div>
     </nav>
 </div>
@@ -55,7 +46,8 @@
     </div>
 </div>--%>
 <div id="CC_sectionContainer">
-<section id="CC_detailSection" class="configsection">
+<section id="CC_detailSection" class="configsection" style="
+    margin-top: 8%;">
     <div class="container well">
         <div class="row vector-row">
             <div class="col-lg-3 col-sm-3">
@@ -93,7 +85,7 @@
                 </div>
             </div>
             <div class="col-lg-3 col-sm-3">
-                <a id="CC_newCustomer" style="width: 100%;">New Customer
+                <a id="CC_newCustomer" style="width: 100%;" href="customer">New Customer
                 </a>
             </div>
             <div class="col-lg-3 col-sm-3"></div>
@@ -206,7 +198,7 @@
     </div>
 
 </section>
-<section class="wheelsection" id="CC_wheelConfigSection" style="display: none">
+<section class="wheelsection" id="CC_wheelConfigSection" style="display: none;margin-top: 8%;">
     <div class="container" style="height:70%">
         <div class="row wheel-device">
             <div class="col-lg-2 col-sm-2">

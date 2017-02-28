@@ -1,40 +1,31 @@
 <html>
 <%@ include file="header.jsp" %>
 <script src="<c:url value="/resources/js/customer.js"/>"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3.css">
 <head>
     <title>Customer Details</title>
 </head>
-<div class="vector-header" style="
-    font-size: 30px;
-    font-family: inherit;
-    line-height: 2;
-    padding: 8px;
-    color: white;
-">
-    Hi, <security:authentication property="principal.fullname"/>.
-    <a href="${logoutUrl}" style="
+<div>
+    <nav class="navbar navbar-fixed-top">
+        <div class="container-fluid" style="
+     background-color: #47759a;
+    ">
+            <ul class="nav navbar-nav" style="color:whitesmoke" >
+                <li><a id="dash-animation" class="dash-background animated shake ">
+                    <font style="opacity: 0;">ssadsfs</font> </a></li>
+                <li><a href="home" class="color-me" style=" margin-left: 10px">Dashboard</a></li>
+                <li><a href="customer" >Customer</a></li>
+                <li><a href="newJob">Create New Job</a></li>
+            </ul>
+            <a href="${logoutUrl}" style="
     float: right;
-        font-size: 15px;
+    font-size: 15px;
     margin-right: 10px;
     color: whitesmoke;
-">Log out</a>
-</div>
-<div>
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-            </div>
-            <ul class="nav navbar-nav">
-                <li><a href="home">Dashboard</a></li>
-                <li><a href="customer">Customer</a></li>
-                <li><a href="vehicle">Vehicle</a></li>
-                <li style="
-    float: right;
-    background-color: '#47759a';
-">
-                    <a href="newJob">Create new job</a>
-                </li>
-            </ul>
+    margin-top: 15px;
+    background-position: center;
+            ">Log out</a>
         </div>
     </nav>
 </div>

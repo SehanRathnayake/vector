@@ -15,7 +15,6 @@
                     <font style="opacity: 0;">ssadsfs</font> </a></li>
                 <li cxlass="active"><a href="#" class="color-me" style=" margin-left: 10px">Dashboard</a></li>
                 <li><a href="customer" >Customer</a></li>
-                <li><a href="vehicle">Vehicle</a></li>
             </ul>
             <a href="${logoutUrl}" style="
     float: right;
@@ -73,8 +72,8 @@ Hi, <security:authentication property="principal.fullname"/>.
 -->
 
 <div>
-    <button class="btn btn_job animated pulse" style="position:absolute;line-height: 50%; z-index: 100;top: 42%;left: 42%"
-            onclick="window.location.href='new'">CREAT A NEW JOB
+    <button class="btn btn_job animated pulse" style="position:absolute;line-height: 50%; z-index: 100;top: 42%;left: 34%"
+            onclick="window.location.href='newJob'">CREATE A NEW JOB
     </button>
     <div>
 
