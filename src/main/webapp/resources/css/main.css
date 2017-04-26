@@ -117,6 +117,8 @@
     box-shadow: 0 0 2px black;
     border-radius: 5px;
     z-index: 10;
+    color: white !important;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
 .device-active {
@@ -449,4 +451,7 @@ body {
     background: rgba(245, 245, 245, 0.87);
     box-shadow: 0 0 6px #0e2386;
     display: none;
+}
+div{
+    text-align: left;
 }

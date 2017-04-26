@@ -1,9 +1,6 @@
 package com.springapp.mvc.controller;
 
-import com.springapp.mvc.dto.CustomerDto;
-import com.springapp.mvc.dto.DetailDto;
-import com.springapp.mvc.dto.ModelDto;
-import com.springapp.mvc.dto.VehicleDto;
+import com.springapp.mvc.dto.*;
 import com.springapp.mvc.model.Customer;
 import com.springapp.mvc.service.CustomerService;
 import com.springapp.mvc.service.VehicleService;

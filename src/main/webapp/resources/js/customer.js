@@ -8,7 +8,9 @@ VECTOR.module.customer = function () {
     var modelList;
     var select;
     var a;
-
+    //var ip= "192.168.43.150";
+    var ip= "localhost";o
+    var customerList;
     var viewCustomerList = function () {
         var vehicle=[];
         var customer;
@@ -16,14 +18,14 @@ VECTOR.module.customer = function () {
         $(idPrefix+"editButton").prop("disabled",false);
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:8082/vector/customerList',
+            url: 'http://'+ip+':8082/vector/customerList',
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
+                customerList=data;
                 $("#customers").empty();
                 _.each(data, function (item) {
                     cid = item.cus_id;
                     var row = ' <li class="list-group-item customer-li" id="'+cid+'">'
-                        + cid+" "
                         + item.cus_name
                         + '</li>';
                     $("#customers").append(row);
@@ -37,7 +39,7 @@ VECTOR.module.customer = function () {
                     var id = $(this).attr("id");
                     $.ajax({
                         type: 'POST',
-                        url: 'http://localhost:8082/vector/viewCustomerDetail',
+                        url: 'http://'+ip+':8082/vector/viewCustomerDetail',
                         dataType: 'json',
                         contentType: 'application/json; charset=utf-8',
                         data: id,
@@ -52,7 +54,7 @@ VECTOR.module.customer = function () {
                             $("#vehicleDetail").empty();
                             for(a = 1; a<=vehicle.length;a++){
                                 var item = vehicle[a-1];
-                                    var row = '<div class="container well vehicle-input-well">'
+                                    var row = '<div class="vehicle-input-well">'
                                         + '<div class="container well"><div class="row vector-row"><div class="col-lg-3 col-sm-3">Manufacture Date</div><input id="vehicleManufact'+a+'" class="col-lg-3 col-sm-3 vehicle-input" value ="' + item.manufactDate + '" type="number" min="1980" max="2017" disabled></div></div>'
                                         + '<div class="container well"><div class="row vector-row"><div class="col-lg-3 col-sm-3">Number plate</div><input id="vehicleNumber'+a+'" class="col-lg-3 col-sm-3 vehicle-input" value="'+item.numberPlate+'" disabled></div></div>'
                                         + '<div class="container well"><div class="row vector-row"><div class="col-lg-3 col-sm-3">Model</div><input id="vehicleModel'+a+'" class="col-lg-3 col-sm-3 vehicle-input" value="' + item.model + '" disabled></div></div></div>';
@@ -75,10 +77,19 @@ VECTOR.module.customer = function () {
         var vehicle = [];
         var customer;
         var vehicleCount = 0;
-        var modelList = getModelList();
+        getModelList();
         $(".vehicle-input").prop("disabled", true);
         $(".customer-input").prop("disabled", true);
         // $(idPrefix+"addCustomerForm").append(select[0].innerHTML);
+        $(idPrefix+"addVehicleModel").empty();
+        _.each(modelList,function (item) {
+            var x=item;
+            var div = '<option class="add-cust-v-model" modelId="'+item.modelId+'" value="'+item.manufacturer+" "+item.vehicleType+'">'+item.manufacturer+" "+item.vehicleType+'</option>'
+            $(idPrefix+"addVehicleModel").append(div);
+        });
+        $(idPrefix+"addVehicleModel").change(function(){
+            $(this).attr("modelId",$(idPrefix+"addVehicleModel option:selected").attr("modelId"));
+        });
         
         $(idPrefix + "addMore").click(function () {
             var row1 = '<div class="form-group"><label>Add Vehicle</label></div>'
@@ -115,9 +126,9 @@ VECTOR.module.customer = function () {
                     
                     for(var c = 1; c< idcount; c++){
                         vehicledto={
-                            vehicleModelId: $("#addModel1" + c).val(),
+                            vehicleModelId: parseInt($(idPrefix+"addVehicleModel").attr("modelId")),
                             numberPlate: ""+$("#numberPlate1" + c).val()+"",
-                            manufactDate: $("#manufactDate1" + c).val(),
+                            manufactDate: $("#manufactDate1" + c).val()
                         }
                         vehicleList.push(vehicledto);
                     }
@@ -130,7 +141,7 @@ VECTOR.module.customer = function () {
                     
                     $.ajax({
                         type: 'POST',
-                        url: 'http://localhost:8082/vector/addCustomer',
+                        url: 'http://'+ip+':8082/vector/addCustomer',
                         dataType: 'json',
                         contentType: 'application/json; charset=utf-8',
                         data: JSON.stringify(data),
@@ -194,7 +205,7 @@ VECTOR.module.customer = function () {
             }
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:8082/vector/editCustomerDetail',
+                url: 'http://'+ip+':8082/vector/editCustomerDetail',
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(data),
@@ -210,7 +221,7 @@ VECTOR.module.customer = function () {
         var removeId = $("#customerId").val();
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:8082/vector/removeCustomer',
+            url: 'http://'+ip+':8082/vector/removeCustomer',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             data : removeId,
@@ -242,7 +253,7 @@ VECTOR.module.customer = function () {
         var models;
         $.ajax({
             type: 'POST',
-            url:'http://localhost:8082/vector/modelList',
+            url:'http://'+ip+':8082/vector/modelList',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             async:false,
@@ -261,8 +272,21 @@ VECTOR.module.customer = function () {
                 select = $('<div class="form-group"><label for="addModel">Model</label><form id="addModel"><select name="item" class="form-control">'+list+'</select></div>');
             }
         });
-    }
-
+    };
+    var customerSearch = function (event) {
+        var str = $(idPrefix + "customerName").val();
+        var filteredList = _.filter(customerList, function (num) {
+            return num.cus_name.indexOf(str) >= 0;
+        });
+        $("#customers").empty();
+        _.each(filteredList, function (item) {
+            //var div='<div class="customer-search-item" style="padding-left: 5px;">'+item+'</div>';
+            var row = ' <li class="list-group-item customer-li" id="'+item.cus_id+'">'
+                + item.cus_name
+                + '</li>';
+            $("#customers").append(row);
+        });
+    };
     return {
         init: function () {
             viewCustomerList();
@@ -277,6 +301,9 @@ VECTOR.module.customer = function () {
                 window.location.reload();
             });
             $(idPrefix+"modelList").off("click").on("click",getModelList);
+            $(idPrefix + "customerName").keyup(function (event) {
+                customerSearch(event);
+            });
         }
     }
 }();

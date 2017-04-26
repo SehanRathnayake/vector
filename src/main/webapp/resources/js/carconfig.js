@@ -62,7 +62,7 @@ VECTOR.module.carconfig = function () {
             _.each(devices, function (item) {
                 var div;
                 div = '<div class="block-device ui-widget-content device-' + item.status + '" value="';
-                div += item.value + '" id="' + item.id + '" title = "A00' + item.id + '"></div>';
+                div += item.value + '" id="' + item.id + '" title = "A00' + item.id + '">'+"A00"+item.id+'</div>';
                 $(idPrefix + "activeDeviceInnerContainer").append(div);
                 containerHeight += $(".block-device").outerHeight(true);
             });
@@ -145,7 +145,7 @@ VECTOR.module.carconfig = function () {
         ele.parent().removeClass('container-not-filled').addClass('container-not-filled');
         ele.parent().removeClass('device-active');
         ele.parent().removeClass('device-inactive');
-        $(idPrefix + "activeDeviceInnerContainer").append('<div class="block-device ui-widget-content device-active" status="active" id="'+parseInt(ele.parent().attr("id"))+'" title='+ele.parent().attr("value")+' value="' + ele.parent().attr("value") + '"></div>');
+        $(idPrefix + "activeDeviceInnerContainer").append('<div class="block-device ui-widget-content device-active" status="active" id="'+parseInt(ele.parent().attr("id"))+'" title='+ele.parent().attr("value")+' value="' + ele.parent().attr("value") + '">'+ele.parent().attr("value")+'</div>');
         $(".device-active").draggable({
             revert: true
         });
